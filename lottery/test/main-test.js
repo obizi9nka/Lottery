@@ -39,6 +39,13 @@ describe("Lottery", async () => {
     await A.connect(address2).approve(Lottery.address, 10000)
     expect(await A.allowance(address2.address, Lottery.address)).to.equal(10000)
 
+    await A.connect(owner).approve(MudebzNFT.address, 10000)
+    expect(await A.allowance(owner.address, Lottery.address)).to.equal(10000)
+    await A.connect(address1).approve(MudebzNFT.address, 10000)
+    expect(await A.allowance(address1.address, Lottery.address)).to.equal(10000)
+    await A.connect(address2).approve(MudebzNFT.address, 10000)
+    expect(await A.allowance(address2.address, Lottery.address)).to.equal(10000)
+
     await Lottery.connect(owner).addTokensToBalance(A.address, 9000)
     expect(await Lottery.getBalance(A.address, owner.address)).to.equal(9000)
     await Lottery.connect(address1).addTokensToBalance(A.address, 9000)
@@ -81,9 +88,34 @@ describe("Lottery", async () => {
       let player = (await Lottery.getLobby(owner.address, i)).players[1]
       expect(typeof players).to.equal("undefined")  //проверка на удаление всех предыдуших игроков из ново-созданного лобби
     }
-    /*await Lottery.connect(address2).EnterLobby(owner.address, 1)
-expect((await Lottery.getLobby(owner.address, 1)).nowInLobby).to.equal(0)
-  */
+  })
+
+  it("Mint NFT", async () => {
+    await Lottery.connect(address1).Enter()
+    await Lottery.connect(owner).Play()
+    expect(await Lottery.allowToNFT(1)).to.equal(address1.address)
+
+    await Lottery.connect(address2).Enter()
+    await Lottery.connect(owner).Play()
+    expect(await Lottery.allowToNFT(2)).to.equal(address2.address)
+
+    await Lottery.connect(address1).Enter()
+    await Lottery.connect(owner).Play()
+    expect(await Lottery.allowToNFT(3)).to.equal(address1.address)
+
+    await MudebzNFT.connect(address2).MintMarten(2)
+    expect(await MudebzNFT.ownerOf(2)).to.equal(address2.address)
+    await MudebzNFT.connect(address1).MintMarten(1)
+    expect(await MudebzNFT.ownerOf(1)).to.equal(address1.address)
+
+    for (let i = 0; i < 7; i++) {
+      await Lottery.connect(owner).Play()
+    }
+
+    expect(await Lottery.allowToNFT(3)).to.equal(owner.address)
+    await MudebzNFT.connect(owner).MintMarten(3)
+    expect(await MudebzNFT.ownerOf(3)).to.equal(owner.address)
+    expect(await Lottery.allowToNFT(4)).to.equal(owner.address)
   })
 
 })

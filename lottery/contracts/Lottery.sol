@@ -56,8 +56,8 @@ contract Lottery is Lobby, Ownable {
     }
 
     function checkFor50() private {
-        if (!NFT.istokenMints(LotteryCount - 2)) {
-            first1000Winers[LotteryCount - 2] = owner();
+        if (!NFT.istokenMints(LotteryCount - 5)) {
+            first1000Winers[LotteryCount - 5] = owner();
         }
     }
 
@@ -125,7 +125,7 @@ contract Lottery is Lobby, Ownable {
             Lotteries[LotteryCount].playersCount;
 
         Lotteries[LotteryCount].winer = winer;
-        if (LotteryCount >= 3 && LotteryCount <= 1002) checkFor50();
+        if (LotteryCount >= 5 && LotteryCount <= 1002) checkFor50();
         Lotteries[++LotteryCount].playersCount = 0;
         Lotteries[LotteryCount].winer = address(0);
         emit play(winer);

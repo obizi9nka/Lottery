@@ -14,7 +14,7 @@ async function main() {
   console.log("Lottery deployed to:", Lottery.address);
 
   const NFT = await hre.ethers.getContractFactory("MudebzNFT");
-  const MudebzNFT = await NFT.deploy(Lottery.address, A.address);
+  const MudebzNFT = await NFT.deploy(Lottery.address);
   await MudebzNFT.deployed();
   console.log("MudebzNFT deployed to:", MudebzNFT.address);
 

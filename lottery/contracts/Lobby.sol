@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 contract Lobby is Balance {
     struct lobbyShablon {
         IERC20 token;
+        address winer;
         address[] players;
         uint256 deposit;
         uint256 countOfPlayers;
@@ -17,8 +18,8 @@ contract Lobby is Balance {
     event newLobby(
         address indexed creator,
         uint256 indexed deposit,
-        uint256 indexed countOfPlayers, //тут может появится ошибка, так как индексы цекличны и при новой записи может возникнуть конфликт, но я не уверен что оно так работает
-        uint256 LobbyId
+        uint256 indexed countOfPlayers,
+        uint256 LobbyId //тут может появится ошибка, так как индексы цекличны и при новой записи может возникнуть конфликт, но я не уверен что оно так работает
     );
 
     event enterLobby(address creator, address user, uint256 LobbyId);
@@ -61,6 +62,7 @@ contract Lobby is Balance {
         temp.countOfPlayers = countOfPlayers;
         temp.token = tokenAddress;
         temp.nowInLobby = 1;
+        temp.winer = address(0);
 
         emit newLobby(msg.sender, deposit, countOfPlayers, lobbyId);
     }
@@ -82,6 +84,7 @@ contract Lobby is Balance {
 
         if (nowInLobby == temp.countOfPlayers) {
             address winer = LobbyPlay(temp);
+            temp.winer = winer;
             emit playLobby(lobbyCreator, lobbyId, winer);
             lobby[lobbyCreator][lobbyId].nowInLobby = 0;
             lobbyCountForAddress[lobbyCreator]--;
