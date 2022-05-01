@@ -1,12 +1,10 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
 const { ethers } = require("ethers");
-import detectEthereumProvider from '@metamask/detect-provider';
 import { useState, useEffect } from 'react'
-import 'bulma/css/bulma.css'
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
+import bigStar from 'C:/Lottery/lottery-dapp/images/star-big.png'
 
 export default function Home() {
 
@@ -148,8 +146,6 @@ export default function Home() {
   }
 
 
-
-
   return (
     <div>
       <Head>
@@ -157,81 +153,17 @@ export default function Home() {
         <meta name="description" content="An Ethereum Lottery dApp" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <nav className="navbar mt-4 mb-4">
-        <div className='container'>
-          <div>
-            <button onClick={getTokens} className="button is-link"> Free tokens</button>
-            <input
-              onChange={e => setFreeTokens(e.target.value)}
-            />
-          </div>
+      <div className='newnft'>
+        <Image src={bigStar} />
+        <div className=''>
+          <button onClick={Enter} className="button">Enter Lottery</button>
         </div>
-      </nav>
-      <nav className="navbar mt-4 mb-4">
-        <div className="container">
-          <div className="navbar">
-            <button onClick={balanceOf} className="button is-link">balanceOf</button>
-          </div>
-        </div>
-      </nav>
-      <nav className="navbar mt-4 mb-4">
-        <div className="container">
-          <div className="navbar">
-            <button onClick={Enter} className="button is-link" >Enter</button>
-          </div>
-        </div>
-      </nav>
-      <nav className="navbar mt-4 mb-4">
-        <div className="container">
-          <div className="navbar">
-            <button onClick={addTokensToBalance} className="button is-link" >Add</button>
-            <input
-              onChange={e => setdeposit(e.target.value)}
-            />
-          </div>
-        </div>
-      </nav>
-      <nav className="navbar mt-4 mb-4">
-        <div className="container">
-          <div className="navbar">
-            <button onClick={balanceInTokenForAccount} className="button is-link">Check balance</button>
-          </div>
-        </div>
-      </nav>
+      </div>
 
-      <nav className="navbar mt-4 mb-4">
-        <div className="container">
-          <div className="navbar">
-            <button onClick={getLotteryShablonByIndex} className="button is-link">Players</button>
-          </div>
-        </div>
-      </nav>
-
-      <nav className="navbar mt-4 mb-4">
-        <div className="container">
-          <div className="navbar">
-            <button onClick={Play} className="button is-link">Play</button>
-          </div>
-        </div>
-      </nav>
-
-      <nav className="navbar mt-4 mb-4">
-        <div className="container">
-          <div className="navbar">
-            <button onClick={allowToNFT} className="button is-link">allowToNFT</button>
-          </div>
-        </div>
-      </nav>
-
-      <nav className="navbar mt-4 mb-4">
-        <div className="container">
-          <div className="navbar">
-            <button onClick={setAdrressNFT} className="button is-link">setAdrressNFT</button>
-          </div>
-        </div>
-      </nav>
-
-    </div>
-
+    </div >
   )
 }
+
+/*
+
+*/

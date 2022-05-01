@@ -1,9 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import GreeterContract from '../blockchain/Greeter.js'
-import styles from '../styles/Home.module.css'
 const { ethers } = require("ethers");
-import detectEthereumProvider from '@metamask/detect-provider';
 import { useState, useEffect } from 'react'
 import 'bulma/css/bulma.css'
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
@@ -59,25 +56,16 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <nav className="navbar mt-4 mb-4">
-                <div className='container'>
-                    <div>
-                        <button onClick={MintMarten} className="button is-link">MintMarten</button>
-                        <input
-                            onChange={e => setTokenId(e.target.value)}
-                        />
-                    </div>
+            <div className='container'>
+                <div className='filter'>
+                    f
+                    <p>a</p>
                 </div>
-            </nav>
 
-            <nav className="navbar mt-4 mb-4">
-                <div className='container'>
-                    <div>
-                        <button onClick={balanceOf} className="button is-link">balanceOf</button>
-                    </div>
+                <div className='nfts'>
+                    f
                 </div>
-            </nav>
-
+            </div>
 
         </div>
     )

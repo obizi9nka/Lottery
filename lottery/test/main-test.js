@@ -16,7 +16,7 @@ describe("Lottery", async () => {
     await Lottery.deployed();
 
     NFT = await hre.ethers.getContractFactory("MudebzNFT");
-    MudebzNFT = await NFT.deploy(Lottery.address, A.address);
+    MudebzNFT = await NFT.deploy(Lottery.address);
     await MudebzNFT.deployed();
 
     [owner, address1, address2, _] = await ethers.getSigners()
@@ -103,9 +103,9 @@ describe("Lottery", async () => {
     await Lottery.connect(owner).Play()
     expect(await Lottery.allowToNFT(3)).to.equal(address1.address)
 
-    await MudebzNFT.connect(address2).MintMarten(2)
+    await MudebzNFT.connect(address2).MintMarten(2, { value: 32 })
     expect(await MudebzNFT.ownerOf(2)).to.equal(address2.address)
-    await MudebzNFT.connect(address1).MintMarten(1)
+    await MudebzNFT.connect(address1).MintMarten(1, { value: 32 })
     expect(await MudebzNFT.ownerOf(1)).to.equal(address1.address)
 
     for (let i = 0; i < 7; i++) {
@@ -113,7 +113,7 @@ describe("Lottery", async () => {
     }
 
     expect(await Lottery.allowToNFT(3)).to.equal(owner.address)
-    await MudebzNFT.connect(owner).MintMarten(3)
+    await MudebzNFT.connect(owner).MintMarten(3, { value: 32 })
     expect(await MudebzNFT.ownerOf(3)).to.equal(owner.address)
     expect(await Lottery.allowToNFT(4)).to.equal(owner.address)
   })

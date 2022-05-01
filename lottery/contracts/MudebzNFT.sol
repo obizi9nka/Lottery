@@ -20,9 +20,9 @@ contract MudebzNFT is ERC721with, Ownable {
         address msgsender = msg.sender;
         require(
             lottery._findAddressInfirst1000Winers(msgsender, TokenId),
-            "That is not yours token"
+            "Not yours token"
         );
-        require(msg.value == nftPrice, "Transfer faild");
+        require(msg.value == nftPrice, "Wrong send value");
 
         _safeMint(msgsender, TokenId);
         setTokenMints(TokenId);
@@ -37,8 +37,6 @@ contract MudebzNFT is ERC721with, Ownable {
     function withdrow(address payable _to) external onlyOwner {
         _to.transfer(address(this).balance);
     }
-
-    //receive() external payable {}
 
     function _baseURI() internal view override returns (string memory) {
         return "";

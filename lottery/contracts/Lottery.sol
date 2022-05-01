@@ -15,6 +15,11 @@ contract Lottery is Lobby, Ownable {
         uint256 playersCount;
     }
 
+    struct wins {
+        uint256[] lotteryes;
+        uint256 count;
+    }
+
     event enter(address user);
     event play(address winer);
 
@@ -23,6 +28,8 @@ contract Lottery is Lobby, Ownable {
     mapping(uint256 => LotteryShablon) Lotteries;
 
     mapping(uint256 => address) first1000Winers;
+
+    mapping(address => wins) _first1000Winers;
 
     uint256 deposit = 10;
 
@@ -63,6 +70,10 @@ contract Lottery is Lobby, Ownable {
 
     function allowToNFT(uint256 TokenId) public view returns (address) {
         return first1000Winers[TokenId];
+    }
+
+    function _allowToNFT(address addres) public view returns (wins memory) {
+        return _first1000Winers[addres];
     }
 
     function changeAllowToMint(address newAddress, uint256 TokenId)
@@ -118,6 +129,8 @@ contract Lottery is Lobby, Ownable {
 
         if (LotteryCount <= 1000) {
             first1000Winers[LotteryCount] = winer;
+            _first1000Winers[winer].lotteryes.push(LotteryCount);
+            _first1000Winers[winer].count++;
         }
 
         balanceInTokenForAccount[tokenForLottery][winer] +=

@@ -11,6 +11,112 @@ a {
   text-decoration: none;
 }
 
+footer {
+  margin-left: 50%;
+  margin-top: 100%;
+}
+
 * {
   box-sizing: border-box;
+}
+
+/*_app*/
+.nav {
+  border-bottom: 3px solid rgb(255, 255, 255);
+  height: 100px;
+  padding-right: 100px;
+  padding-left: 100px;
+}
+
+.container {
+  display: flex;
+  height: inherit;
+  align-items: center;
+}
+
+.leftside {
+  position: relative;
+}
+
+.between {
+  justify-content: space-between;
+}
+
+.menu {
+  color: rgb(255, 255, 255);
+}
+
+.navigation {
+  position: absolute;
+  word-spacing: 20px;
+  left: auto;
+}
+
+.image {
+  position: absolute;
+  left: 46%;
+}
+
+.nftmint {
+  position: absolute;
+  left: 80%;
+}
+
+.wallet {
+  position: absolute;
+  right: 0%;
+}
+
+.black {
+  background-color: #110e0ef1;
+  /*#343434e6*/
+}
+
+/*Lottery*/
+.newnft {
+  margin-top: 5%;
+  text-align: center;
+}
+
+/*Lobby*/
+.lobbymenu {}
+
+.newLobby {
+  background-color: #1011126d;
+  position: relative;
+  border-style: solid;
+  height: 90px;
+  margin-left: 350px;
+  margin-right: 350px;
+  padding-left: 30px;
+  padding-right: 30px;
+  border-radius: 40ex;
+  color: black;
+}
+
+.createNewLobby {
+  text-align: center;
+  margin-top: 12px;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+.deposit .countofplayers {
+  text-align: end;
+}
+
+.deposit.countofplayers:hover {}
+
+/*Marketplace*/
+.filter {
+  margin-left: 30px;
+  margin-top: 30px;
+  width: 340px;
+  border: 1px solid;
+}
+
+.nfts {
+  margin-top: 30px;
+  border: 1px solid;
+  width: 100%;
 }
