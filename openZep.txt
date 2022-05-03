@@ -1,0 +1,4 @@
+Тестовый relayer on Rinkeby:
+Address:0xb0275344b549031691dce3f3b78e484e75c34717
+API Key:5PczzFRZBx3TvZknD9akev8AnwJvBFiX
+Secret Key:5DNTZMZ3WzoeHpHR2TNnP2M2yFp1wobaas92kDgnrnq1Skn4eXo9CbFAtwnvEYem

@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model user {
+  address     String  @id @unique
+  tokens      String
+  userLobbyes lobby[]
+}
+
+model lobby {
+  creator String @id
+
+  IERC20         String
+  winer          String
+  players        String
+  deposit        String
+  countOfPlayers Int
+  nowInLobby     Int
+
+  user        user?   @relation(fields: [userAddress], references: [address])
+  userAddress String?
+
+}

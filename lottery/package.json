@@ -9,7 +9,8 @@
     "hardhat": "^2.9.2"
   },
   "scripts": {
-    "compile": "solcjs --abi --include-path node_modules/ --base-path . contracts/Lottery.sol"
+    "deploy": "npx hardhat run scripts/deploy.js --network localhost",
+    "compile": "/solcjs --abi --include-path node_modules/ --base-path . contracts/Lottery.sol"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.5.0",

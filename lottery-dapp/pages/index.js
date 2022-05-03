@@ -6,8 +6,8 @@ import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.
 import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
 import bigStar from 'C:/Lottery/lottery-dapp/images/star-big.png'
 
-export default function Home() {
 
+export default function Home() {
 
   const AAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
   const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
@@ -159,7 +159,6 @@ export default function Home() {
           <button onClick={Enter} className="button">Enter Lottery</button>
         </div>
       </div>
-
     </div >
   )
 }

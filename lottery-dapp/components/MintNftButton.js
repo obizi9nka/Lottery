@@ -1,6 +1,5 @@
 const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
-import 'bulma/css/bulma.css'
 
 export default function MintNftButton() {
 

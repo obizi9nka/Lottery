@@ -1,43 +1,41 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import GreeterContract from '../blockchain/Greeter.js'
-import styles from '../styles/Home.module.css'
 const { ethers } = require("ethers");
-import detectEthereumProvider from '@metamask/detect-provider';
 import { useState, useEffect } from 'react'
-import 'bulma/css/bulma.css'
 import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
+import { PrismaClient } from '@prisma/client';
+import LobbyShablon from '../components/LobbyShablon'
 
-export default function Home() {
+const prisma = new PrismaClient();
+
+export async function getServerSideProps() {
+    const lobbyes = await prisma.lobby.findMany();
+    return {
+        props: {
+            allLobbyes: lobbyes
+        }
+    }
+}
+
+export default function Home({ allLobbyes }) {
 
     const [deposit, setdeposit] = useState(0)
     const [countOfPlayers, setcountOfPlayers] = useState(0)
     const [LobbyCreator, setLobbyCreator] = useState('')
     const [LobbyId, setLobbyId] = useState(0)
     const [token, settoken] = useState('')
-    const [lotteryContract, setlotteryContract] = useState('')
+    const [lobbyes, setlobbyes] = useState(allLobbyes)
 
     const AAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
     const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
 
     useEffect(() => {
         updateState()
-    }, [lotteryContract])
+    }, [lobbyes])
 
-    const updateState = () => {
-        if (lotteryContract) getPlayers()
-        if (lotteryContract) getLotteryId()
-    }
+    const updateState = async () => {
 
-    const approve = async () => {
-        if (typeof window.ethereum !== 'undefined') {
-            const provider = new ethers.providers.Web3Provider(window.ethereum)
-            const singer = provider.getSigner()
-            const contract = new ethers.Contract(AAddress, A.abi, singer)
-            const tx = await contract.approve(LotteryAddress, deposit)
-            await tx.wait()
-        }
     }
 
     const createNewLobby = async () => {
@@ -60,15 +58,6 @@ export default function Home() {
         console.log(await contract.lobby(LobbyCreator, LobbyId))
     }
 
-    const state = async () => {
-        const provider = new ethers.providers.getDefaultProvider()
-        const contract = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
-        setlotteryContract(contract)
-
-
-    }
-
-
     return (
         <div>
             <Head>
@@ -83,12 +72,17 @@ export default function Home() {
                         <option>A</option>
                         <option>B</option>
                     </select>
-                    <input className='deposit' id='deposit' onChange={e => setdeposit(e.target.value)} />
-                    <input className='countofplayers' id='countofplayers' onChange={e => setcountOfPlayers(e.target.value)} />
+                    <input className='deposit' id='deposit' placeholder='Deposit' onChange={e => setdeposit(e.target.value)} />
+                    <input className='countofplayers' id='countofplayers' placeholder='Count Of Players' onChange={e => setcountOfPlayers(e.target.value)} />
                     <button onClick={createNewLobby} className="button">Creat Lobby</button>
                 </div>
             </div>
             <h1 className='createNewLobby'>Enter Lobby</h1>
+            {allLobbyes && allLobbyes.map(({ creator, nowInLobby, countOfPlayers, deposit }) =>
+                <LobbyShablon creator={creator} nowInLobby={nowInLobby} countOfPlayers={countOfPlayers} deposit={deposit} />
+            )}
+
         </div>
     )
 }
+

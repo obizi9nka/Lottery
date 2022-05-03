@@ -2,7 +2,6 @@ import Head from 'next/head'
 import Image from 'next/image'
 const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
-import 'bulma/css/bulma.css'
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
 import MudeBzNFT from "C:/Lottery/lottery/artifacts/contracts/MudeBzNFT.sol/MudebzNFT.json"
@@ -66,7 +65,6 @@ export default function Home() {
                     f
                 </div>
             </div>
-
         </div>
     )
 }
