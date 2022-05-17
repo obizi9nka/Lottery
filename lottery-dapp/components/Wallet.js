@@ -9,6 +9,8 @@ import WalletAlert from './WalletAlert';
 
 export default function Wallet() {
 
+    let USER = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+
     const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
     const MudeBzNFTAddress = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
 
@@ -31,19 +33,20 @@ export default function Wallet() {
                 const signer = provider.getSigner()
                 const lottery = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
                 const nft = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, provider)
-                const address = await signer.getAddress()
-                const wins = await lottery._allowToNFT(address)
+                USER = await signer.getAddress()
+                const wins = await lottery._allowToNFT(USER)
                 for (let i = 0; i < wins.count; i++) {
                     if (!nft.istokenMints(wins.lotteryes[i])) {
                         setNftButton(true)
                         break
                     }
                 }
-                setNftButton(true)
+
             }
         } catch (err) {
             //console.log(err)
         }
+        setNftButton(true)
     }
 
     const connectWalletHandler = async () => {
@@ -77,21 +80,15 @@ export default function Wallet() {
 
     if (isWalletConnect)
         return (
-            <div className='nav'>
-                <div className='nftmint'>
-                    {NftButton && <MintNftButton />}
-                </div>
-                <div className='wallet'>
-                    <button onClick={() => setisWalletAlert(!isWalletAlert)} className="">Account</button>
-                </div>
-                <WalletAlert active={isWalletAlert} setActive={setisWalletAlert} />
+            <div className='nav center'>
+                {NftButton && <MintNftButton />}
+                <button onClick={() => setisWalletAlert(!isWalletAlert)} className="wallet mybutton">Account</button>
+                <WalletAlert active={isWalletAlert} setActive={setisWalletAlert} user={USER} />
             </div>
         )
     else {
         return (
-            <div className='walletconnect'>
-                <button onClick={connectWalletHandler} className="button">Connect Wallet</button>
-            </div>
+            <button onClick={connectWalletHandler} className="wallet mybutton center">Connect Wallet</button>
         )
     }
 }

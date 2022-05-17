@@ -55,7 +55,7 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <div className='container'>
+            <div className='container marketplace'>
                 <div className='filter'>
                     f
                     <p>a</p>

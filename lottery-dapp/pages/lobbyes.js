@@ -72,13 +72,13 @@ export default function Home({ allLobbyes }) {
                         <option>A</option>
                         <option>B</option>
                     </select>
-                    <input className='deposit' id='deposit' placeholder='Deposit' onChange={e => setdeposit(e.target.value)} />
-                    <input className='countofplayers' id='countofplayers' placeholder='Count Of Players' onChange={e => setcountOfPlayers(e.target.value)} />
-                    <button onClick={createNewLobby} className="button">Creat Lobby</button>
+                    <input className='input' id='deposit' placeholder='Deposit' onChange={e => setdeposit(e.target.value)} />
+                    <input className='input' id='countofplayers' placeholder='Count Of Players' onChange={e => setcountOfPlayers(e.target.value)} />
+                    <button onClick={createNewLobby} className="mybutton">Creat Lobby</button>
                 </div>
             </div>
             <h1 className='createNewLobby'>Enter Lobby</h1>
-            {allLobbyes && allLobbyes.map(({ creator, nowInLobby, countOfPlayers, deposit }) =>
+            {lobbyes && lobbyes.map(({ creator, nowInLobby, countOfPlayers, deposit }) =>
                 <LobbyShablon creator={creator} nowInLobby={nowInLobby} countOfPlayers={countOfPlayers} deposit={deposit} />
             )}
 

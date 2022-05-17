@@ -145,6 +145,25 @@ export default function Home() {
     }
   }
 
+  async function addToken() {
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const signer = provider.getSigner()
+    const address = await signer.getAddress()
+    console.log(address, addTokenAddress)
+    const body = { address, addTokenAddress }
+    try {
+      await fetch('/api/user', {
+        method: "POST",
+        body: JSON.stringify(body)
+      })
+      document.getElementById("inputToken").value = "";
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const [addTokenAddress, setaddTokenAddress] = useState('')
+
 
   return (
     <div>
@@ -156,7 +175,15 @@ export default function Home() {
       <div className='newnft'>
         <Image src={bigStar} />
         <div className=''>
-          <button onClick={Enter} className="button">Enter Lottery</button>
+          <button onClick={Enter} className="mybutton">Enter Lottery</button>
+        </div>
+      </div>
+      <div className="modll">
+        <div className="walletalert">
+          <div>
+            <input className="input" id="inputToken" onChange={e => setaddTokenAddress(e.target.value)} />
+            <button onClick={addToken} className="addtoken mybutton">Add new token</button>
+          </div>
         </div>
       </div>
     </div >

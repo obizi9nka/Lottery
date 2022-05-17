@@ -8,8 +8,8 @@ import bigStar from 'C:/Lottery/lottery-dapp/images/star-big.png'
 import MintNftButton from '../components/MintNftButton';
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/MudebzNFT.json"
-import { PrismaClient } from '@prisma/client';
 import Wallet from '../components/Wallet';
+
 
 
 function MyApp({ Component, pageProps }) {
@@ -22,17 +22,6 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
   }, [])
-
-
-  async function saveToken() {
-    const response = await fetch('api/user', {
-      method: "POST",
-      body: JSON.stringify(token)
-    })
-    return await response.json();
-  }
-
-
 
   return (
     <div>

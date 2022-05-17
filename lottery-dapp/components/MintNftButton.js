@@ -23,8 +23,6 @@ export default function MintNftButton() {
     }
 
     return (
-        <div>
-            <button onClick={MintMarten} className="">MintMarten</button>
-        </div>
+        <button onClick={MintMarten} className="nftmint mybutton">MintMarten</button>
     )
 }
