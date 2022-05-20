@@ -50,7 +50,7 @@ export default function Home() {
     return (
         <div>
             <Head>
-                <title>!Mudebz Marketplace</title>
+                <title>!Mudebz</title>
                 <meta name="description" content="An Ethereum Lottery dApp" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>

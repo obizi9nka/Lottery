@@ -1,5 +1,4 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import sqlite from 'sqlite'
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -7,12 +6,14 @@ const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
 
-  const { address, addTokenAddress } = JSON.parse(req.body)
+  let { address, defaultToken } = JSON.parse(req.body)
+
+  defaultToken = defaultToken + "_"
 
   const result = await prisma.user.create({
     data: {
       address,
-      tokens: addTokenAddress
+      tokens: defaultToken
     }
   })
 

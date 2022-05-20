@@ -26,16 +26,41 @@ export default function Home({ allLobbyes }) {
     const [LobbyId, setLobbyId] = useState(0)
     const [token, settoken] = useState('')
     const [lobbyes, setlobbyes] = useState(allLobbyes)
+    const [user, setuser] = useState('')
+    const [rokens, setTokens] = useState([])
 
     const AAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
     const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
 
+    const setUser = async () => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const signer = provider.getSigner()
+        const _user = await signer.getAddress()
+        setuser(_user)
+    }
+    setUser()
+
     useEffect(() => {
-        updateState()
-    }, [lobbyes])
+        getTokens()
+    }, [user])
 
-    const updateState = async () => {
 
+    const getTokens = async () => {
+        try {
+            await fetch('/api/getTokens', {
+                method: "POST",
+                body: user
+            })
+                .then(async (data) => {
+                    const temp = await data.json()
+                    const t = temp.tokens
+                    let f = t.split("_")
+                    f.pop();
+                    setTokens(f)
+                })
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     const createNewLobby = async () => {
@@ -61,16 +86,17 @@ export default function Home({ allLobbyes }) {
     return (
         <div>
             <Head>
-                <title>!Mudebz Lobbys</title>
+                <title>!Mudebz</title>
                 <meta name="description" content="An Ethereum Lottery dApp" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <h1 className='createNewLobby'>Create New Lobby</h1>
             <div className='newLobby'>
                 <div className='container lobbymenu between'>
-                    <select onChange={e => settoken(e.target.value)}>
-                        <option>A</option>
-                        <option>B</option>
+                    <select onChange={e => settoken(e.target.value)} className="choosetoken">
+                        {rokens && rokens.map((element) =>
+                            <option>{element}</option>
+                        )}
                     </select>
                     <input className='input' id='deposit' placeholder='Deposit' onChange={e => setdeposit(e.target.value)} />
                     <input className='input' id='countofplayers' placeholder='Count Of Players' onChange={e => setcountOfPlayers(e.target.value)} />

@@ -20,7 +20,29 @@ function MyApp({ Component, pageProps }) {
   const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
   const MudeBzNFTAddress = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
 
+  const [user, setuser] = useState('')
+
+  const setUser = async () => {
+    try {
+      if (typeof window.ethereum !== "undefined") {
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const signer = provider.getSigner()
+        const _user = await signer.getAddress()
+        setuser(_user)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+
   useEffect(() => {
+    async function listenMMAccount() {
+      window.ethereum.on("accountsChanged", async function () {
+        setUser()
+      });
+    }
+    listenMMAccount();
   }, [])
 
   return (

@@ -2,7 +2,8 @@ import Head from 'next/head'
 import Image from 'next/image'
 const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
-
+import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
+import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
 export default function Home() {
 
 
@@ -185,7 +186,7 @@ export default function Home() {
     return (
         <div>
             <Head>
-                <title>!Mudebz Lottery</title>
+                <title>!Mudebz</title>
                 <meta name="description" content="An Ethereum Lottery dApp" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>

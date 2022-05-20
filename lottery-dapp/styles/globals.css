@@ -72,6 +72,10 @@ footer {
   color: rgb(255, 255, 255);
 }
 
+.menu:hover {
+  color: rgb(180, 173, 37);
+}
+
 .navigation {
   position: absolute;
   word-spacing: 20px;
@@ -119,6 +123,10 @@ footer {
   border-radius: 40ex;
   color: black;
   margin-bottom: 10px;
+}
+
+.choosetoken {
+  width: 40px;
 }
 
 .lobbymenu {}
