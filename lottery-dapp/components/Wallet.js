@@ -67,9 +67,6 @@ export default function Wallet() {
         if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
             try {
                 await window.ethereum.request({ method: "eth_requestAccounts" })
-                window.ethereum.on('accountsChanged', async () => {
-                    console.log("l")
-                })
                 setisWalletConnect(true)
                 localStorage.setItem("WalletConnect", "true")
                 setNewUSer()

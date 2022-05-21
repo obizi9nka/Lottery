@@ -11,22 +11,38 @@ datasource db {
 }
 
 model user {
-  address     String  @id @unique
-  tokens      String
-  userLobbyes lobby[]
+  address            String         @id @unique
+  tokens             String
+  countOfLobbys      Int            @default(0)
+  userLobbyes        lobby[]
+  userLobbyesHistory lobbyHistory[]
 }
 
 model lobby {
-  creator String @id
+  id      Int
+  creator String
 
   IERC20         String
-  winer          String
   players        String
   deposit        String
   countOfPlayers Int
   nowInLobby     Int
 
-  user        user?   @relation(fields: [userAddress], references: [address])
-  userAddress String?
+  user user? @relation(fields: [creator], references: [address])
 
+  @@id([creator, id])
+}
+
+model lobbyHistory {
+  id      Int
+  creator String
+
+  IERC20         String
+  winner         String
+  deposit        String
+  countOfPlayers Int
+
+  user user? @relation(fields: [creator], references: [address])
+
+  @@id([creator, id])
 }

@@ -25,9 +25,10 @@ contract Lobby is Balance {
     event enterLobby(address creator, address user, uint256 LobbyId);
     event playLobby(address creator, uint256 LobbyId, address winer);
 
-    mapping(address => uint8) lobbyCountForAddress;
+    mapping(address => uint256) lobbyCountForAddress;
+    mapping(address => uint256) lobbyCountForAddressHistory;
 
-    mapping(address => mapping(uint8 => lobbyShablon)) lobby;
+    mapping(address => mapping(uint256 => lobbyShablon)) lobby;
 
     function createNewLobby(
         IERC20 tokenAddress,
@@ -45,7 +46,8 @@ contract Lobby is Balance {
 
         balanceInTokenForAccount[tokenAddress][msgsender] -= deposit;
 
-        uint8 lobbyId = lobbyCountForAddress[msgsender]++;
+        lobbyCountForAddress[msgsender]++;
+        uint256 lobbyId = ++lobbyCountForAddressHistory[msgsender];
         while (true) {
             if (lobby[msgsender][lobbyId].nowInLobby != 0) {
                 lobbyId++;
@@ -67,7 +69,7 @@ contract Lobby is Balance {
         emit newLobby(msg.sender, deposit, countOfPlayers, lobbyId);
     }
 
-    function EnterLobby(address lobbyCreator, uint8 lobbyId) public {
+    function EnterLobby(address lobbyCreator, uint256 lobbyId) public {
         address msgsender = msg.sender;
         lobbyShablon storage temp = lobby[lobbyCreator][lobbyId];
 
@@ -82,6 +84,8 @@ contract Lobby is Balance {
         temp.players.push(msgsender);
         uint256 nowInLobby = ++temp.nowInLobby;
 
+        emit enterLobby(lobbyCreator, msg.sender, lobbyId);
+
         if (nowInLobby == temp.countOfPlayers) {
             address winer = LobbyPlay(temp);
             temp.winer = winer;
@@ -89,8 +93,6 @@ contract Lobby is Balance {
             lobby[lobbyCreator][lobbyId].nowInLobby = 0;
             lobbyCountForAddress[lobbyCreator]--;
         }
-
-        emit enterLobby(lobbyCreator, msg.sender, lobbyId);
     }
 
     function LobbyPlay(lobbyShablon memory _lobby) private returns (address) {
@@ -118,7 +120,7 @@ contract Lobby is Balance {
     function findPlayerInLobby(
         address msgsender,
         address lobbyCreator,
-        uint8 lobbyId
+        uint256 lobbyId
     ) public view returns (bool) {
         address[] memory _players = lobby[lobbyCreator][lobbyId].players;
         uint256 stop = lobby[lobbyCreator][lobbyId].nowInLobby;
@@ -129,7 +131,7 @@ contract Lobby is Balance {
         return false;
     }
 
-    function getLobby(address creator, uint8 lobbyid)
+    function getLobby(address creator, uint256 lobbyid)
         public
         view
         returns (lobbyShablon memory)

@@ -112,7 +112,6 @@ footer {
 /*Lobby*/
 
 .newLobby {
-  background-color: #1011126d;
   position: relative;
   border-style: solid;
   height: 90px;
@@ -121,7 +120,7 @@ footer {
   padding-left: 30px;
   padding-right: 30px;
   border-radius: 40ex;
-  color: black;
+  color: white;
   margin-bottom: 10px;
 }
 
