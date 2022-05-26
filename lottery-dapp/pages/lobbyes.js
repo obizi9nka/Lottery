@@ -6,6 +6,7 @@ import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import { PrismaClient } from '@prisma/client';
 import LobbyShablon from '../components/LobbyShablon'
+import Filter from '../components/Filter';
 
 const prisma = new PrismaClient();
 
@@ -21,16 +22,19 @@ export async function getServerSideProps() {
 export default function Home({ allLobbyes }) {
 
 
+    const ALL_LOBBYES = allLobbyes
+
+
     const [deposit, setdeposit] = useState(0)
     const [countOfPlayers, setcountOfPlayers] = useState(0)
     const [LobbyCreator, setLobbyCreator] = useState('')
     const [LobbyId, setLobbyId] = useState(0)
     const [token, settoken] = useState('0x5FbDB2315678afecb367f032d93F642f64180aa3')
+    const [tokenForFilter, settokenForFolter] = useState('0x5FbDB2315678afecb367f032d93F642f64180aa3')
     const [lobbyes, setlobbyes] = useState(allLobbyes)
     const [user, setuser] = useState('')
     const [rokens, setTokens] = useState([])
 
-    const AAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
     const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
 
     const setUser = async () => {
@@ -119,6 +123,30 @@ export default function Home({ allLobbyes }) {
         document.getElementById("deposit").value = "";
         document.getElementById("countofplayers").value = "";
     }
+    const setSettingFOrFilter = () => {
+        let setting = ''
+        //setting = setting + " deposit_up"
+        //setting = setting + " 0x5FbDB2315678afecb367f032d93F642f64180aa3"
+        //setting = setting + " countOfPlayers_down"
+        setting = setting + " nowInLobby_up"
+        const filtered = Filter(lobbyes, setting)
+        setlobbyes([...filtered])
+    }
+
+    const RAISE_DEPOSIT = async () => {
+        lobbyes.sort((a, b) => {
+            return a.deposit - b.deposit
+        })
+        setlobbyes([...lobbyes])
+    }
+
+    const DOWN_DEPOSIT = async () => {
+        lobbyes.sort((a, b) => {
+            return b.deposit - a.deposit
+        })
+        setlobbyes([...lobbyes])
+    }
+
 
     return (
         <div>
@@ -141,6 +169,9 @@ export default function Home({ allLobbyes }) {
                 </div>
             </div>
             <h1 className='createNewLobby'>Enter Lobby</h1>
+            <button onClick={RAISE_DEPOSIT}>RAISE_DEPOSIT</button>
+            <button onClick={DOWN_DEPOSIT}>DOWN_DEPOSIT</button>
+            <button onClick={setSettingFOrFilter}>Filter</button>
             {lobbyes && lobbyes.map(({ creator, nowInLobby, countOfPlayers, deposit, IERC20, id }) =>
                 <LobbyShablon
                     creator={creator}

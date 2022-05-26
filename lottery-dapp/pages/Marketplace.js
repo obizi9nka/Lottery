@@ -5,10 +5,11 @@ import { useState, useEffect } from 'react'
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
 import MudeBzNFT from "C:/Lottery/lottery/artifacts/contracts/MudeBzNFT.sol/MudebzNFT.json"
+import metadata from "C:/Lottery/nfts/hashlips_art_engine/build/json/_metadata.json"
+import NftsShablon from '../components/NftsShablon';
 
 export default function Home() {
 
-    const AAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
     const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
     const MudeBzNFTAddress = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
 
@@ -47,6 +48,14 @@ export default function Home() {
         }
     }
 
+    const nfts = async () => {
+        metadata.forEach(element => {
+            console.log(element.image)
+        });
+    }
+
+    //nfts()
+
     return (
         <div>
             <Head>
@@ -55,16 +64,23 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <div className='container marketplace'>
-                <div className='filter'>
-                    f
-                    <p>a</p>
-                </div>
 
-                <div className='nfts'>
-                    f
-                </div>
-            </div>
+            {metadata.map((element) => < NftsShablon data={element} />)}
+            {metadata.map((element) => < NftsShablon data={element} />)}{metadata.map((element) => < NftsShablon data={element} />)}{metadata.map((element) => < NftsShablon data={element} />)}{metadata.map((element) => < NftsShablon data={element} />)}{metadata.map((element) => < NftsShablon data={element} />)}{metadata.map((element) => < NftsShablon data={element} />)}{metadata.map((element) => < NftsShablon data={element} />)}{metadata.map((element) => < NftsShablon data={element} />)}
+
+
         </div>
     )
 }
+
+/*
+<div className='container marketplace'>
+                <div className='filter'>
+
+                </div>
+
+                <div className='nfts'>
+
+                </div>
+            </div>
+*/

@@ -61,14 +61,14 @@ export default function WalletAlert({ active, setActive }) {
     return (
         <div className={active ? "modall active" : "modall"} onClick={() => setActive(false)}>
             <div className="walletalert" onClick={e => e.stopPropagation()}>
-                <div>
-                    <input className="input" id="inputToken" onChange={e => setaddTokenAddress(e.target.value)} />
-                    <button onClick={addToken} className="addtoken mybutton">Add new token</button>
-                </div>
                 <div className="wallettokens">
                     {rokens && rokens.map((element) =>
                         <TokensBalanceShablon user={user} token={element} />
                     )}
+                </div>
+                <div>
+                    <input className="input" id="inputToken" onChange={e => setaddTokenAddress(e.target.value)} />
+                    <button onClick={addToken} className="addtoken mybutton">Add new token</button>
                 </div>
             </div>
         </div>
