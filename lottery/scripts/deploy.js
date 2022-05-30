@@ -20,6 +20,8 @@ async function main() {
 
   [owner, address1, address2, _] = await ethers.getSigners()
 
+  await Lottery.connect(owner).setAdrressNFT(MudebzNFT.address)
+
   await A.connect(owner).getTokens(10000)
   await A.connect(address1).getTokens(10000)
   await A.connect(address2).getTokens(10000)

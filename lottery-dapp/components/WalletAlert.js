@@ -6,14 +6,18 @@ import TokensBalanceShablon from '../components/TokensBalanceShablon'
 export default function WalletAlert({ active, setActive }) {
 
     const [addTokenAddress, setaddTokenAddress] = useState('')
-    const [user, setuser] = useState('')
+    const [user, setuser] = useState("")
     const [rokens, setTokens] = useState([])
 
     const setUser = async () => {
-        const provider = new ethers.providers.Web3Provider(window.ethereum)
-        const signer = provider.getSigner()
-        const _user = await signer.getAddress()
-        setuser(_user)
+        try {
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const signer = provider.getSigner()
+            const _user = await signer.getAddress()
+            setuser(_user)
+        } catch (err) {
+            console.log()
+        }
     }
     setUser()
 
@@ -23,7 +27,7 @@ export default function WalletAlert({ active, setActive }) {
 
     const getTokens = async () => {
         try {
-            await fetch('/api/getTokens', {
+            await fetch('/api/getUserData', {
                 method: "POST",
                 body: user
             })
@@ -38,8 +42,6 @@ export default function WalletAlert({ active, setActive }) {
             console.log(err)
         }
     }
-
-
 
     async function addToken() {
         const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -59,7 +61,13 @@ export default function WalletAlert({ active, setActive }) {
 
 
     return (
-        <div className={active ? "modall active" : "modall"} onClick={() => setActive(false)}>
+        <div className={active ? "modall active" : "modall"} onClick={
+            () => {
+                setActive(false)
+                if (localStorage.getItem("overflow") != "lock")
+                    document.body.style.overflow = ('overflow', 'auto');
+            }
+        }>
             <div className="walletalert" onClick={e => e.stopPropagation()}>
                 <div className="wallettokens">
                     {rokens && rokens.map((element) =>

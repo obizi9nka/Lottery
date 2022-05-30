@@ -16,6 +16,7 @@ model user {
   countOfLobbys      Int            @default(0)
   userLobbyes        lobby[]
   userLobbyesHistory lobbyHistory[]
+  news               String?
 }
 
 model lobby {
@@ -38,6 +39,7 @@ model lobbyHistory {
   creator String
 
   IERC20         String
+  players        String
   winner         String
   deposit        String
   countOfPlayers Int

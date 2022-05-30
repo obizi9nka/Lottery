@@ -17,7 +17,7 @@ contract Lottery is Lobby, Ownable {
 
     struct wins {
         uint256[] lotteryes;
-        uint256 count;
+        uint256 dont_use;
     }
 
     event enter(address user);
@@ -64,7 +64,31 @@ contract Lottery is Lobby, Ownable {
 
     function checkFor50() private {
         if (!NFT.istokenMints(LotteryCount - 5)) {
+            address onNeZamintel = first1000Winers[LotteryCount - 5];
+
+            uint256[] storage array = _first1000Winers[onNeZamintel].lotteryes;
+            uint256 stop = array.length;
+
+            for (uint256 i = 0; i < stop; i++) {
+                if (array[i] == LotteryCount - 5) {
+                    if (stop == 1) {
+                        array.pop();
+                    } else {
+                        for (
+                            uint256 index = i;
+                            index < array.length - 1;
+                            index++
+                        ) {
+                            array[index] = array[index + 1];
+                        }
+                    }
+                    break;
+                }
+            }
+
+            //_first1000Winers[onNeZamintel].dont_use--;//тут появляется баг в тестах мол преполнение происходит, но я так и не понял почему ведь если
             first1000Winers[LotteryCount - 5] = owner();
+            _first1000Winers[owner()].lotteryes.push(LotteryCount - 5);
         }
     }
 
@@ -119,8 +143,9 @@ contract Lottery is Lobby, Ownable {
     function Play() public onlyOwner {
         address winer;
 
-        if (Lotteries[LotteryCount].playersCount == 0) winer == owner();
-        else {
+        if (Lotteries[LotteryCount].playersCount == 0) {
+            winer = owner();
+        } else {
             uint256 tryRandom = getRandNumber(
                 Lotteries[LotteryCount].playersCount
             );
@@ -130,7 +155,6 @@ contract Lottery is Lobby, Ownable {
         if (LotteryCount <= 1000) {
             first1000Winers[LotteryCount] = winer;
             _first1000Winers[winer].lotteryes.push(LotteryCount);
-            _first1000Winers[winer].count++;
         }
 
         balanceInTokenForAccount[tokenForLottery][winer] +=
@@ -138,7 +162,7 @@ contract Lottery is Lobby, Ownable {
             Lotteries[LotteryCount].playersCount;
 
         Lotteries[LotteryCount].winer = winer;
-        if (LotteryCount >= 5 && LotteryCount <= 1002) checkFor50();
+        if (LotteryCount >= 5 && LotteryCount <= 1005) checkFor50();
         Lotteries[++LotteryCount].playersCount = 0;
         Lotteries[LotteryCount].winer = address(0);
         emit play(winer);

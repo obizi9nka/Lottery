@@ -6,14 +6,13 @@ const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
 
-  let { address, defaultToken } = JSON.parse(req.body)
-
-  defaultToken = defaultToken + "_"
+  const { address } = JSON.parse(req.body)
 
   const result = await prisma.user.create({
     data: {
       address,
-      tokens: defaultToken
+      tokens: "0x5FbDB2315678afecb367f032d93F642f64180aa3_",
+      news: ""
     }
   })
 

@@ -22,6 +22,50 @@
     pointer-events: all;
 }
 
+.modallMINT {
+    margin-top: 100px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.modallMINT.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.areaMINT {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow-y: auto;
+    background-color: #110e0e;
+    display: inline-block;
+}
+
+.space-around {
+
+    display: flex;
+    justify-content: space-around;
+}
+
+.MINT {
+    padding-top: 20vh;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    width: auto;
+    height: 100vh;
+
+}
+
+
 .walletalert {
     padding: 10px;
     width: 450px;
@@ -55,8 +99,13 @@
 */
 
 .nftmint {
-    position: absolute;
-    left: 80%;
+    color: white;
+    border: 1px;
+    border-style: solid;
+    padding: 10px;
+    border-radius: 12px;
+    border-color: white;
+    background-color: rgb(180, 173, 37);
 }
 
 .nftmint:hover {
@@ -89,4 +138,40 @@
 .bordernft {
     border: 1px solid white;
     padding: 23px;
+}
+
+/*
+    LobbyShablon
+*/
+
+.LobbyShablon {
+    border: 1px solid white;
+    width: 150px;
+    height: 150px;
+    display: inline-block;
+    margin: 23px;
+    background-color: rgba(55, 38, 88, 0.542);
+}
+
+.tokeninlobbyshablon {
+    margin: 10px;
+}
+
+.countofplayers {
+    padding: 10px;
+}
+
+.depositlobby {
+    margin: 20px;
+}
+
+.enter {
+    margin: 20px;
+    height: 25px;
+}
+
+.con {
+    display: flex;
+    height: auto;
+    justify-content: space-between;
 }

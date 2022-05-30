@@ -15,30 +15,43 @@ export default function Wallet() {
     const [NftButton, setNftButton] = useState(false)
     const [isWalletConnect, setisWalletConnect] = useState(false)
     const [isWalletAlert, setisWalletAlert] = useState(false)
+    const [user, setuser] = useState("")
+
+    const setUser = async () => {
+        try {
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const signer = provider.getSigner()
+            const _user = await signer.getAddress()
+            setuser(_user)
+        } catch (err) {
+            console.log()
+        }
+    }
+    setUser()
 
     useEffect(() => {
         checkWallet()
         checkNftButton()
-    }, [isWalletConnect])
+        getAllNews()
+    }, [isWalletConnect, user])
 
 
     async function setNewUSer() {
-        const defaultToken = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
         const provider = new ethers.providers.Web3Provider(window.ethereum)
         const signer = provider.getSigner()
         const address = await signer.getAddress()
-        const body = { address, defaultToken }
+        const body = { address }
         try {
             await fetch('/api/user', {
                 method: "POST",
                 body: JSON.stringify(body)
+            }).catch(() => {
+                window.location.reload()
             })
         } catch (err) {
             console.log(err)
         }
     }
-
-
 
     const checkNftButton = async () => {
         try {
@@ -47,10 +60,10 @@ export default function Wallet() {
                 const signer = provider.getSigner()
                 const lottery = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
                 const nft = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, provider)
-                USER = await signer.getAddress()
+                const USER = await signer.getAddress()
                 const wins = await lottery._allowToNFT(USER)
-                for (let i = 0; i < wins.count; i++) {
-                    if (!nft.istokenMints(wins.lotteryes[i])) {
+                for (let i = 0; i < parseInt(wins.lotteryes.length, 10); i++) {
+                    if (!await nft.istokenMints(wins.lotteryes[i])) {
                         setNftButton(true)
                         break
                     }
@@ -58,18 +71,18 @@ export default function Wallet() {
 
             }
         } catch (err) {
-            //console.log(err)
+            console.log(err)
         }
-        setNftButton(true)
+        //setNftButton(true)
     }
 
     const connectWalletHandler = async () => {
         if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
             try {
                 await window.ethereum.request({ method: "eth_requestAccounts" })
-                setisWalletConnect(true)
                 localStorage.setItem("WalletConnect", "true")
                 setNewUSer()
+                setisWalletConnect(true)
             } catch (err) {
                 console.log(err)
             }
@@ -92,13 +105,80 @@ export default function Wallet() {
         }
     }
 
+    const [news, setnews] = useState([])
+
+    const getAllNews = async () => {
+        try {
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const signer = provider.getSigner()
+            const user = await signer.getAddress()
+            const constructorNews = []
+            await fetch('/api/getUserData', {
+                method: "POST",
+                body: user
+            })
+                .then(async (data) => {
+                    const temp = await data.json()
+                    const t = temp.news.split("&")
+                    t.pop()
+                    t.map(element => {
+                        let data = element.split("_")
+                        let winOrLose
+                        if (data[5] == "1") {
+                            winOrLose = "Win"
+                        } else {
+                            winOrLose = "Lose"
+                        }
+
+                        constructorNews.push(Object({
+                            creator: data[0],
+                            id: data[1],
+                            token: data[2],
+                            deposit: data[3],
+                            countOfPlayers: data[4],
+                            isWin: winOrLose
+                        }
+                        ))
+                    });
+
+                })
+            setnews(constructorNews)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+
     if (isWalletConnect)
         return (
-            <div className='nav center'>
-                {NftButton && <MintNftButton />}
-                <button onClick={() => setisWalletAlert(!isWalletAlert)} className="wallet mybutton">Account</button>
+            <div className='wallet center'>
+                <div className='otstup widthmint'>{NftButton && <MintNftButton />}</div>
+                <div className='otstup'>
+                    <div className="dropdown">
+                        <Image className="white" src="/news.png" width={25} height={25} />
+                        <div className="dropdown-content">
+                            {news && news.map((element) =>
+                                <div>
+                                    {"..."}
+                                    {element.creator.substr(37, 5)}
+                                    {" Deposit:"}
+                                    {element.deposit}
+                                    {" Players:"}
+                                    {element.countOfPlayers}
+                                    {" "}
+                                    {element.isWin}
+                                </div>
+                            )}
+                        </div>
+                    </div >
+                </div>
+                <div className='otstup'><button onClick={() => {
+                    if (!isWalletAlert)
+                        document.body.style.overflow = ('overflow', 'hidden')
+                    setisWalletAlert(!isWalletAlert)
+                }} className="mybutton">Account</button></div>
                 <WalletAlert active={isWalletAlert} setActive={setisWalletAlert} />
-            </div>
+            </div >
         )
     else {
         return (

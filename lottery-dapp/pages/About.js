@@ -2,18 +2,22 @@ import Head from 'next/head'
 import Image from 'next/image'
 const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
+import MudeBzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/MudebzNFT.json"
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
+import { platform } from 'os';
+
+
 export default function Home() {
 
 
     const AAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
     const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
-    const MudeBzNFT = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
+    const MudeBzNFTAddress = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
 
     const [error, setError] = useState('')
     const [successMsg, setSuccessMsg] = useState('')
-    const [lcContract, setLcContract] = useState()
+    const [TokenId, setTokenId] = useState()
     const [freeTokens, setFreeTokens] = useState(0)
     const [deposit, setdeposit] = useState(0)
     const [lotteryPlayers, setPlayers] = useState([])
@@ -66,7 +70,10 @@ export default function Home() {
         if (typeof window.ethereum !== 'undefined') {
             const provider = new ethers.providers.Web3Provider(window.ethereum)
             const contract = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
-            const tx = await contract.allowToNFT(1)
+            //const tx = await contract.allowToNFT(1)
+            const tx = await contract._allowToNFT("0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc")
+            // const contract = new ethers.Contract(MudeBzNFTAddress, MudeBzNFT.abi, provider)
+            // const tx = contract.istokenMints(1)
             console.log(tx)
         }
     }
@@ -128,7 +135,7 @@ export default function Home() {
             const tx = await contract.Play()
             await tx.wait()
             contract.on("play", async () => {
-                console.log("Winer:", contract.getLotteryShablonByIndex(contract.getLotteryCount() - 1).winer)
+                console.log("Winer:", (await contract.getLotteryShablonByIndex(parseInt(await contract.getLotteryCount() - 1, 10))).winer)
             })
         }
     }
@@ -163,11 +170,12 @@ export default function Home() {
 
     const MintMarten = async () => {
         if (typeof window.ethereum !== 'undefined') {
-            await approve()
             const provider = new ethers.providers.Web3Provider(window.ethereum)
             const singer = provider.getSigner()
             const contract = new ethers.Contract(MudeBzNFTAddress, MudeBzNFT.abi, singer)
-            const tx = await contract.MintMarten(TokenId)
+            const tx = await contract.MintMarten(2, {
+                value: 32
+            })
             await tx.wait()
         }
     }

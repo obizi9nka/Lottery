@@ -4,7 +4,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
-import bigStar from 'C:/Lottery/lottery-dapp/images/star-big.png'
 import MintNftButton from '../components/MintNftButton';
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/MudebzNFT.json"
@@ -31,7 +30,7 @@ function MyApp({ Component, pageProps }) {
         setuser(_user)
       }
     } catch (err) {
-      console.log(err)
+      window.location.reload()
     }
   }
 
@@ -46,9 +45,9 @@ function MyApp({ Component, pageProps }) {
   }, [])
 
   return (
-    <div>
+    <div className=''>
       <nav className="nav">
-        <div className='container'>
+        <div className='container between'>
           <div className='navigation'>
             <Link href="/">
               <a className='menu'> Lottery </a>
@@ -64,17 +63,18 @@ function MyApp({ Component, pageProps }) {
             </Link>
           </div>
           <div className='image'>
-            <Image src={bigStar} width="100px" height="100px" />
+            <Link href="/" >
+              <Image src="/star-big.png" width="100px" height="100px" />
+            </Link>
           </div>
-
           <Wallet />
         </div>
-      </nav>
+      </nav >
       <Component {...pageProps} />
       <footer>
-        footer
+        f
       </footer>
-    </div>
+    </div >
   )
 }
 

@@ -2,7 +2,8 @@
 CREATE TABLE "user" (
     "address" TEXT NOT NULL PRIMARY KEY,
     "tokens" TEXT NOT NULL,
-    "countOfLobbys" INTEGER NOT NULL DEFAULT 0
+    "countOfLobbys" INTEGER NOT NULL DEFAULT 0,
+    "news" TEXT
 );
 
 -- CreateTable
@@ -24,6 +25,7 @@ CREATE TABLE "lobbyHistory" (
     "id" INTEGER NOT NULL,
     "creator" TEXT NOT NULL,
     "IERC20" TEXT NOT NULL,
+    "players" TEXT NOT NULL,
     "winner" TEXT NOT NULL,
     "deposit" TEXT NOT NULL,
     "countOfPlayers" INTEGER NOT NULL,

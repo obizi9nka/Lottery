@@ -57,7 +57,7 @@ export default function Home() {
     //nfts()
 
     return (
-        <div>
+        <div className='some-padding'>
             <Head>
                 <title>!Mudebz</title>
                 <meta name="description" content="An Ethereum Lottery dApp" />

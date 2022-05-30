@@ -4,10 +4,27 @@ const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
-import bigStar from 'C:/Lottery/lottery-dapp/images/star-big.png'
+import { compileFunction } from 'vm';
 
+export async function getServerSideProps() {
+  let id
+  try {
+    const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
+    const provider = new ethers.providers.JsonRpcProvider
+    const contract = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
+    id = await contract.getLotteryCount()
+    console.log(id)
+  } catch (err) {
+    console.log(err)
+  }
+  return {
+    props: {
+      id: parseInt(id, 10)
+    }
+  }
+}
 
-export default function Home() {
+export default function Home({ id }) {
 
   const AAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
   const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
@@ -19,6 +36,7 @@ export default function Home() {
   const [freeTokens, setFreeTokens] = useState(0)
   const [deposit, setdeposit] = useState(0)
   const [lotteryPlayers, setPlayers] = useState([])
+  const [lotteryId, setlotteryId] = useState(`/images/${id % 5 === 0 ? id % 5 + 1 : id % 5}.png`)
 
   /*useEffect(() => {
     updateState()
@@ -149,6 +167,8 @@ export default function Home() {
 
 
 
+
+
   return (
     <div>
       <Head>
@@ -157,9 +177,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className='newnft'>
-        <Image src={bigStar} />
+        <Image src={lotteryId} width={300} height={300} />
         <div className=''>
-          <button onClick={Enter} className="mybutton">Enter Lottery</button>
+          <button onClick={Enter} className="mybutton tobottom">Enter Lottery</button>
         </div>
       </div>
     </div >

@@ -58,7 +58,9 @@ describe("Lottery", async () => {
 
   })
   it("Enter Lottery and Play", async () => {
-    for (let i = 0; i < 10; i++) {
+    await Lottery.connect(owner).Play()
+    expect(await Lottery.allowToNFT(1)).to.equal(owner.address)
+    for (let i = 1; i < 10; i++) {
       await Lottery.connect(owner).Enter()
       expect(await Lottery.getPlayerByIndex(0)).to.equal(owner.address)
       await Lottery.connect(address1).Enter()
@@ -74,15 +76,15 @@ describe("Lottery", async () => {
   })
 
   it("Lobby create, enter and play", async () => {
-    for (let i = 0; i < 3; i++) {
+    for (let i = 1; i < 4; i++) {
       await Lottery.connect(owner).createNewLobby(A.address, 1, 2)
       expect((await Lottery.getLobby(owner.address, i)).nowInLobby).to.equal(1)
     }
-    for (let i = 0; i < 3; i++) {
+    for (let i = 1; i < 4; i++) {
       await Lottery.connect(address1).EnterLobby(owner.address, i)
       expect((await Lottery.getLobby(owner.address, i)).nowInLobby).to.equal(0)
     }
-    for (let i = 0; i < 10; i++) {
+    for (let i = 4; i <= 12; i++) {
       await Lottery.connect(owner).createNewLobby(A.address, 1, 2)
       expect((await Lottery.getLobby(owner.address, i)).nowInLobby).to.equal(1)
       let player = (await Lottery.getLobby(owner.address, i)).players[1]

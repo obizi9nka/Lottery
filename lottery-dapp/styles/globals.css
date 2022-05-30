@@ -9,17 +9,27 @@ body {
 }
 
 a {
-  color: inherit;
   text-decoration: none;
 }
 
 footer {
   margin-left: 50%;
-  margin-top: 100%;
+  margin-top: 100vh;
 }
 
 * {
   box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: .4em;
+}
+
+::-webkit-scrollbar-track {}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: rgba(180, 180, 161, 0.866);
 }
 
 .mybutton {
@@ -51,11 +61,17 @@ footer {
 }
 
 /*_app*/
+
+.locksdvig {
+  overflow-x: hidden;
+  margin-right: calc(-1 * (100vw - 100%));
+}
+
 .nav {
   border-bottom: 3px solid rgb(255, 255, 255);
   height: 100px;
-  padding-right: 100px;
-  padding-left: 100px;
+  padding-right: 10%;
+  padding-left: 10%;
 }
 
 .container {
@@ -65,7 +81,21 @@ footer {
 }
 
 .between {
+  display: flex;
   justify-content: space-between;
+}
+
+.d {
+  display: flex;
+  width: auto;
+}
+
+.otstup {
+  padding: 0px 0px 0px 10px;
+}
+
+.widthmint {
+  width: 110px;
 }
 
 .menu {
@@ -77,7 +107,6 @@ footer {
 }
 
 .navigation {
-  position: absolute;
   word-spacing: 20px;
   left: auto;
 }
@@ -87,15 +116,14 @@ footer {
   align-items: center;
 }
 
+.box {}
+
 .image {
   position: absolute;
-  left: 47%;
+  left: 47.5%;
 }
 
-.wallet {
-  position: absolute;
-  right: 100px;
-}
+.wallet {}
 
 .wallet:hover {
   cursor: pointer;
@@ -107,38 +135,148 @@ footer {
 .newnft {
   margin-top: 5%;
   text-align: center;
+  z-index: 1;
 }
 
 /*Lobby*/
 
-.newLobby {
-  position: relative;
-  border-style: solid;
-  height: 90px;
-  margin-left: 350px;
-  margin-right: 350px;
-  padding-left: 30px;
-  padding-right: 30px;
-  border-radius: 40ex;
-  color: white;
-  margin-bottom: 10px;
+.areanewLobby {
+  border: 1px solid white;
+  margin: 15px 20px;
+  width: 250px;
+  height: 250px;
 }
 
-.choosetoken {
-  width: 40px;
+.arealobbychoose {
+  border: 1px solid white;
+  margin: 15px 5px;
+  width: 1200px;
+  height: 250px;
+  display: flex;
+  overflow-x: auto;
 }
 
-.lobbymenu {}
+.areafilterlobby {
+  border: 1px solid white;
+  margin: 0px 20px;
+  width: 250px;
+  height: 250px;
+  position: sticky;
+  top: 50px;
+}
 
+.arealobbyes {
+  border: 1px solid white;
+  width: 1200px;
+  height: auto;
+  margin-right: 25px;
+}
 
-.createNewLobby {
+.con {
+  display: flex;
+  height: inherit;
+}
+
+.titel {
   text-align: center;
   margin-top: 12px;
   color: #ffffff;
   margin-bottom: 12px;
 }
 
-/*Marketplace*/
+.newLobby {
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+  justify-content: space-between;
+}
+
+.filterbutton {
+  position: absolute;
+  display: flex;
+  bottom: 6%;
+  right: 6%;
+}
+
+.choosecoler {
+  color: white;
+}
+
+.choose {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.UpAndDown {
+  color: white;
+  display: flex;
+  justify-content: space-between;
+}
+
+/*тумблер*/
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #2196F3;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked+.slider {
+  background-color: #2196F3;
+}
+
+input:focus+.slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+
+/*
+  Marketplace
+*/
 .marketplace {
   margin-top: 30px;
   margin-left: 30px;
@@ -157,5 +295,44 @@ footer {
   border: 1px solid;
   width: 100%;
   border-color: white;
+}
 
+.some-padding {
+  padding: 3%;
+}
+
+/*
+  News
+*/
+
+
+.dropdown {}
+
+.white {
+  background-color: white;
+  border-radius: 100px;
+}
+
+.dropdown-content {
+  overflow-y: auto;
+  max-height: 400px;
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 165px;
+  max-width: 200px;
+  z-index: 150;
+}
+
+/*.dropdown-content f {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content f:hover {}*/
+
+.dropdown:hover .dropdown-content {
+  display: block;
 }

@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
 
-    const { creator, id } = JSON.parse(req.body)
+    const { creator, id, newPlayer } = JSON.parse(req.body)
 
     const loby = await prisma.lobby.findUnique({
         where: {
@@ -27,7 +27,8 @@ export default async function handler(req, res) {
             }
         },
         data: {
-            nowInLobby: loby.nowInLobby + 1
+            nowInLobby: loby.nowInLobby + 1,
+            players: loby.players + newPlayer + "_"
         }
     });
 
@@ -50,9 +51,37 @@ export default async function handler(req, res) {
                 countOfPlayers: loby.countOfPlayers,
                 IERC20: loby.IERC20,
                 winner: lobyWithWinner.winer,
-                deposit: loby.deposit
+                deposit: loby.deposit,
+                players: loby.players
             }
         })
+        const players = lobyWithWinner.players
+        const newNews = creator + "_" + id + "_" + loby.IERC20 + "_" + `${loby.deposit}` + "_" + `${loby.countOfPlayers}`;
+        for (let i = 0; i < players.length; i++) {
+            let AlredyNews = await prisma.user.findUnique({
+                where: {
+                    address: players[i]
+                },
+                select: {
+                    news: true
+                }
+            })
+
+            let news = AlredyNews.news + newNews;
+            if (lobyWithWinner.winer == players[i]) { news += "_1&" }
+            else { news += "_0&" };
+
+            await prisma.user.update({
+                where:
+                {
+                    address: players[i]
+                },
+                data: {
+                    news
+                }
+            })
+        };
+
 
     }
 

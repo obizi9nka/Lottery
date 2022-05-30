@@ -14,7 +14,7 @@ export default function NftsShablon({ data }) {
     return (
         <div className='nftsShablon'>
             <div className='bordernft'>
-                <Image src={image} width={120} height={120} />
+                <Image src={image} width={90} height={90} />
                 <p>#{data.edition}</p>
             </div>
         </div>
