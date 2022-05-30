@@ -52,7 +52,7 @@ export default async function handler(req, res) {
                 IERC20: loby.IERC20,
                 winner: lobyWithWinner.winer,
                 deposit: loby.deposit,
-                players: loby.players
+                players: loby.players + lobyWithWinner.players[loby.countOfPlayers - 1] + "_"
             }
         })
         const players = lobyWithWinner.players

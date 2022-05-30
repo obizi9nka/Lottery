@@ -19,11 +19,27 @@ contract Lobby is Balance {
         address indexed creator,
         uint256 indexed deposit,
         uint256 indexed countOfPlayers,
-        uint256 LobbyId //тут может появится ошибка, так как индексы цекличны и при новой записи может возникнуть конфликт, но я не уверен что оно так работает
+        uint256 LobbyId
     );
 
-    event enterLobby(address creator, address user, uint256 LobbyId);
-    event playLobby(address creator, uint256 LobbyId, address winer);
+    event enterLobby(
+        address creator,
+        uint256 LobbyId,
+        address user,
+        address[] players,
+        uint256 deposit,
+        uint256 countOfPlayers,
+        IERC20 token
+    );
+    event playLobby(
+        address creator,
+        uint256 LobbyId,
+        address[] players,
+        uint256 deposit,
+        uint256 countOfPlayers,
+        IERC20 token,
+        address winer
+    );
 
     mapping(address => uint256) lobbyCountForAddress;
     mapping(address => uint256) lobbyCountForAddressHistory;
@@ -84,14 +100,30 @@ contract Lobby is Balance {
         temp.players.push(msgsender);
         uint256 nowInLobby = ++temp.nowInLobby;
 
-        emit enterLobby(lobbyCreator, msg.sender, lobbyId);
+        emit enterLobby(
+            lobbyCreator,
+            lobbyId,
+            msg.sender,
+            temp.players,
+            temp.deposit,
+            temp.countOfPlayers,
+            temp.token
+        );
 
         if (nowInLobby == temp.countOfPlayers) {
             address winer = LobbyPlay(temp);
             temp.winer = winer;
-            emit playLobby(lobbyCreator, lobbyId, winer);
             lobby[lobbyCreator][lobbyId].nowInLobby = 0;
             lobbyCountForAddress[lobbyCreator]--;
+            emit playLobby(
+                lobbyCreator,
+                lobbyId,
+                temp.players,
+                temp.deposit,
+                temp.countOfPlayers,
+                temp.token,
+                winer
+            );
         }
     }
 

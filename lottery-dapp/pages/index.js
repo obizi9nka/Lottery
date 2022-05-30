@@ -6,6 +6,7 @@ import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.
 import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
 import { compileFunction } from 'vm';
 
+
 export async function getServerSideProps() {
   let id
   try {
@@ -25,6 +26,10 @@ export async function getServerSideProps() {
 }
 
 export default function Home({ id }) {
+
+
+
+
 
   const AAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
   const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'

@@ -9,7 +9,7 @@ import Image from 'next/image';
 export default function LobbyShablon(lobby) {
 
     const EnterLobby = async () => {
-        console.log(lobby.creator, lobby.id)
+        console.log(lobby.creator, lobby.id, lobby)
         const provider = new ethers.providers.Web3Provider(window.ethereum)
         const signer = provider.getSigner()
         const newPlayer = await signer.getAddress()

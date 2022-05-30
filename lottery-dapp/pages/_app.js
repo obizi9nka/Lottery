@@ -35,13 +35,11 @@ function MyApp({ Component, pageProps }) {
   }
 
 
+
   useEffect(() => {
-    async function listenMMAccount() {
-      window.ethereum.on("accountsChanged", async function () {
-        setUser()
-      });
-    }
-    listenMMAccount();
+    window.ethereum.on("accountsChanged", () => {
+      setUser()
+    });
   }, [])
 
   return (

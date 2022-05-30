@@ -1,10 +1,13 @@
+
+
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 
-export default async function handler(req, res) {
 
+export default async function handler(req, res) {
+    //for (let i = 0; i < 1000; i++) {
     let { user, token, countOfPlayers, deposit } = JSON.parse(req.body)
 
     countOfPlayers = parseInt(countOfPlayers, 10)
@@ -16,15 +19,14 @@ export default async function handler(req, res) {
     })
 
     id = 1 + id.countOfLobbys
-    const players = user + "_"
-    const result = await prisma.lobby.create({
 
+    const result = await prisma.lobby.create({
         data: {
             id,
             creator: user,
             IERC20: token,
             countOfPlayers,
-            players,
+            players: user,
             nowInLobby: 1,
             deposit,
         }
@@ -38,6 +40,8 @@ export default async function handler(req, res) {
             countOfLobbys: id
         }
     })
+    //}
 
-    res.json(result)
+
+
 }
