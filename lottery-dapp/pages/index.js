@@ -181,6 +181,7 @@ export default function Home({ id }) {
         <meta name="description" content="An Ethereum Lottery dApp" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <h1 className='titel'>New NFT</h1>
       <div className='newnft'>
         <Image src={lotteryId} width={300} height={300} />
         <div className=''>

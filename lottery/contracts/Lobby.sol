@@ -62,7 +62,7 @@ contract Lobby is Balance {
 
         balanceInTokenForAccount[tokenAddress][msgsender] -= deposit;
 
-        lobbyCountForAddress[msgsender]++;
+        lobbyCountForAddress[msgsender]++; //мб тут ошибка
         uint256 lobbyId = ++lobbyCountForAddressHistory[msgsender];
         while (true) {
             if (lobby[msgsender][lobbyId].nowInLobby != 0) {

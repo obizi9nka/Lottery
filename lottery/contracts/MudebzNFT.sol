@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract MudebzNFT is ERC721with, Ownable {
     Lottery immutable lottery;
-    uint256 public constant nftPrice = 32; // 32 * (10**15); //0.032WETH 32000000000000000 wei
+    uint256 public constant nftPrice = 32 * (10**15); //0.032ETH 32000000000000000 wei
 
     event NewNFT(address owner, uint256 tokenId);
 

@@ -62,7 +62,7 @@ export default function MintNftButton() {
     }
     return (
         <div>
-            <button className={isMintMartenActive ? "nftmint" : "mybutton"} onClick={() => {
+            <button className={isMintMartenActive ? "nftmintbuttonactive" : "mybutton"} onClick={() => {
                 if (!isMintMartenActive) {
                     localStorage.setItem("overflow", "lock")
                     document.body.style.overflow = ('overflow', 'hidden');

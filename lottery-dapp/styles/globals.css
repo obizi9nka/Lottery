@@ -3,6 +3,7 @@ body {
   padding: 0;
   background: #110e0ef1;
   margin: 0;
+  max-width: 99.56vw;
   height: auto;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
@@ -21,7 +22,13 @@ footer {
   box-sizing: border-box;
 }
 
+.main {
+  overflow-x: hidden;
+  min-width: 1528.8px;
+}
+
 ::-webkit-scrollbar {
+  height: .3em;
   width: .4em;
 }
 
@@ -31,6 +38,7 @@ footer {
   border-radius: 4px;
   background: rgba(180, 180, 161, 0.866);
 }
+
 
 .mybutton {
   color: white;
@@ -45,8 +53,6 @@ footer {
 .mybutton:hover {
   background-color: rgb(180, 173, 37);
   cursor: pointer;
-  border: 1px;
-  border-style: solid;
 }
 
 .input {
@@ -57,21 +63,22 @@ footer {
   border-radius: 12px;
   border-color: white;
   padding: 10px;
-  width: 240px;
+}
+
+.input.big {
+  width: 65%;
 }
 
 /*_app*/
 
-.locksdvig {
-  overflow-x: hidden;
-  margin-right: calc(-1 * (100vw - 100%));
-}
 
 .nav {
   border-bottom: 3px solid rgb(255, 255, 255);
-  height: 100px;
+  height: 9%;
   padding-right: 10%;
   padding-left: 10%;
+  background: rgb(2, 0, 36);
+  background: linear-gradient(180deg, rgba(2, 0, 36, 1) 0%, rgba(207, 0, 255, 1) 100%, rgba(0, 212, 255, 1) 100%, rgba(63, 159, 255, 1) 100%);
 }
 
 .container {
@@ -94,9 +101,7 @@ footer {
   padding: 0px 0px 0px 10px;
 }
 
-.widthmint {
-  width: 110px;
-}
+.widthmint {}
 
 .menu {
   color: rgb(255, 255, 255);
@@ -118,64 +123,122 @@ footer {
 
 .box {}
 
-.image {
-  position: absolute;
-  left: 47.5%;
-}
+.image {}
 
-.wallet {}
+.wallet {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 333px;
+}
 
 .wallet:hover {
   cursor: pointer;
+}
+
+.nftmintbuttonactive {
+  color: white;
+  border: 1px;
+  border-style: solid;
+  padding: 10px;
+  border-radius: 12px;
+  border-color: white;
+  background-color: rgb(180, 173, 37);
 }
 
 
 
 /*Lottery*/
 .newnft {
-  margin-top: 5%;
   text-align: center;
   z-index: 1;
 }
 
 /*Lobby*/
 
-.areanewLobby {
-  border: 1px solid white;
-  margin: 15px 20px;
-  width: 250px;
-  height: 250px;
+
+
+.new_active_lobbys {
+  min-height: 200px;
+  height: 15vw;
+  display: flex;
+  margin: 0px 1vw;
+}
+
+.area {
+  border: 4px solid #b9b2b2f1;
+  border-radius: 10px;
+  width: 84%;
+  margin-left: 1vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overflow {
+  padding-bottom: 1%;
+  display: flex;
+  margin: 0% 1%;
+  overflow: auto;
 }
 
 .arealobbychoose {
-  border: 1px solid white;
-  margin: 15px 5px;
-  width: 1200px;
-  height: 250px;
+  justify-content: space-around;
   display: flex;
-  overflow-x: auto;
+}
+
+.newLobby {
+  width: 230px;
+  padding: 17px;
+  border: 4px solid #b9b2b2f1;
+  border-radius: 10px;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
 }
 
 .areafilterlobby {
-  border: 1px solid white;
-  margin: 0px 20px;
-  width: 250px;
-  height: 250px;
-  position: sticky;
-  top: 50px;
+  padding: 1% 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.FILTER {
+  padding: 1%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: 3px solid white;
+  border-radius: 12px;
+  width: 40%;
+}
+
+.settings {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .arealobbyes {
-  border: 1px solid white;
-  width: 1200px;
-  height: auto;
-  margin-right: 25px;
+  min-height: 200px;
+  border: 3px solid white;
+  border-radius: 12px;
 }
 
-.con {
+
+
+.alllobbyes {
+  justify-content: center;
   display: flex;
-  height: inherit;
+  flex-wrap: wrap;
 }
+
+.I {
+  width: 100%;
+}
+
 
 .titel {
   text-align: center;
@@ -184,28 +247,19 @@ footer {
   margin-bottom: 12px;
 }
 
-.newLobby {
-  display: flex;
-  flex-direction: column;
-  height: inherit;
-  justify-content: space-between;
+.choosetoken {
+  background-color: #110e0ef1;
+  color: white;
+  padding: 10px;
+  height: fit-content;
 }
 
-.filterbutton {
-  position: absolute;
-  display: flex;
-  bottom: 6%;
-  right: 6%;
+option {
+  background-color: #0d0e0f;
 }
 
 .choosecoler {
-  color: white;
-}
-
-.choose {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+  color: rgb(255, 255, 255);
 }
 
 .UpAndDown {
@@ -273,6 +327,9 @@ input:checked+.slider:before {
   border-radius: 50%;
 }
 
+.justcolor {
+  color: #403e3f;
+}
 
 /*
   Marketplace
@@ -284,54 +341,8 @@ input:checked+.slider:before {
 
 }
 
-.filter {
-  width: 340px;
-  border: 1px solid;
-  border-color: white;
-}
 
-.nfts {
-  margin-left: 10px;
-  border: 1px solid;
-  width: 100%;
-  border-color: white;
-}
 
 .some-padding {
   padding: 3%;
-}
-
-/*
-  News
-*/
-
-.dropdown {}
-
-.white {
-  background-color: white;
-  border-radius: 100px;
-}
-
-.dropdown-content {
-  overflow-y: auto;
-  max-height: 400px;
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  min-width: 165px;
-  max-width: 200px;
-  z-index: 150;
-}
-
-/*.dropdown-content f {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown-content f:hover {}*/
-
-.dropdown:hover .dropdown-content {
-  display: block;
 }

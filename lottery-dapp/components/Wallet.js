@@ -7,6 +7,7 @@ import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.
 import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/MudebzNFT.json"
 import WalletAlert from './WalletAlert';
 
+
 export default function Wallet() {
 
 
@@ -35,7 +36,6 @@ export default function Wallet() {
         checkNftButton()
         getAllNews()
     }, [isWalletConnect, user])
-
 
     async function setNewUSer() {
         const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -120,17 +120,17 @@ export default function Wallet() {
             })
                 .then(async (data) => {
                     const temp = await data.json()
+                    console.log(temp.news)
+                    if (!temp.news)
+                        return
                     const t = temp.news.split("&")
                     t.pop()
                     t.map(element => {
                         let data = element.split("_")
-                        let winOrLose
+                        let winOrLose = "Lose"
                         if (data[5] == "1") {
                             winOrLose = "Win"
-                        } else {
-                            winOrLose = "Lose"
                         }
-
                         constructorNews.push(Object({
                             creator: data[0],
                             id: data[1],
@@ -150,28 +150,71 @@ export default function Wallet() {
         }
     }
 
+    const deleteNews = async () => {
+        try {
+            await fetch("/api/deleteAllNews", {
+                method: "POST",
+                body: user
+            }).then(setnews())
+
+        } catch (err) {
+            console.log(err)
+        }
+
+    }
 
     if (isWalletConnect)
         return (
-            <div className='wallet center'>
-                <div className='otstup widthmint'>{NftButton && <MintNftButton />}</div>
+            <div className='wallet'>
+                <div className='otstup widthmint'>{!NftButton && <MintNftButton />}</div>
                 <div className='otstup'>
-                    <div className="dropdown">
+                    <div className="dropdown" onClick={getAllNews}>
                         <Image className="white" src="/news.png" width={25} height={25} />
-                        <div className="dropdown-content">
-                            {news && news.map((element) =>
-                                <div>
-                                    {"..."}
-                                    {element.creator.substr(37, 5)}
-                                    {" Deposit:"}
-                                    {element.deposit}
-                                    {" Players:"}
-                                    {element.countOfPlayers}
-                                    {" "}
-                                    {element.isWin}
+                        <div className='wraper'>
+                            <div className='fff'>
+                                <div className="dropdown-content">
+                                    <div className={news && news.length > 0 ? 'hearder' : 'hearder alone'}>
+                                        <div className='CENTER'>
+                                            <Image className="" onClick={deleteNews} src="/delete.png" width={25} height={25} />
+                                        </div>
+                                        <div className='CENTER'>
+                                            {"Creator"}
+                                        </div>
+                                        <div className='CENTER'>
+                                            {"Deposit"}
+                                        </div>
+                                        <div className='CENTER'>
+                                            {"Players"}
+                                        </div >
+                                        <div className='CENTER'>
+                                            {"Exodus"}
+                                        </div>
+                                    </div>
+                                    {news && news.map((element, index) =>
+                                        <div className={element.isWin == "Win" ? "win" : null}>
+                                            <div className={index === news.length - 1 ? "onenews KOSTLb" : 'onenews'}>
+                                                <div className="CENTER" >
+                                                    <Image className='token' src={`/tokens/${element.token}.png`} width={25} height={25} />
+                                                </div>
+                                                <div className='CENTER'>
+                                                    {"0x..." + element.creator.substr(38, 4)}
+                                                </div>
+                                                <div className='CENTER nowrap'>
+                                                    {element.deposit}
+                                                </div>
+                                                <div className='CENTER'>
+                                                    {element.countOfPlayers}
+                                                </div>
+                                                <div className='CENTER'>
+                                                    {element.isWin}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
+                            </div>
                         </div>
+
                     </div >
                 </div>
                 <div className='otstup'><button onClick={() => {

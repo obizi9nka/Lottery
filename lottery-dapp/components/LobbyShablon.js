@@ -8,8 +8,12 @@ import Image from 'next/image';
 
 export default function LobbyShablon(lobby) {
 
+    const [isfaund, setisfaund] = useState(true)
+
+
+    //console.log(lobby.index)
     const EnterLobby = async () => {
-        console.log(lobby.creator, lobby.id, lobby)
+        //console.log(lobby.creator, lobby.id, lobby)
         const provider = new ethers.providers.Web3Provider(window.ethereum)
         const signer = provider.getSigner()
         const newPlayer = await signer.getAddress()
@@ -21,8 +25,8 @@ export default function LobbyShablon(lobby) {
         const id = lobby.id
         const body = { creator, id, newPlayer }
 
-        console.log(newPlayer)
-        console.log(body)
+        //console.log(newPlayer)
+        // console.log(body)
 
         try {
             fetch("/api/enterLobby", {
@@ -34,29 +38,36 @@ export default function LobbyShablon(lobby) {
         }
     }
 
-    return (
-        <div className='LobbyShablon'>
-            <div className='con'>
-                <div className="tokeninlobbyshablon"><Image src="/favicon.ico" width={50} height={50} /></div>
-                <div className='countofplayers'>
-                    {lobby.nowInLobby}/{lobby.countOfPlayers}
-                    <Image src="/countOfPlayers.png" width={20} height={20} />
+    if (lobby.allOrActive) {
+        return (
+            <div className={lobby.index ? 'LobbyShablonKOSTLb2 ' : 'LobbyShablonKOSTLb2'}>
+                <div className="tokeninlobbyshablon gridcenter">
+                    {isfaund && <Image className="tokenpng" alt='?' src={`/tokens/${lobby.IERC20}.png`} width={45} height={45} />}
+                    {!isfaund && <Image className="tokenpng" src="/question_mark.png" width={45} height={45} />}
                 </div>
+                <div className='countofplayers gridcenter'>
+                    {lobby.nowInLobby}/{lobby.countOfPlayers}
+                    <Image src="/countOfPlayers.png" width={27} height={27} />
+                </div>
+                <div className='depositlobby gridcenter'>{lobby.deposit}</div>
+                <button className='enter mybutton gridcenter' onClick={EnterLobby}> Enter </button>
             </div>
-            <div className='con'>
-                <div className='depositlobby'>{lobby.deposit}</div>
-                <button className='enter' onClick={EnterLobby}> Enter </button>
+        )
+    }
+    else {
+        return (
+            <div className={lobby.index ? 'LobbyShablonKOSTLb ' : 'LobbyShablon'}>
+                <div className="tokeninlobbyshablon gridcenter">
+                    {isfaund && <Image className="tokenpng" alt='?' src={`/tokens/${lobby.IERC20}.png`} width={45} height={45} />}
+                    {!isfaund && <Image className="tokenpng" src="/question_mark.png" width={45} height={45} />}
+                </div>
+                <div className='countofplayers gridcenter'>
+                    {lobby.nowInLobby}/{lobby.countOfPlayers}
+                    <Image src="/countOfPlayers.png" width={27} height={27} />
+                </div>
+                <div className='depositlobby gridcenter'>{lobby.deposit}</div>
             </div>
-        </div>
-    )
-}
+        )
 
-/*
-<p> deposit: {lobby.deposit}
-                nowInLobby: {lobby.nowInLobby}
-                countOfPlayers: {lobby.countOfPlayers}
-                token: {lobby.IERC20.substr(38, 4)}
-                _______
-                <button onClick={EnterLobby}> Enter </button>
-            </p>
-*/
+    }
+}

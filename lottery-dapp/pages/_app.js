@@ -8,7 +8,7 @@ import MintNftButton from '../components/MintNftButton';
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/MudebzNFT.json"
 import Wallet from '../components/Wallet';
-
+import Head from 'next/head';
 
 
 function MyApp({ Component, pageProps }) {
@@ -43,7 +43,10 @@ function MyApp({ Component, pageProps }) {
   }, [])
 
   return (
-    <div className=''>
+    <div className='main'>
+      <Head>
+        <meta name="viewport" content='width=device-width' />
+      </Head>
       <nav className="nav">
         <div className='container between'>
           <div className='navigation'>

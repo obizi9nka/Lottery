@@ -7,6 +7,10 @@ export default async function handler(req, res) {
 
     let { user, token, countOfPlayers, deposit } = JSON.parse(req.body)
 
+    deposit = `${deposit}`
+
+    console.log(deposit)
+
     countOfPlayers = parseInt(countOfPlayers, 10)
 
     let id = await prisma.user.findUnique({

@@ -41,7 +41,7 @@
 }
 
 .areaMINT {
-    width: 100vw;
+    width: 99.5vw;
     height: 100vh;
     position: relative;
     overflow-y: auto;
@@ -62,15 +62,13 @@
     align-items: center;
     width: auto;
     height: 100vh;
-
 }
-
 
 .walletalert {
     padding: 10px;
-    width: 450px;
-    height: 600px;
-    background-color: rgb(115, 115, 115);
+    width: 500px;
+    height: 85vh;
+    background-color: rgb(40, 40, 41);
     border-radius: 12px;
     position: relative;
     border: 1px;
@@ -86,29 +84,102 @@
 
 .wallettokens {
     margin-top: 7px;
-    border-color: white;
-    border: 1px solid;
-    height: 530px;
+    height: auto;
 }
 
-.shablonbalance {}
+.shablonbalance {
+    display: flex;
+    height: 3vw;
+    margin-top: 1vw;
+    justify-content: space-around;
+    align-items: center;
+}
 
+.fixsizebutton {
+    padding: 10px 0px;
+    font-size: 15px;
+    width: 73px;
+}
+
+.tokenpng {
+    border-radius: 100px;
+}
+
+
+.PDF {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+}
+
+.input_min {
+    width: 85px;
+}
+
+.balanceForToken {
+    display: flex;
+    font-size: x-large;
+    font-weight: 700;
+    width: 9vw;
+    justify-content: center;
+}
+
+.balance {
+    color: white;
+    font-size: x-large;
+    border: none;
+}
+
+.balancealert {
+    color: white;
+    font-size: 20px;
+    display: none;
+    position: absolute;
+    padding: 10px;
+    top: 0%;
+    left: 0%;
+    z-index: 3000;
+}
+
+.balancealert a {
+    color: black;
+    text-decoration: none;
+    display: block;
+}
+
+
+.balanceForToken:hover .balancealert {
+    display: block;
+}
+
+.isReliably {
+    position: absolute;
+    bottom: 1%;
+}
+
+.invalid {
+    position: absolute;
+    color: red;
+    font-size: 13px;
+    left: 10%;
+}
+
+.depositvalue {
+    position: relative;
+}
+
+.invalidvalue {
+    position: absolute;
+    font-size: 13px;
+    left: 10px;
+    color: red;
+}
 
 /*
     MintNftButtom
 */
 
-.nftmint {
-    color: white;
-    border: 1px;
-    border-style: solid;
-    padding: 10px;
-    border-radius: 12px;
-    border-color: white;
-    background-color: rgb(180, 173, 37);
-}
-
-.nftmint:hover {
+.nftmintbuttonactive:hover {
     cursor: pointer;
 }
 
@@ -145,33 +216,150 @@
 */
 
 .LobbyShablon {
+    padding: 1px;
+    margin-right: 2.9vw;
     border: 1px solid white;
-    width: 150px;
+    border-radius: 19px;
+    min-width: 170px;
     height: 150px;
-    display: inline-block;
-    margin: 23px;
-    background-color: rgba(55, 38, 88, 0.542);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: rgba(120, 116, 127, 0.542);
+}
+
+.LobbyShablonKOSTLb {
+    padding: 1px;
+    border-radius: 19px;
+    border: 1px solid white;
+    min-width: 170px;
+    height: 150px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: rgba(120, 116, 127, 0.542);
+}
+
+.LobbyShablonKOSTLb2 {
+    padding: 1px;
+    border-radius: 19px;
+    border: 1px solid white;
+    margin: 3% 3%;
+    min-width: 170px;
+    height: 150px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: rgba(120, 116, 127, 0.542);
 }
 
 .tokeninlobbyshablon {
-    margin: 10px;
+    margin-top: 10px;
 }
 
 .countofplayers {
-    padding: 10px;
+    color: white;
+    font-size: 30px;
+    font-weight: 500;
 }
 
 .depositlobby {
-    margin: 20px;
+    color: white;
+    overflow-x: auto;
+    max-width: 70px;
+    font-size: 15px;
+    font-weight: 500;
 }
 
 .enter {
-    margin: 20px;
-    height: 25px;
+    height: min-content;
 }
 
-.con {
+.gridcenter {
+    justify-self: center;
+    align-self: center;
+}
+
+/*
+  News
+*/
+
+.hearder {
+    color: rgba(226, 240, 71, 0.895);
+    padding: 10px;
+    display: grid;
+    border-bottom: 3px solid rgb(252, 248, 248);
+    border-top-right-radius: inherit;
+    border-top-left-radius: inherit;
+    background-color: rgba(31, 31, 31, 0.26);
+    grid-template-columns: 1fr 2fr 3fr 2fr 1fr;
+}
+
+.hearder.alone {
+    border-bottom: none;
+}
+
+.onenews {
+    color: white;
+    word-spacing: 20px;
+    display: grid;
+    background-color: rgb(0 0 0 / 10%);
+    grid-template-columns: 1fr 2fr 3fr 2fr 1fr;
+    padding: 10px;
+    border-bottom: 1px solid white;
+}
+
+.onenews.KOSTLb {
+    border-bottom: none;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.win {
+    background-color: #1fa61dc7;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.token {
+    border-radius: 100px;
+}
+
+.CENTER {
     display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropdown {}
+
+.white {
+    background-color: rgb(84, 147, 172);
+    border-radius: 100px;
+}
+
+.wraper {
+    right: 3%;
+    padding: 20px 1% 1% 1%;
+    overflow-y: auto;
+    display: none;
+    position: absolute;
+    z-index: 150;
+    overflow: hidden;
+}
+
+.fff {
+    overflow-y: auto;
+    max-height: 400px;
+}
+
+.dropdown-content {
+    border: 2px solid white;
+    background-color: #2a2828;
     height: auto;
-    justify-content: space-between;
+    border-radius: 12px;
+    min-width: 600px;
+}
+
+.dropdown:hover .wraper {
+    display: block;
 }

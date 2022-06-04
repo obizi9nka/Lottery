@@ -67,7 +67,7 @@ export default async function handler(req, res) {
                 }
             })
 
-            let news = AlredyNews.news + newNews;
+            let news = ((AlredyNews.news && AlredyNews.news.length > 0) ? AlredyNews.news : "") + newNews;
             if (lobyWithWinner.winer == players[i]) { news += "_1&" }
             else { news += "_0&" };
 

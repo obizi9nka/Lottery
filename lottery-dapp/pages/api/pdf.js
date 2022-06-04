@@ -4,71 +4,68 @@ const prisma = new PrismaClient();
 
 export default async function pdf(req, res) {
 
-    let Header = ["id", "creator", "token", "players", "winner", "deposit", "countOfPlayers"]
+    const user = req.body
+
+    let Header = [
+        { text: "№", style: "tableHeader" },
+        { text: "creator", style: "tableHeader" },
+        { text: "token", style: "tableHeader" },
+        { text: "players", style: "tableHeader" },
+        { text: "winner", style: "tableHeader" },
+        { text: "deposit", style: "tableHeader" },
+        { text: "countOfPlayers", style: "tableHeader" },
+    ]
 
     let body = []
 
     body.push(Header)
     const allLobbyes = await prisma.lobbyHistory.findMany()
-    allLobbyes.map((element) => {
-        if (element.players.indexOf(req.body) !== -1) {
+    allLobbyes.map((element, index) => {
+        if (element.players.indexOf(user) !== -1) {
             let cutPlayers = ''
             let players = element.players.split("_")
             players.pop()
             players = players.map((element) => {
-                return (`...${element.substr(37, 5)}`)
+                return (`${element.substr(37, 5)}`)
             })
-            players.forEach((element) => {
-                cutPlayers += element + "|"
+            players.forEach((element, index) => {
+                cutPlayers += element + ((index !== players.length - 1) ? ", " : " ")
             })
-            const temp = [`${element.id}`, element.creator, element.IERC20, cutPlayers, element.winner, element.deposit, `${element.countOfPlayers}`]
-            body.push(temp)
-            body.push(temp)
-            body.push(temp)
-            body.push(temp)
+            const color = (element.winner === user) ? "#8fbe6b" : null
+            const temp = [
+                { text: `${index + 1}`, fillColor: color },
+                { text: element.creator, fillColor: color },
+                { text: element.IERC20, fillColor: color },
+                { text: cutPlayers, fillColor: color },
+                { text: element.winner, fillColor: color },
+                { text: element.deposit, fillColor: color },
+                { text: `${element.countOfPlayers}`, fillColor: color },
+            ]
             body.push(temp)
         }
     })
-
-    const pdf = {
-        pageOrientation: "landscape",
-        content: [
-            {
-                style: 'tableExample',
-                table: {
-                    headerRows: 1,
-                    body,
-                },
-                layout: {
-                    fillColor: function (rowIndex, node, columnIndex) {
-                        return (rowIndex % 2 === 0) ? '#2196F3' : '#2196F3';
-                    }
-                }
-
-            }
-        ],
-        styles: {
-            header: {
-                fontSize: 18,
-                bold: true,
-                margin: [0, 0, 0, 0]
-            },
-            subheader: {
-                fontSize: 16,
-                bold: true,
-                margin: [0, 0, 0, 0]
-            },
-            tableExample: {
-                margin: [0, 0, 0, 0],
-                fontSize: 7
-            },
-            tableHeader: {
-                bold: true,
-                fontSize: 10,
-                color: 'black'
-            }
+    const styles = {
+        header: {
+            fontSize: 18,
+            bold: true,
+            margin: [0, 0, 0, 0]
         },
+        subheader: {
+            fontSize: 16,
+            bold: true,
+            margin: [0, 0, 0, 0]
+        },
+        tableExample: {
+            fontSize: 7
+        },
+        tableHeader: {
+            bold: true,
+            fontSize: 10,
+            fillColor: '#403e3f',
+            color: 'white',
+            alignment: 'center'
+        }
     }
-
-    res.json(body)
+    const data = { body, styles }
+    res.json(data)
 }
