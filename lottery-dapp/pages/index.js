@@ -43,28 +43,9 @@ export default function Home({ id }) {
   const [lotteryPlayers, setPlayers] = useState([])
   const [lotteryId, setlotteryId] = useState(`/images/${id % 5 === 0 ? id % 5 + 1 : id % 5}.png`)
 
-  /*useEffect(() => {
-    updateState()
-  }, [lcContract])
-
-  const updateState = () => {
-    //if (lcContract) getPot()
-    //if (lcContract) getPlayers()
-    //if (lcContract) getLotteryId()
-  }*/
-
-  const approve = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const singer = provider.getSigner()
-      const contract = new ethers.Contract(AAddress, A.abi, singer)
-      const tx = await contract.approve(LotteryAddress, deposit)
-      await tx.wait()
-    }
-  }
 
   const Enter = async () => {
-    if (typeof window.ethereum !== 'undefined') {
+    try {
       const provider = new ethers.providers.Web3Provider(window.ethereum)
       const singer = provider.getSigner()
       const contract = new ethers.Contract(LotteryAddress, Lottery.abi, singer)
@@ -73,105 +54,10 @@ export default function Home({ id }) {
       contract.once("enter", async () => {
         console.log("Welcome!", await singer.getAddress())
       })
+    } catch (err) {
+
     }
   }
-
-  const addTokensToBalance = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      await approve()
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const singer = provider.getSigner()
-      const contract = new ethers.Contract(LotteryAddress, Lottery.abi, singer)
-      const tx = await contract.addTokensToBalance(AAddress, deposit)
-      await tx.wait()
-    }
-  }
-
-  const allowToNFT = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const contract = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
-      const tx = await contract.allowToNFT(1)
-      console.log(tx)
-    }
-  }
-
-
-  const getTokens = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const singer = provider.getSigner()
-      const contract = new ethers.Contract(AAddress, A.abi, singer)
-      const tx = await contract.getTokens(freeTokens)
-      await tx.wait()
-    }
-  }
-
-  const balanceOf = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const signer = provider.getSigner()
-      const contract = new ethers.Contract(AAddress, A.abi, provider)
-      const address = await signer.getAddress()
-      try {
-        const balance = await contract.balanceOf(address)
-        console.log('data :', parseInt(balance))
-      } catch (err) {
-        console.log("Error: ", err)
-      }
-    }
-  }
-
-  const balanceInTokenForAccount = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const contract = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
-      const signer = provider.getSigner()
-      const address = await signer.getAddress()
-      try {
-        const balance = await contract.getBalance(AAddress, address)
-        console.log('balance contract :', parseInt(balance))
-      } catch (err) {
-        console.log("Error: ", err)
-      }
-    }
-  }
-
-  const getLotteryShablonByIndex = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const contract = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
-      console.log(await contract.getLotteryShablonByIndex(await contract.getLotteryCount() - 1))
-    }
-  }
-
-  const Play = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const signer = provider.getSigner()
-      const contract = new ethers.Contract(LotteryAddress, Lottery.abi, signer)
-      const tx = await contract.Play()
-      await tx.wait()
-      contract.on("play", async () => {
-        console.log("Winer:", contract.getLotteryShablonByIndex(contract.getLotteryCount() - 1).winer)
-      })
-    }
-  }
-
-  const setAdrressNFT = async () => {
-    if (typeof window.ethereum !== 'undefined') {
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const signer = provider.getSigner()
-      const contract = new ethers.Contract(LotteryAddress, Lottery.abi, signer)
-      const tx = await contract.setAdrressNFT(MudeBzNFT)
-      await tx.wait()
-    }
-  }
-
-
-
-
-
 
 
   return (

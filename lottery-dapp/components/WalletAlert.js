@@ -4,7 +4,7 @@ import TokensBalanceShablon from '../components/TokensBalanceShablon'
 import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
 
 
-export default function WalletAlert({ active, setActive }) {
+export default function WalletAlert({ active, setActive, }) {
 
     const [addTokenAddress, setaddTokenAddress] = useState('')
     const [tryed, settryed] = useState(false)
@@ -137,6 +137,8 @@ export default function WalletAlert({ active, setActive }) {
             setActive(false)
             if (localStorage.getItem("overflow") != "lock")
                 document.body.style.overflow = ('overflow', 'auto');
+            else
+                document.body.style.overflow = ('overflow', 'hidden');
         }}>
             <div className="walletalert" onClick={e => e.stopPropagation()}>
                 <div className="PDF">

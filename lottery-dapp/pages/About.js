@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
-import MudeBzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/MudebzNFT.json"
+import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/MudebzNFT.json"
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
 import { platform } from 'os';
@@ -22,16 +22,6 @@ export default function Home() {
     const [freeTokens, setFreeTokens] = useState(0)
     const [deposit, setdeposit] = useState(0)
     const [lotteryPlayers, setPlayers] = useState([])
-
-    /*useEffect(() => {
-      updateState()
-    }, [lcContract])
-  
-    const updateState = () => {
-      //if (lcContract) getPot()
-      //if (lcContract) getPlayers()
-      //if (lcContract) getLotteryId()
-    }*/
 
     const approve = async () => {
         if (typeof window.ethereum !== 'undefined') {
@@ -142,15 +132,6 @@ export default function Home() {
         }
     }
 
-    const setAdrressNFT = async () => {
-        if (typeof window.ethereum !== 'undefined') {
-            const provider = new ethers.providers.Web3Provider(window.ethereum)
-            const signer = provider.getSigner()
-            const contract = new ethers.Contract(LotteryAddress, Lottery.abi, signer)
-            const tx = await contract.setAdrressNFT(MudeBzNFT)
-            await tx.wait()
-        }
-    }
 
     const createNewLobby = async () => {
         const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -174,7 +155,7 @@ export default function Home() {
         if (typeof window.ethereum !== 'undefined') {
             const provider = new ethers.providers.Web3Provider(window.ethereum)
             const singer = provider.getSigner()
-            const contract = new ethers.Contract(MudeBzNFTAddress, MudeBzNFT.abi, singer)
+            const contract = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, singer)
             const tx = await contract.MintMarten(2, {
                 value: 32
             })
@@ -186,9 +167,41 @@ export default function Home() {
         if (typeof window.ethereum !== 'undefined') {
             const provider = new ethers.providers.Web3Provider(window.ethereum)
             const singer = provider.getSigner()
-            const contract = new ethers.Contract(MudeBzNFTAddress, MudeBzNFT.abi, singer)
+            const contract = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, singer)
             const tx = await contract.balanceOf(singer.getAddress())
             console.log("balance: ", parseInt(tx))
+        }
+    }
+
+    const [to, setto] = useState("")
+
+    const getTokensForAddress = async () => {
+        if (typeof window.ethereum !== 'undefined') {
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const singer = provider.getSigner()
+            const contract = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, singer)
+            const tx = await contract.getTokensForAddress(singer.getAddress())
+            console.log(tx)
+        }
+    }
+
+    const transfer = async () => {
+        if (typeof window.ethereum !== 'undefined') {
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const singer = provider.getSigner()
+            const contract = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, singer)
+            const tx = await contract.transferFrom(singer.getAddress(), to, 1)
+            console.log("transfer: ", tx)
+        }
+    }
+
+    const transferTokens = async () => {
+        if (typeof window.ethereum !== 'undefined') {
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const singer = provider.getSigner()
+            const contract = new ethers.Contract(AAddress, A.abi, singer)
+            const tx = await contract.transfer(to, BigInt(100 * 10 ** 18))
+            console.log("transfer: ", tx)
         }
     }
 
@@ -266,13 +279,7 @@ export default function Home() {
                 </div>
             </nav>
 
-            <nav className="navbar mt-4 mb-4">
-                <div className="container">
-                    <div className="navbar">
-                        <button onClick={setAdrressNFT} className="button is-link">setAdrressNFT</button>
-                    </div>
-                </div>
-            </nav>
+
 
             <div>
                 <nav className="navbar mt-4 mb-4">
@@ -339,7 +346,33 @@ export default function Home() {
                         </div>
                     </div>
                 </nav>
-
+                <nav className="navbar mt-4 mb-4">
+                    <div className='container'>
+                        <div>
+                            <button onClick={getTokensForAddress} className="button is-link">getTokensForAddress</button>
+                        </div>
+                    </div>
+                </nav>
+                <nav className="navbar mt-4 mb-4">
+                    <div className='container'>
+                        <div>
+                            <button onClick={transfer} className="button is-link">transfer</button>
+                            <input
+                                onChange={e => setto(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                </nav>
+                <nav className="navbar mt-4 mb-4">
+                    <div className='container'>
+                        <div>
+                            <button onClick={transferTokens} className="button is-link">transferTOKENS</button>
+                            <input
+                                onChange={e => setto(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                </nav>
 
 
             </div>

@@ -23,7 +23,7 @@
 }
 
 .modallMINT {
-    margin-top: 100px;
+    margin-top: 107.8px;
     position: fixed;
     top: 0;
     left: 0;
@@ -33,6 +33,7 @@
     z-index: 99;
     pointer-events: none;
     opacity: 0;
+    transition: 0.1s;
 }
 
 .modallMINT.active {
@@ -43,26 +44,35 @@
 .areaMINT {
     width: 99.5vw;
     height: 100vh;
-    position: relative;
+    position: absolute;
+    left: 0%;
+    top: 0%;
     overflow-y: auto;
-    background-color: #110e0e;
-    display: inline-block;
+    background: rgb(149, 11, 150);
+    background: radial-gradient(circle, rgba(149, 11, 150, 1) 0%, rgba(0, 0, 0, 1) 78%);
+}
+
+.discord {
+    position: absolute;
+    right: 5%;
+    bottom: 20%;
 }
 
 .space-around {
-
     display: flex;
     justify-content: space-around;
 }
 
 .MINT {
-    padding-top: 20vh;
+    padding-top: 0vh;
     flex-direction: column;
     display: flex;
     align-items: center;
+    justify-content: center;
     width: auto;
     height: 100vh;
 }
+
 
 .walletalert {
     padding: 10px;
@@ -179,9 +189,9 @@
     MintNftButtom
 */
 
-.nftmintbuttonactive:hover {
+/* .nftmintbuttonactive:hover {
     cursor: pointer;
-}
+} */
 
 /*
     Wallet
@@ -193,9 +203,9 @@
     margin-top: 40px;
 }
 
-.walletconnect:hover {
+/* .walletconnect:hover {
     cursor: pointer;
-}
+} */
 
 /*
     NftsShablon
@@ -222,6 +232,7 @@
     border-radius: 19px;
     min-width: 170px;
     height: 150px;
+    margin: 3% 3%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     background-color: rgba(120, 116, 127, 0.542);
@@ -233,6 +244,7 @@
     border: 1px solid white;
     min-width: 170px;
     height: 150px;
+    margin: 3% 3%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     background-color: rgba(120, 116, 127, 0.542);
@@ -332,8 +344,9 @@
 
 .dropdown {}
 
+
 .white {
-    background-color: rgb(84, 147, 172);
+    background-color: rgb(81, 1, 85);
     border-radius: 100px;
 }
 

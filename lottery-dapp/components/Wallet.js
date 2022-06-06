@@ -10,7 +10,6 @@ import WalletAlert from './WalletAlert';
 
 export default function Wallet() {
 
-
     const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
     const MudeBzNFTAddress = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
 
@@ -25,14 +24,20 @@ export default function Wallet() {
             const signer = provider.getSigner()
             const _user = await signer.getAddress()
             setuser(_user)
-        } catch (err) {
-            console.log()
+        } catch {
+            console.log("Connect Wallet")
+            setuser("")
         }
     }
-    setUser()
 
     useEffect(() => {
-        checkWallet()
+        window.ethereum.on("accountsChanged", () => {
+            setUser()
+            checkWallet()
+        });
+    }, [])
+
+    useEffect(() => {
         checkNftButton()
         getAllNews()
     }, [isWalletConnect, user])
@@ -42,17 +47,35 @@ export default function Wallet() {
         const signer = provider.getSigner()
         const address = await signer.getAddress()
         const body = { address }
-        try {
-            await fetch('/api/user', {
-                method: "POST",
-                body: JSON.stringify(body)
-            }).catch(() => {
-                window.location.reload()
-            })
-        } catch (err) {
-            console.log(err)
-        }
+
+        const prom = new Promise(async (res, rej) => {
+            try {
+                res(await fetch('/api/user', {
+                    method: "POST",
+                    body: JSON.stringify(body)
+                }))
+            } catch (e) {
+            }
+        })
+        prom.then(async (data) => {
+            console.log(await data.json())
+            window.location.reload()
+        })
     }
+
+    useEffect(() => {
+        const provider = new ethers.providers.JsonRpcProvider
+        const contract = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
+        const contractM = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, provider)
+        contract.on("play", async (winer) => {
+            console.log("emit play", winer)
+            checkNftButton()
+        })
+        contractM.on("NewNFT", async (user, id) => {
+            console.log("new nft", user, id)
+            checkNftButton()
+        })
+    }, [])
 
     const checkNftButton = async () => {
         try {
@@ -63,15 +86,17 @@ export default function Wallet() {
                 const nft = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, provider)
                 const USER = await signer.getAddress()
                 const wins = await lottery._allowToNFT(USER)
+                let flag = false
                 for (let i = 0; i < parseInt(wins.lotteryes.length, 10); i++) {
                     if (!await nft.istokenMints(wins.lotteryes[i])) {
-                        setNftButton(true)
+                        flag = true
                         break
                     }
                 }
-
+                setNftButton(flag)
             }
         } catch (err) {
+            setNftButton(false)
             console.log(err)
         }
         //setNftButton(true)
@@ -120,7 +145,6 @@ export default function Wallet() {
             })
                 .then(async (data) => {
                     const temp = await data.json()
-                    console.log(temp.news)
                     if (!temp.news)
                         return
                     const t = temp.news.split("&")
@@ -146,17 +170,18 @@ export default function Wallet() {
             constructorNews.reverse()
             setnews(constructorNews)
         } catch (err) {
+            setnews()
             console.log(err)
         }
     }
 
     const deleteNews = async () => {
+        console.log(user)
         try {
             await fetch("/api/deleteAllNews", {
                 method: "POST",
                 body: user
-            }).then(setnews())
-
+            }).then(setnews([]))
         } catch (err) {
             console.log(err)
         }
@@ -166,10 +191,9 @@ export default function Wallet() {
     if (isWalletConnect)
         return (
             <div className='wallet'>
-                <div className='otstup widthmint'>{!NftButton && <MintNftButton />}</div>
                 <div className='otstup'>
                     <div className="dropdown" onClick={getAllNews}>
-                        <Image className="white" src="/news.png" width={25} height={25} />
+                        <Image src="/news.png" width={25} height={25} />
                         <div className='wraper'>
                             <div className='fff'>
                                 <div className="dropdown-content">
@@ -217,6 +241,7 @@ export default function Wallet() {
 
                     </div >
                 </div>
+                <div className='otstup widthmint'>{NftButton && <MintNftButton />}</div>
                 <div className='otstup'><button onClick={() => {
                     if (!isWalletAlert)
                         document.body.style.overflow = ('overflow', 'hidden')
@@ -227,7 +252,9 @@ export default function Wallet() {
         )
     else {
         return (
-            <button onClick={connectWalletHandler} className="wallet mybutton center">Connect Wallet</button>
+            <div className='wallet'>
+                <button onClick={connectWalletHandler} className=" mybutton ">Connect Wallet</button>
+            </div>
         )
     }
 }

@@ -33,7 +33,7 @@ export default function Home({ allLobbyes }) {
 
     const [deposit, setdeposit] = useState("")
     const [countOfPlayers, setcountOfPlayers] = useState(0)
-    const [token, settoken] = useState('')
+    const [token, settoken] = useState("")
     const [lobbyes, setlobbyes] = useState(allLobbyes)
     const [lobbyesActive, setlobbyesActive] = useState([])
     const [user, setuser] = useState('')
@@ -48,17 +48,26 @@ export default function Home({ allLobbyes }) {
 
     const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
 
+    useEffect(() => {
+        setUser()
+    })
+
     const setUser = async () => {
         try {
             const provider = new ethers.providers.Web3Provider(window.ethereum)
             const signer = provider.getSigner()
             const _user = await signer.getAddress()
             setuser(_user)
-        } catch {
-            console.log("Connect Wallet")
+        } catch (err) {
+            console.log(err)
         }
     }
-    setUser()
+
+    useEffect(() => {
+        window.ethereum.on("accountsChanged", (data) => {
+            setuser(data[0])
+        });
+    }, [])
 
     const filterUserLobbyes = async () => {
         try {
@@ -69,8 +78,8 @@ export default function Home({ allLobbyes }) {
                 return (element.players.indexOf(_user) !== -1)
             })
             setlobbyesActive(f)
-            //console.log(f)
         } catch (err) {
+            setlobbyesActive([])
             console.log(err)
         }
 
@@ -80,28 +89,6 @@ export default function Home({ allLobbyes }) {
         getTokens()
         filterUserLobbyes()
     }, [user])
-
-    useEffect(() => {
-        const provider = new ethers.providers.Web3Provider(window.ethereum)
-        const contract = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
-        contract.on("enterLobby", async (creator, id, newPlayer, players, deposit, countOfPlayers, IERC20) => {
-            await fetch("/api/getAllLobbyes", {
-                method: "POST",
-            }).then(async (data) => {
-                const temp = await data.json()
-                const provider = new ethers.providers.Web3Provider(window.ethereum)
-                const signer = provider.getSigner()
-                const _user = await signer.getAddress()
-                const f = temp.filter((element) => {
-                    return (element.players.indexOf(_user) !== -1)
-                })
-                setlobbyesActive(f)
-                setlobbyes(temp)
-                setAll_LOBBYES(temp)
-                //console.log(f, temp)
-            })
-        })
-    }, [])
 
 
     const getTokens = async () => {
@@ -145,11 +132,11 @@ export default function Home({ allLobbyes }) {
                             })
                         })
                     })
-                    console.log(objects)
                     setTokens(objects)
                 })
         } catch (err) {
-            console.log(err)
+            setTokens([])
+            console.log(user, err)
         }
     }
 
@@ -240,6 +227,47 @@ export default function Home({ allLobbyes }) {
         }
     }
 
+    const [isfaund, setisfaund] = useState(true)
+
+    const EnterLobby = async (lobby) => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const signer = provider.getSigner()
+        const newPlayer = await signer.getAddress()
+        const contract = new ethers.Contract(LotteryAddress, Lottery.abi, signer)
+        const tx = await contract.EnterLobby(lobby.creator, lobby.id)
+        await tx.wait()
+
+        const creator = lobby.creator
+        const id = lobby.id
+        const body = { creator, id, newPlayer }
+
+        try {
+            fetch("/api/enterLobby", {
+                method: "POST",
+                body: JSON.stringify(body)
+            })
+        } catch (err) {
+            console.log(err)
+        }
+
+        const loby = await contract.getLobby(creator, id)
+        for (let i = 0; i < lobbyes.length; i++) {
+            if (lobbyes[i].creator === creator && parseInt(id) == lobbyes[i].id) {
+                if (parseInt(BigInt(loby.nowInLobby)) != 0) {
+                    lobbyes[i].nowInLobby = parseInt(BigInt(loby.nowInLobby))
+                    setlobbyesActive([...lobbyesActive, lobbyes[i]])
+                }
+                else
+                    lobbyes.splice(i, 1)
+                break
+            }
+        }
+
+        setlobbyes([...lobbyes])
+        console.log("rr")
+    }
+
+
     //lobbyesActive.pop()
     //lobbyesActive.pop()
     //lobbyesActive.pop()
@@ -318,113 +346,23 @@ export default function Home({ allLobbyes }) {
             </div>
             <div className='arealobbyes'>
                 <div className='alllobbyes'>
-                    {lobbyes && lobbyes.map(({ creator, nowInLobby, countOfPlayers, deposit, IERC20, id }, index) =>
-                        <LobbyShablon
-                            allOrActive={true}
-                            creator={creator}
-                            nowInLobby={nowInLobby}
-                            countOfPlayers={countOfPlayers}
-                            deposit={deposit}
-                            IERC20={IERC20}
-                            id={id}
-                            index={index == lobbyesActive.length - 1 ? true : false} />
+                    {lobbyes && lobbyes.map((element, index) =>
+                        <div className={(index == lobbyes.length - 1) ? 'LobbyShablonKOSTLb2 ' : 'LobbyShablon'}>
+                            <div className="tokeninlobbyshablon gridcenter">
+                                {isfaund && <Image className="tokenpng" alt='?' src={`/tokens/${element.IERC20}.png`} width={45} height={45} />}
+                                {!isfaund && <Image className="tokenpng" src="/question_mark.png" width={45} height={45} />}
+                            </div>
+                            <div className='countofplayers gridcenter'>
+                                {element.nowInLobby}/{element.countOfPlayers}
+                                <Image src="/countOfPlayers.png" width={27} height={27} />
+                            </div>
+                            <div className='depositlobby gridcenter'>{element.deposit}</div>
+                            <div className='enter mybutton gridcenter' onClick={() => EnterLobby(element)}> Enter </div>
+                        </div>
                     )}
-
                 </div>
-
             </div>
-            <table>
-            </table>
-
         </div >
     )
 }
 
-/* 
-
-<div>
-            <Head>
-                <title>!Mudebz</title>
-                <meta name="description" content="An Ethereum Lottery dApp" />
-                <link rel="icon" href="/favicon.ico" />
-
-            </Head>
-            <h1 className='titel'>!Mudebz Lobbys</h1>
-            <div className='container'>
-                <div className='areanewLobby'>
-                    <div className='newLobby'>
-                        <select onClick={e => {
-                            rokens.forEach((element) => {
-                                if (e.target.value === element.symbol)
-                                    settoken(element.address)
-                            });
-                        }} className="choosetoken">
-                            {rokens && rokens.map((element) =>
-                                <option className='option' > {element.symbol}</option>
-                            )}
-                        </select>
-                        <input className='input input_min' id='deposit' placeholder='Deposit' onChange={e => setdeposit(e.target.value.toString())} />
-                        <input className='input input_min' id='countofplayers' placeholder='Count Of Players' onChange={e => setcountOfPlayers(e.target.value)} />
-                        <button onClick={createNewLobby} className="mybutton">Creat Lobby</button>
-                    </div>
-                </div>
-                <div className='arealobbychoose'>
-                    {lobbyesActive && lobbyesActive.map(({ creator, nowInLobby, countOfPlayers, deposit, IERC20, id }) =>
-                        <LobbyShablon
-                            creator={creator}
-                            nowInLobby={nowInLobby}
-                            countOfPlayers={countOfPlayers}
-                            deposit={deposit}
-                            IERC20={IERC20}
-                            id={id} />
-                    )}
-                </div>
-            </div>
-            <div className='con'>
-                <div className='areafilterlobby'>
-                    <div className='choose'>
-                        <select onChange={e => settokenn(e.target.value)} className="choosetoken">
-                            <option>ALL</option>
-                            {rokens && rokens.map((element) =>
-                                <option>{element.symbol}</option>
-                            )}
-                        </select>
-                        <div className='UpAndDown'>
-                            Up
-                            <label className="switch">
-                                <input type="checkbox" onChange={() => setUP(!UP)} />
-                                <span className="slider round"></span>
-                            </label>
-                            Down
-                        </div>
-
-                        <div>
-                            <input onChange={() => { setdepositt(true); setnowInLobby(false); setcountOfPlayerss(false) }} type="radio" id="depositt" name="monster" />
-                            <label for="depositt" className='choosecoler'>deposit</label><br />
-                        </div>
-                        <div>
-                            <input onChange={() => { setnowInLobby(true); setdepositt(false); setcountOfPlayerss(false) }} type="radio" id="nowInLobby" name="monster" />
-                            <label for="nowInLobby" className='choosecoler'>nowInLobby</label><br />
-                        </div>
-                        <div>
-                            <input onChange={() => { setcountOfPlayerss(true); setdepositt(false); setnowInLobby(false); }} type="radio" id="countOfPlayerss" name="monster" />
-                            <label for="countOfPlayerss" className='choosecoler'>countOfPlayers</label><br />
-                        </div>
-                    </div>
-                    <button onClick={setSettingFOrFilter} className='mybutton filterbutton'>Filter</button>
-                </div>
-                <div className='arealobbyes'>
-                    {lobbyes && lobbyes.map(({ creator, nowInLobby, countOfPlayers, deposit, IERC20, id }) =>
-                        <LobbyShablon
-                            creator={creator}
-                            nowInLobby={nowInLobby}
-                            countOfPlayers={countOfPlayers}
-                            deposit={deposit}
-                            IERC20={IERC20}
-                            id={id} />
-                    )}
-                </div>
-            </div>
-        </div>
-
-*/

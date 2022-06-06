@@ -63,33 +63,29 @@ contract Lottery is Lobby, Ownable {
     }
 
     function checkFor50() private {
-        if (!NFT.istokenMints(LotteryCount - 5)) {
-            address onNeZamintel = first1000Winers[LotteryCount - 5];
+        require(!NFT.istokenMints(LotteryCount - 5) && LotteryCount - 5 > 0);
+        address onNeZamintel = first1000Winers[LotteryCount - 5];
 
-            uint256[] storage array = _first1000Winers[onNeZamintel].lotteryes;
-            uint256 stop = array.length;
+        uint256[] storage array = _first1000Winers[onNeZamintel].lotteryes;
+        uint256 stop = array.length;
 
-            for (uint256 i = 0; i < stop; i++) {
-                if (array[i] == LotteryCount - 5) {
-                    if (stop == 1) {
-                        array.pop();
-                    } else {
-                        for (
-                            uint256 index = i;
-                            index < array.length - 1;
-                            index++
-                        ) {
-                            array[index] = array[index + 1];
-                        }
+        for (uint256 i = 0; i < stop; i++) {
+            if (array[i] == LotteryCount - 5) {
+                if (stop == 1) {
+                    array.pop();
+                } else {
+                    for (uint256 index = i; index < array.length - 1; index++) {
+                        array[index] = array[index + 1];
                     }
-                    break;
+                    array.pop(); //может быть лишним
                 }
+                break;
             }
-
-            //_first1000Winers[onNeZamintel].dont_use--;//тут появляется баг в тестах мол преполнение происходит, но я так и не понял почему ведь если
-            first1000Winers[LotteryCount - 5] = owner();
-            _first1000Winers[owner()].lotteryes.push(LotteryCount - 5);
         }
+
+        //_first1000Winers[onNeZamintel].dont_use--;//тут появляется баг в тестах мол преполнение происходит, но я так и не понял почему ведь если
+        first1000Winers[LotteryCount - 5] = owner();
+        _first1000Winers[owner()].lotteryes.push(LotteryCount - 5);
     }
 
     function allowToNFT(uint256 TokenId) public view returns (address) {

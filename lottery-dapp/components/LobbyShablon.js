@@ -11,9 +11,7 @@ export default function LobbyShablon(lobby) {
     const [isfaund, setisfaund] = useState(true)
 
 
-    //console.log(lobby.index)
     const EnterLobby = async () => {
-        //console.log(lobby.creator, lobby.id, lobby)
         const provider = new ethers.providers.Web3Provider(window.ethereum)
         const signer = provider.getSigner()
         const newPlayer = await signer.getAddress()
@@ -24,9 +22,6 @@ export default function LobbyShablon(lobby) {
         const creator = lobby.creator
         const id = lobby.id
         const body = { creator, id, newPlayer }
-
-        //console.log(newPlayer)
-        // console.log(body)
 
         try {
             fetch("/api/enterLobby", {
@@ -40,7 +35,7 @@ export default function LobbyShablon(lobby) {
 
     if (lobby.allOrActive) {
         return (
-            <div className={lobby.index ? 'LobbyShablonKOSTLb2 ' : 'LobbyShablonKOSTLb2'}>
+            <div className={lobby.index ? 'LobbyShablonKOSTLb ' : 'LobbyShablonKOSTLb'}>
                 <div className="tokeninlobbyshablon gridcenter">
                     {isfaund && <Image className="tokenpng" alt='?' src={`/tokens/${lobby.IERC20}.png`} width={45} height={45} />}
                     {!isfaund && <Image className="tokenpng" src="/question_mark.png" width={45} height={45} />}
