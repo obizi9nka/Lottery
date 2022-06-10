@@ -53,6 +53,42 @@ contract MudebzNFT is ERC721with, Ownable {
         return "";
     }
 
+    // MarketPlace
+
+    mapping(address => mapping(uint256 => uint256)) tokenOnSell;
+
+    function getCost(address tokenOwner, uint256 tokenId)
+        public
+        view
+        returns (uint256)
+    {
+        return tokenOnSell[tokenOwner][tokenId];
+    }
+
+    function putOnSell(uint256 tokenId, uint256 cost) external {
+        require(ownerOf(tokenId) == msg.sender && cost > 0, "not your token");
+        require(tokenOnSell[msg.sender][tokenId] == 0, "token already on sell");
+        tokenOnSell[msg.sender][tokenId] = cost;
+    }
+
+    function removeFromSell(uint256 tokenId) external {
+        require(ownerOf(tokenId) == msg.sender, "not your token");
+        tokenOnSell[msg.sender][tokenId] = 0;
+    }
+
+    function trigerSell(address payable tokenOwner, uint256 tokenId)
+        external
+        payable
+    {
+        require(
+            msg.value >= tokenOnSell[tokenOwner][tokenId],
+            "not enogth value"
+        );
+        tokenOwner.transfer(tokenOnSell[tokenOwner][tokenId]);
+        tokenOnSell[tokenOwner][tokenId] = 0;
+        _transfer(tokenOwner, msg.sender, tokenId);
+    }
+
     /*
     function sort(uint256 TokenId) private {
         uint256 last = tokensMints[tokensMints.length - 2];

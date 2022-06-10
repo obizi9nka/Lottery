@@ -9,7 +9,7 @@ async function main() {
   console.log("A deployed to:", A.address);
 
   const lottery = await hre.ethers.getContractFactory("Lottery");
-  const Lottery = await lottery.deploy(A.address);
+  const Lottery = await lottery.deploy(A.address, BigInt(5 * 10 ** 18));
   await Lottery.deployed();
   console.log("Lottery deployed to:", Lottery.address);
 
@@ -62,6 +62,14 @@ async function main() {
   await Lottery.connect(owner).addTokensToBalance(B.address, BigInt(0.1 * 10 ** 18))
   await Lottery.connect(address1).addTokensToBalance(B.address, BigInt(0.1 * 10 ** 18))
   await Lottery.connect(address2).addTokensToBalance(B.address, BigInt(0.1 * 10 ** 18))
+
+
+  // for (let i = 1; i < 301; i++) {
+  await Lottery.connect(owner).Play()
+  //   await MudebzNFT.connect(owner).MintMarten(i, { value: BigInt(32 * 10 ** 15) })
+  //   console.log(i)
+  // }
+
 
 }
 

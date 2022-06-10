@@ -20,6 +20,7 @@
 .modall.active {
     opacity: 1;
     pointer-events: all;
+
 }
 
 .modallMINT {
@@ -36,13 +37,15 @@
     transition: 0.1s;
 }
 
+@media (max-width: 508px) {}
+
 .modallMINT.active {
     opacity: 1;
     pointer-events: all;
 }
 
 .areaMINT {
-    width: 99.5vw;
+    min-width: 99.5vw;
     height: 100vh;
     position: absolute;
     left: 0%;
@@ -64,7 +67,6 @@
 }
 
 .MINT {
-    padding-top: 0vh;
     flex-direction: column;
     display: flex;
     align-items: center;
@@ -79,6 +81,19 @@
     width: 500px;
     height: 85vh;
     background-color: rgb(40, 40, 41);
+    border-radius: 12px;
+    position: relative;
+    border: 1px;
+    border-style: solid;
+    border-color: white;
+    overflow-y: auto;
+}
+
+.networkAlert {
+    padding: 10px;
+    width: 500px;
+    height: 85vh;
+    background-color: rgb(255, 0, 0);
     border-radius: 12px;
     position: relative;
     border: 1px;
@@ -197,6 +212,10 @@
     Wallet
 */
 
+.size {
+    font-size: 16px;
+}
+
 .walletconnect {
     position: absolute;
     right: 0%;
@@ -211,14 +230,51 @@
     NftsShablon
 */
 
-.nftsShablon {
-    display: inline-block;
-    margin: 20px 20px;
+
+.nftsShablon {}
+
+.data {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.pad {
+    padding: 40px 50px;
+
+}
+
+.absolute {
+    position: absolute;
+    top: 3.8%;
+    right: 5.5%;
 }
 
 .bordernft {
+    position: relative;
+    padding: 10px;
     border: 1px solid white;
-    padding: 23px;
+    border-radius: 10px;
+}
+
+@media (max-width: 730px) {
+    .data {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .areaNfts {
+        margin: 0px;
+        min-height: 80vh;
+    }
+}
+
+@media (max-width: 508px) {
+    .nftsShablon {
+        margin: 20px 25px;
+    }
 }
 
 /*
@@ -342,7 +398,10 @@
     justify-content: center;
 }
 
-.dropdown {}
+.dropdown {
+    min-height: 25px;
+    min-width: 25px;
+}
 
 
 .white {

@@ -12,7 +12,7 @@ describe("Lottery", async () => {
     await A.deployed();
 
     lottery = await hre.ethers.getContractFactory("Lottery");
-    Lottery = await lottery.deploy(A.address);
+    Lottery = await lottery.deploy(A.address, BigInt(5 * 10 ** 18));
     await Lottery.deployed();
 
     NFT = await hre.ethers.getContractFactory("MudebzNFT");
@@ -21,37 +21,37 @@ describe("Lottery", async () => {
 
     [owner, address1, address2, _] = await ethers.getSigners()
 
-    await A.connect(owner).getTokens(10000)
-    await A.connect(address1).getTokens(10000)
-    await A.connect(address2).getTokens(10000)
+    await A.connect(owner).getTokens(BigInt(10000 * 10 ** 18))
+    await A.connect(address1).getTokens(BigInt(10000 * 10 ** 18))
+    await A.connect(address2).getTokens(BigInt(10000 * 10 ** 18))
 
     let balance = await A.balanceOf(owner.address)
-    expect(balance).to.equal(10000)
+    expect(balance).to.equal(BigInt(10000 * 10 ** 18))
     balance = await A.balanceOf(address1.address)
-    expect(balance).to.equal(10000)
+    expect(balance).to.equal(BigInt(10000 * 10 ** 18))
     balance = await A.balanceOf(address2.address)
-    expect(balance).to.equal(10000)
+    expect(balance).to.equal(BigInt(10000 * 10 ** 18))
 
-    await A.connect(owner).approve(Lottery.address, 10000)
-    expect(await A.allowance(owner.address, Lottery.address)).to.equal(10000)
-    await A.connect(address1).approve(Lottery.address, 10000)
-    expect(await A.allowance(address1.address, Lottery.address)).to.equal(10000)
-    await A.connect(address2).approve(Lottery.address, 10000)
-    expect(await A.allowance(address2.address, Lottery.address)).to.equal(10000)
+    await A.connect(owner).approve(Lottery.address, BigInt(10000 * 10 ** 18))
+    expect(await A.allowance(owner.address, Lottery.address)).to.equal(BigInt(10000 * 10 ** 18))
+    await A.connect(address1).approve(Lottery.address, BigInt(10000 * 10 ** 18))
+    expect(await A.allowance(address1.address, Lottery.address)).to.equal(BigInt(10000 * 10 ** 18))
+    await A.connect(address2).approve(Lottery.address, BigInt(10000 * 10 ** 18))
+    expect(await A.allowance(address2.address, Lottery.address)).to.equal(BigInt(10000 * 10 ** 18))
 
-    await A.connect(owner).approve(MudebzNFT.address, 10000)
-    expect(await A.allowance(owner.address, Lottery.address)).to.equal(10000)
-    await A.connect(address1).approve(MudebzNFT.address, 10000)
-    expect(await A.allowance(address1.address, Lottery.address)).to.equal(10000)
-    await A.connect(address2).approve(MudebzNFT.address, 10000)
-    expect(await A.allowance(address2.address, Lottery.address)).to.equal(10000)
+    await A.connect(owner).approve(MudebzNFT.address, BigInt(10000 * 10 ** 18))
+    expect(await A.allowance(owner.address, Lottery.address)).to.equal(BigInt(10000 * 10 ** 18))
+    await A.connect(address1).approve(MudebzNFT.address, BigInt(10000 * 10 ** 18))
+    expect(await A.allowance(address1.address, Lottery.address)).to.equal(BigInt(10000 * 10 ** 18))
+    await A.connect(address2).approve(MudebzNFT.address, BigInt(10000 * 10 ** 18))
+    expect(await A.allowance(address2.address, Lottery.address)).to.equal(BigInt(10000 * 10 ** 18))
 
-    await Lottery.connect(owner).addTokensToBalance(A.address, 9000)
-    expect(await Lottery.getBalance(A.address, owner.address)).to.equal(9000)
-    await Lottery.connect(address1).addTokensToBalance(A.address, 9000)
-    expect(await Lottery.getBalance(A.address, address1.address)).to.equal(9000)
-    await Lottery.connect(address2).addTokensToBalance(A.address, 9000)
-    expect(await Lottery.getBalance(A.address, address2.address)).to.equal(9000)
+    await Lottery.connect(owner).addTokensToBalance(A.address, BigInt(9000 * 10 ** 18))
+    expect(await Lottery.getBalance(A.address, owner.address)).to.equal(BigInt(9000 * 10 ** 18))
+    await Lottery.connect(address1).addTokensToBalance(A.address, BigInt(9000 * 10 ** 18))
+    expect(await Lottery.getBalance(A.address, address1.address)).to.equal(BigInt(9000 * 10 ** 18))
+    await Lottery.connect(address2).addTokensToBalance(A.address, BigInt(9000 * 10 ** 18))
+    expect(await Lottery.getBalance(A.address, address2.address)).to.equal(BigInt(9000 * 10 ** 18))
 
     await Lottery.connect(owner).setAdrressNFT(MudebzNFT.address)
     expect(await Lottery.getAdrressNFT()).to.equal(MudebzNFT.address)
@@ -124,6 +124,21 @@ describe("Lottery", async () => {
     await MudebzNFT.connect(owner).MintMarten(4, { value: BigInt(32 * 10 ** 16) })
     console.log(await MudebzNFT.gettokensMints())
 
+    //MarkePlace
+
+    await MudebzNFT.connect(address2).putOnSell(2, BigInt(1 * 10 ** 18))
+    expect(await MudebzNFT.getCost(address2.address, 2)).to.equal(BigInt(1 * 10 ** 18))
+
+    await MudebzNFT.connect(address2).removeFromSell(2)
+    expect(await MudebzNFT.getCost(address2.address, 2)).to.equal(0)
+
+    await MudebzNFT.connect(address2).putOnSell(2, BigInt(1 * 10 ** 18))
+    expect(await MudebzNFT.getCost(address2.address, 2)).to.equal(BigInt(1 * 10 ** 18))
+
+    await MudebzNFT.connect(address1).trigerSell(address2.address, 2, { value: BigInt(1 * 10 ** 18) })
+    expect(await MudebzNFT.getCost(address2.address, 2)).to.equal(0)
+    expect(await MudebzNFT.ownerOf(2)).to.equal(address1.address)
   })
+
 
 })

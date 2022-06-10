@@ -84,7 +84,7 @@ export default function WalletAlert({ active, setActive, }) {
                 //console.log(err)
             }
         }
-
+        localStorage.setItem("addToken", "true")
     }
 
     const makePDF = async () => {

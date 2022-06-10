@@ -31,23 +31,28 @@ contract Lottery is Lobby, Ownable {
 
     mapping(address => wins) _first1000Winers;
 
-    uint256 deposit = 10;
+    uint256 deposit;
 
     IERC20 tokenForLottery;
     ERC721with NFT;
 
-    constructor(IERC20 _tokenForLottery) {
+    constructor(IERC20 _tokenForLottery, uint256 _deposit) {
         tokenForLottery = _tokenForLottery;
         Lotteries[1].playersCount = 0;
         Lotteries[1].winer = address(0);
+        deposit = _deposit;
     }
 
     function getLotteryCount() public view returns (uint256) {
         return LotteryCount;
     }
 
-    function setTokenForLottery(IERC20 token) public onlyOwner {
+    function setTokenForLottery(IERC20 token, uint256 _deposit)
+        public
+        onlyOwner
+    {
         tokenForLottery = token;
+        deposit = _deposit;
     }
 
     function setAdrressNFT(ERC721with token) public onlyOwner {
@@ -63,14 +68,13 @@ contract Lottery is Lobby, Ownable {
     }
 
     function checkFor50() private {
-        require(!NFT.istokenMints(LotteryCount - 5) && LotteryCount - 5 > 0);
-        address onNeZamintel = first1000Winers[LotteryCount - 5];
+        address onNeZamintel = first1000Winers[LotteryCount - 51];
 
         uint256[] storage array = _first1000Winers[onNeZamintel].lotteryes;
         uint256 stop = array.length;
 
         for (uint256 i = 0; i < stop; i++) {
-            if (array[i] == LotteryCount - 5) {
+            if (array[i] == LotteryCount - 51) {
                 if (stop == 1) {
                     array.pop();
                 } else {
@@ -158,7 +162,14 @@ contract Lottery is Lobby, Ownable {
             Lotteries[LotteryCount].playersCount;
 
         Lotteries[LotteryCount].winer = winer;
-        if (LotteryCount >= 5 && LotteryCount <= 1005) checkFor50();
+        //надо увеличить на один количество дней для минта т.е если
+        // тригер через 5 дней, то LotteryCount >= 6 && LotteryCount <= 1006
+        // григер через 50 дней, то LotteryCount >= 51 && LotteryCount <= 1051
+        if (
+            LotteryCount >= 51 &&
+            LotteryCount <= 1051 &&
+            !NFT.istokenMints(LotteryCount - 51)
+        ) checkFor50();
         Lotteries[++LotteryCount].playersCount = 0;
         Lotteries[LotteryCount].winer = address(0);
         emit play(winer);

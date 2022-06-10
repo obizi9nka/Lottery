@@ -1,12 +1,11 @@
 html,
 body {
-  /*background: #110e0ef1;*/
+  background: #110e0ef1;
   padding: 0;
-
-
   margin: 0;
-  max-width: 99.5vw;
+  max-width: 99.6vw;
   height: auto;
+  min-width: 400px;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
@@ -14,6 +13,7 @@ body {
 a {
   text-decoration: none;
 }
+
 
 footer {
   margin-left: 50%;
@@ -25,11 +25,8 @@ footer {
 }
 
 .main {
-  background: rgb(0, 0, 0);
-  background: linear-gradient(168deg, rgba(0, 0, 0, 1) 17%, rgba(166, 104, 131, 1) 52%, rgba(176, 29, 94, 1) 87%);
 
   overflow-x: hidden;
-  min-width: 1528.8px;
 }
 
 ::-webkit-scrollbar {
@@ -37,7 +34,10 @@ footer {
   width: .4em;
 }
 
-::-webkit-scrollbar-track {}
+::-webkit-scrollbar-track {
+  min-width: 100px;
+  background-color: #0d0e0f;
+}
 
 ::-webkit-scrollbar-thumb {
   border-radius: 4px;
@@ -80,13 +80,78 @@ footer {
 
 .nav {
   border-bottom: 3px solid rgb(255, 255, 255);
-  height: 9%;
+  min-height: 105px;
   padding-right: 10%;
   padding-left: 10%;
   background: rgb(149, 11, 150);
   background: radial-gradient(circle, rgba(149, 11, 150, 1) 0%, rgba(1, 4, 18, 1) 100%);
-
 }
+
+@media (max-width: 1050px) {
+
+  .nav {
+    padding-right: 4%;
+    padding-left: 4%;
+  }
+}
+
+@media (max-width: 454px) {
+
+  .menu {
+    font-size: smaller;
+
+  }
+}
+
+
+
+@media (max-width: 920px) {
+
+  .navigation {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    padding-right: 12%;
+  }
+
+  .menu {
+    padding: 3px 3px;
+  }
+}
+
+.content {
+  min-height: inherit;
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr;
+}
+
+.MINTnav {}
+
+
+@media (max-width: 581px) {
+
+  .content {
+    grid-template-columns: 3fr 2fr;
+  }
+
+  .image {
+    display: none;
+  }
+
+  .dropdown {
+    display: none;
+  }
+}
+
+
+.navigation {
+  word-spacing: 20px;
+  align-self: center;
+  justify-self: flex-start;
+}
+
+
+
 
 .container {
   display: flex;
@@ -118,10 +183,7 @@ footer {
   color: rgb(180, 173, 37);
 }
 
-.navigation {
-  word-spacing: 20px;
-  left: auto;
-}
+
 
 .center {
   display: flex;
@@ -130,18 +192,21 @@ footer {
 
 .box {}
 
-.image {}
+.image {
+  min-height: 100px;
+  min-width: 100px;
+  justify-self: center;
+  align-self: center;
+}
 
 .wallet {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  min-width: 333px;
 }
 
-.wallet:hover {
-  cursor: pointer;
-}
+
+
 
 .nftmintbuttonactive {
   color: white;
@@ -156,9 +221,69 @@ footer {
 
 
 /*Lottery*/
+.index {
+  min-height: 80vh;
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+@media (max-width: 1519px) {
+  .index {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .PLUSPLUS {
+    display: none;
+  }
+
+  .MINUSMINUS {
+    display: none;
+  }
+
+}
+
+@media (max-width: 920px) {
+  .index {
+    grid-template-columns: 1fr;
+  }
+
+  .PLUS {
+    display: none;
+  }
+
+}
+
 .newnft {
-  text-align: center;
-  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+}
+
+.aou {
+  align-self: center;
+  z-index: 20;
+  color: white;
+}
+
+.enterNftPlay {
+  margin-top: 7%;
+  align-self: center;
+}
+
+.PLUS {
+  justify-self: center;
+  opacity: 0.6;
+}
+
+.PLUSPLUS {
+  justify-self: start;
+  opacity: 0.3;
+}
+
+.MINUSMINUS {
+  justify-self: end;
+  opacity: 0.3;
 }
 
 /*Lobby*/
@@ -169,10 +294,20 @@ footer {
   min-height: 200px;
   height: 15vw;
   display: flex;
+  flex-direction: row;
+  align-items: center;
   margin: 0px 1vw;
 }
 
+@media (max-width: 768px) {
+  .new_active_lobbys {
+    flex-direction: column;
+  }
+}
+
 .area {
+  min-height: 201.2px;
+  max-height: 201.2px;
   border: 4px solid #b9b2b2f1;
   border-radius: 10px;
   width: 84%;
@@ -196,6 +331,7 @@ footer {
 }
 
 .newLobby {
+  min-width: 222.15px;
   width: 230px;
   padding: 17px;
   border: 4px solid #b9b2b2f1;
@@ -256,6 +392,7 @@ footer {
 }
 
 .choosetoken {
+  border-radius: 12px;
   background-color: #110e0ef1;
   color: white;
   padding: 10px;
@@ -271,7 +408,7 @@ option {
 }
 
 .UpAndDown {
-  color: white;
+  color: rgb(0, 0, 0);
   display: flex;
   justify-content: space-between;
 }
@@ -307,7 +444,7 @@ option {
   width: 26px;
   left: 4px;
   bottom: 4px;
-  background-color: white;
+  background-color: rgb(255, 255, 255);
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -329,28 +466,118 @@ input:checked+.slider:before {
 /* Rounded sliders */
 .slider.round {
   border-radius: 34px;
+
 }
 
 .slider.round:before {
   border-radius: 50%;
 }
 
-.justcolor {
-  color: #403e3f;
-}
 
 /*
   Marketplace
 */
-.marketplace {
-  margin-top: 30px;
-  margin-left: 30px;
-  margin-right: 60px;
 
+.areaNfts {
+  margin: 0px calc(10% - 50px);
+  min-height: 80vh
+}
+
+.areaFiter {
+  padding: 0px 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.zx {
+  align-self: center;
+  justify-self: center;
 }
 
 
+.fiter {
+  min-width: 300px;
+  padding-top: 30px;
+}
 
-.some-padding {
-  padding: 3%;
+.anotherShit {
+  min-width: inherit;
+  display: flex;
+  justify-content: space-between;
+}
+
+.BackNext {
+  display: flex;
+  padding: 12px 40px 0px 40px;
+  justify-content: space-around;
+}
+
+@media (max-width: 960px) {
+  .fiter {
+    margin: 4% 2% 0% 2%;
+  }
+}
+
+.sliderGREEN {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #2196F3;
+  transition: .4s;
+}
+
+.sliderGREEN:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #4fff00;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked+.sliderGREEN {
+  background-color: #2196F3;
+}
+
+input:focus+.sliderGREEN {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.sliderGREEN:before {
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.sliderGREEN.round {
+  border-radius: 34px;
+}
+
+.sliderGREEN.round:before {
+  border-radius: 50%;
+}
+
+.reddot {
+  width: 14px;
+  height: 14px;
+  background-color: rgb(255, 0, 0);
+  border-radius: 10px;
+}
+
+.greendot {
+  width: 14px;
+  height: 14px;
+  background-color: #4fff00;
+  border-radius: 10px;
+}
+
+.i {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }

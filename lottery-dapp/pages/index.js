@@ -35,13 +35,45 @@ export default function Home({ id }) {
   const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
   const MudeBzNFT = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
 
-  const [error, setError] = useState('')
-  const [successMsg, setSuccessMsg] = useState('')
-  const [lcContract, setLcContract] = useState()
-  const [freeTokens, setFreeTokens] = useState(0)
-  const [deposit, setdeposit] = useState(0)
-  const [lotteryPlayers, setPlayers] = useState([])
-  const [lotteryId, setlotteryId] = useState(`/images/${id % 5 === 0 ? id % 5 + 1 : id % 5}.png`)
+  const [lotteryIdPLUSPLUS, setlotteryIdPLUSPLUS] = useState(`/images/${id + 2 < 1001 ? id + 2 : 0}.png`)
+  const [lotteryIdMINUSMINUS, setlotteryIdMINUSMINUS] = useState(`/images/${id - 2 > 0 ? id - 2 : 0}.png`)
+  const [lotteryIdPLUS, setlotteryIdPLUS] = useState(`/images/${id + 1 < 1001 ? id + 1 : 0}.png`)
+  const [lotteryIdMINUS, setlotteryIdMINUS] = useState(`/images/${id - 1 > 0 ? id - 1 : 0}.png`)
+  const [lotteryId, setlotteryId] = useState(`/images/${id}.png`)
+
+  useEffect(() => {
+    window.ethereum.on("accountsChanged", () => {
+      console.log("f")
+      checkAmIn()
+    });
+  }, [])
+
+  // useEffect(() => {
+  //   checkAmIn()
+  // }, [])
+
+
+  const [amIn, setamIn] = useState(false)
+
+  const checkAmIn = async () => {
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      const singer = provider.getSigner()
+      const contract = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
+      const players = (await contract.getLotteryShablonByIndex(id)).players
+      const length = players.length
+      let flag = false
+      for (let i = 0; i < length; i++) {
+        if (players[i] == await singer.getAddress()) {
+          flag = true
+          break
+        }
+      }
+      setamIn(flag)
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
 
   const Enter = async () => {
@@ -51,6 +83,7 @@ export default function Home({ id }) {
       const contract = new ethers.Contract(LotteryAddress, Lottery.abi, singer)
       const tx = await contract.Enter()
       await tx.wait()
+      setamIn(true)
       contract.once("enter", async () => {
         console.log("Welcome!", await singer.getAddress())
       })
@@ -67,11 +100,28 @@ export default function Home({ id }) {
         <meta name="description" content="An Ethereum Lottery dApp" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1 className='titel'>New NFT</h1>
-      <div className='newnft'>
-        <Image src={lotteryId} width={300} height={300} />
-        <div className=''>
-          <button onClick={Enter} className="mybutton tobottom">Enter Lottery</button>
+      <div className=''>
+        <div className='index'>
+          <div className='MINUSMINUS'>
+            <Image src={lotteryIdMINUSMINUS} width={150} height={150} />
+          </div>
+          <div className='PLUS'>
+            <Image src={lotteryIdMINUS} width={225} height={225} />
+          </div>
+          <div className='newnft'>
+            <h2 className='aou'>New</h2>
+            <Image src={lotteryId} width={300} height={300} />
+            <div className='enterNftPlay'>
+              {!amIn && <button onClick={Enter} className="mybutton tobottom">Am In!</button>}
+              {amIn && <button className="nftmintbuttonactive">Your In!</button>}
+            </div>
+          </div>
+          <div className='PLUS'>
+            <Image src={lotteryIdPLUS} width={225} height={225} />
+          </div>
+          <div className='PLUSPLUS'>
+            <Image src={lotteryIdPLUSPLUS} width={150} height={150} />
+          </div>
         </div>
       </div>
     </div >

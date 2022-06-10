@@ -30,6 +30,18 @@ export default function MintNftButton() {
     setUser()
 
     useEffect(() => {
+        const provider = new ethers.providers.JsonRpcProvider
+        const contract = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
+        const contractM = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, provider)
+        contract.once("play", async (winer) => {
+            getAllows()
+        })
+        contractM.once("NewNFT", async (user, id) => {
+            getAllows()
+        })
+    }, [])
+
+    useEffect(() => {
         getAllows()
     }, [user])
 
@@ -70,12 +82,18 @@ export default function MintNftButton() {
         } catch (err) {
             console.log(err)
         }
+        if (arrayAllowToMint.length == 1) {
+            localStorage.removeItem("overflow")
+            document.body.style.overflow = ('overflow', 'auto');
+        }
+        getAllows()
     }
 
 
     return (
         <div>
-            <button className={isMintMartenActive ? "nftmintbuttonactive" : "mybutton"} onClick={() => {
+            <button className={isMintMartenActive ? "nftmintbuttonactive" : "MINTnav mybutton"} onClick={() => {
+                window.scrollTo(0, 0)
                 if (!isMintMartenActive) {
                     localStorage.setItem("overflow", "lock")
                     document.body.style.overflow = ('overflow', 'hidden');
@@ -88,15 +106,14 @@ export default function MintNftButton() {
                 setisMintMartenActive(!isMintMartenActive)
 
             }
-            } >MintMarten</button>
+            } >MintNFT</button>
             <div className={isMintMartenActive ? "modallMINT active" : "modallMINT"} onClick={() => setisMintMartenActive(false)}>
                 <div className="areaMINT" onClick={e => e.stopPropagation()}>
-                    <input className='input discord' placeholder='Discord ->  Mint' onChange={e => setdiscord(e.target.value)} />
+                    <input className='input discord' placeholder='Discord' onChange={e => setdiscord(e.target.value)} />
                     <div className='space-around'>
-
                         {arrayAllowToMint && arrayAllowToMint.map(element =>
                             <div className='MINT'>
-                                <Image src={`/images/${element}.png`} width={200} height={200} /><br />
+                                <Image src={`/images/${element}.png`} width={350} height={350} /><br />
                                 <button className='mybutton' onClick={() => MintMarten(element)}>Mint{element}</button>
                             </div>
 

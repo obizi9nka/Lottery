@@ -284,6 +284,11 @@ export default function Home({ allLobbyes }) {
             <div className='new_active_lobbys'>
                 <div className='newLobby'>
                     <select onClick={e => {
+                        if (localStorage.getItem("addToken") === "true") {
+                            getTokens()
+                            localStorage.removeItem("addToken")
+                        }
+
                         rokens.forEach((element) => {
                             if (e.target.value === element.symbol)
                                 settoken(element.address)
@@ -300,17 +305,17 @@ export default function Home({ allLobbyes }) {
                 <div className='area'>
                     <div className='overflow'>
                         <div className='arealobbychoose'>
-                            {lobbyesActive && lobbyesActive.map(({ creator, nowInLobby, countOfPlayers, deposit, IERC20, id }, index) =>
+                            {lobbyesActive && lobbyesActive.map((element, index) =>
                                 <LobbyShablon
-                                    allOrActive={false}
-                                    creator={creator}
-                                    nowInLobby={nowInLobby}
-                                    countOfPlayers={countOfPlayers}
-                                    deposit={deposit}
-                                    IERC20={IERC20}
-                                    id={id}
+                                    lobby={element}
                                     index={index == lobbyesActive.length - 1 ? true : false} />
                             )}
+                            {lobbyesActive && lobbyesActive.map((element, index) =>
+                                <LobbyShablon
+                                    lobby={element}
+                                    index={index == lobbyesActive.length - 1 ? true : false} />
+                            )}
+
                             {lobbyesActive.length < 1 && <h1 style={{ color: "white" }}>Здесь появяться ваши aктивные Лобби</h1>}
                         </div>
                     </div>
@@ -318,20 +323,24 @@ export default function Home({ allLobbyes }) {
             </div>
             <div className='areafilterlobby'>
                 <div className='FILTER'>
-                    <select onChange={e => settokenn(e.target.value)} className="choosetoken">
+                    <select onChange={e => settokenn(e.target.value)} className="choosetoken" onClick={() => {
+                        if (localStorage.getItem("addToken") === "true") {
+                            getTokens()
+                            localStorage.removeItem("addToken")
+                        }
+                    }
+                    }>
                         <option>ALL</option>
                         {rokens && rokens.map((element) =>
                             <option>{element.symbol}</option>
                         )}
                     </select>
-
                     <div className='UpAndDown'>
                         <label className="switch">
-                            <input type="checkbox" onChange={() => setUP(!UP)} />
+                            <input type="checkbox" style={{ display: "none" }} onChange={() => setUP(!UP)} ></input>
                             <span className="slider round"></span>
                         </label>
                     </div>
-
                     <div>
                         <input onChange={() => { setdepositt(true); setnowInLobby(false); setcountOfPlayerss(false) }} type="radio" id="depositt" name="monster" />
                         <label for="depositt" className='choosecoler'>deposit</label><br />

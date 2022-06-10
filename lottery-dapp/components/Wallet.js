@@ -8,7 +8,7 @@ import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/Mude
 import WalletAlert from './WalletAlert';
 
 
-export default function Wallet() {
+export default function Wallet({ f }) {
 
     const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
     const MudeBzNFTAddress = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
@@ -29,18 +29,22 @@ export default function Wallet() {
             setuser("")
         }
     }
+    setUser()
 
     useEffect(() => {
         window.ethereum.on("accountsChanged", () => {
             setUser()
-            checkWallet()
+            setNewUSer()
         });
     }, [])
+
 
     useEffect(() => {
         checkNftButton()
         getAllNews()
+        checkWallet()
     }, [isWalletConnect, user])
+
 
     async function setNewUSer() {
         const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -67,12 +71,10 @@ export default function Wallet() {
         const provider = new ethers.providers.JsonRpcProvider
         const contract = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
         const contractM = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, provider)
-        contract.on("play", async (winer) => {
-            console.log("emit play", winer)
+        contract.once("play", async (winer) => {
             checkNftButton()
         })
-        contractM.on("NewNFT", async (user, id) => {
-            console.log("new nft", user, id)
+        contractM.once("NewNFT", async (user, id) => {
             checkNftButton()
         })
     }, [])
@@ -176,16 +178,18 @@ export default function Wallet() {
     }
 
     const deleteNews = async () => {
-        console.log(user)
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const signer = provider.getSigner()
+        const u = await signer.getAddress()
         try {
             await fetch("/api/deleteAllNews", {
                 method: "POST",
-                body: user
-            }).then(setnews([]))
+                body: u
+            })
         } catch (err) {
             console.log(err)
         }
-
+        setnews([])
     }
 
     if (isWalletConnect)
@@ -246,7 +250,7 @@ export default function Wallet() {
                     if (!isWalletAlert)
                         document.body.style.overflow = ('overflow', 'hidden')
                     setisWalletAlert(!isWalletAlert)
-                }} className="mybutton">Account</button></div>
+                }} className="mybutton size" >{"0x..." + f.substring(38, 42)}</button></div>
                 <WalletAlert active={isWalletAlert} setActive={setisWalletAlert} />
             </div >
         )

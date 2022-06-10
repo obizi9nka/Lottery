@@ -20,8 +20,11 @@ export default async function pdf(req, res) {
 
     body.push(Header)
     const allLobbyes = await prisma.lobbyHistory.findMany()
-    allLobbyes.map((element, index) => {
+    console.log(allLobbyes)
+    let i = 0
+    allLobbyes.map((element) => {
         if (element.players.indexOf(user) !== -1) {
+            i++
             let cutPlayers = ''
             let players = element.players.split("_")
             players.pop()
@@ -33,7 +36,7 @@ export default async function pdf(req, res) {
             })
             const color = (element.winner === user) ? "#8fbe6b" : null
             const temp = [
-                { text: `${index + 1}`, fillColor: color },
+                { text: `${i}`, fillColor: color },
                 { text: element.creator, fillColor: color },
                 { text: element.IERC20, fillColor: color },
                 { text: cutPlayers, fillColor: color },
