@@ -6,14 +6,6 @@ import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
 
 export default function ChangeNetwork({ active }) {
 
-    console.log(active)
-
-    const [addTokenAddress, setaddTokenAddress] = useState('')
-    const [tryed, settryed] = useState(false)
-    const [isvalid, setvalid] = useState(false)
-    const [user, setuser] = useState("")
-    const [rokens, setTokens] = useState([])
-
     return (
         <div className={!active ? "modall active" : "modall"}>
             <div className="networkAlert" onClick={e => e.stopPropagation()}>

@@ -23,9 +23,15 @@ async function main() {
   await B.deployed();
   console.log("B deployed to:", B.address);
 
+  const mud = await hre.ethers.getContractFactory("MUD");
+  const MUD = await mud.deploy(Lottery.address);
+  await MUD.deployed();
+  console.log("MUD deployed to:", MUD.address);
+
   [owner, address1, address2, _] = await ethers.getSigners()
 
   await Lottery.connect(owner).setAdrressNFT(MudebzNFT.address)
+  await Lottery.connect(owner).setMUD(MUD.address)
 
   await A.connect(owner).getTokens(BigInt(100000 * 10 ** 18))
   await A.connect(address1).getTokens(BigInt(100000 * 10 ** 18))
@@ -43,6 +49,19 @@ async function main() {
   await Lottery.connect(address1).addTokensToBalance(A.address, BigInt(10000 * 10 ** 18))
   await Lottery.connect(address2).addTokensToBalance(A.address, BigInt(10000 * 10 ** 18))
 
+  ///
+
+  await MUD.connect(owner).getTokens(BigInt(100 * 10 ** 18))
+  await MUD.connect(address1).getTokens(BigInt(100 * 10 ** 18))
+  await MUD.connect(address2).getTokens(BigInt(100 * 10 ** 18))
+
+  await MUD.connect(owner).approve(Lottery.address, BigInt(10000 * 10 ** 18))
+  await MUD.connect(address1).approve(Lottery.address, BigInt(10000 * 10 ** 18))
+  await MUD.connect(address2).approve(Lottery.address, BigInt(10000 * 10 ** 18))
+
+  await Lottery.connect(owner).addTokensToBalance(MUD.address, BigInt(99 * 10 ** 18))
+  await Lottery.connect(address1).addTokensToBalance(MUD.address, BigInt(99 * 10 ** 18))
+  await Lottery.connect(address2).addTokensToBalance(MUD.address, BigInt(99 * 10 ** 18))
 
   ///
 
@@ -65,7 +84,7 @@ async function main() {
 
 
   // for (let i = 1; i < 301; i++) {
-  await Lottery.connect(owner).Play()
+  //await Lottery.connect(owner).Play()
   //   await MudebzNFT.connect(owner).MintMarten(i, { value: BigInt(32 * 10 ** 15) })
   //   console.log(i)
   // }

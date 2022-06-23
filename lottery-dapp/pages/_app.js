@@ -17,9 +17,6 @@ function MyApp({ Component, pageProps }) {
   const [logo, setlogo] = useState('/star-big.png')
   const [Chain, setChain] = useState(true)
 
-  const AAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
-  const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
-  const MudeBzNFTAddress = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
 
   const [user, setuser] = useState("")
 
@@ -33,29 +30,38 @@ function MyApp({ Component, pageProps }) {
       console.log()
     }
   }
-  setUser()
 
 
+  useEffect(() => {
+    setUser()
+  })
+
+
+  const [chainId, setchainId] = useState(0)
   const checkChain = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const chain = await provider.getNetwork()
     if (chain.chainId == 31337) {
       setlogo('/star-big.png')
       setChain(true)
+      setchainId(31337)
     }
-    else if (chain.chainId == 56) {
+    else if (chain.chainId == 4) {
       setlogo('/countOfPlayers.png')
       setChain(true)
+      setchainId(4)
     }
     else {
       setlogo('/delete.png')
       setChain(false)
-      console.log("change chain")
+      setchainId(0)
     }
   }
+
   useEffect(() => {
     checkChain()
   }, [])
+
 
   useEffect(() => {
     window.ethereum.on('chainChanged', () => {
@@ -75,14 +81,14 @@ function MyApp({ Component, pageProps }) {
       <div className="nav">
         <div className='content'>
           <div className='navigation'>
-            <Link href="/">
+            <Link href="/" className="spase">
               <a className='menu'> Lottery </a>
             </Link>
             <Link href="/lobbyes">
               <a className='menu'> Lobbys </a>
             </Link>
-            <Link href="/Marketplace">
-              <a className='menu'> Marketplace </a>
+            <Link href="/Galary">
+              <a className='menu'> Galary </a>
             </Link>
             <Link href="/About">
               <a className='menu'> About </a>
@@ -93,11 +99,12 @@ function MyApp({ Component, pageProps }) {
               <Image src={logo} width="100px" height="100px" />
             </Link>
           </div>
-          <Wallet f={user} />
+          <Wallet f={user} chainId={chainId} />
         </div>
       </div >
       <Component {...pageProps} />
-
+      <footer>
+      </footer>
     </div >
   )
 }

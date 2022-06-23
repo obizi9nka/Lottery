@@ -1,40 +1,46 @@
 const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
-import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
-const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
 import Image from 'next/image';
-const MudeBzNFTAddress = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from 'C:/Lottery/lottery-dapp/components/Constants.js';
 import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/MudebzNFT.json"
 
 
 
 
-export default function NftsShablon({ data, isowner, istokensMints }) {
+export default function NftsShablon({ data, chainId }) {
 
-    const [ISowner, setisowner] = useState(isowner)
-    const [cost, setcost] = useState(0)
-    const [istokenOnSell, setIsTokenOnSell] = useState(false)
-    const [clicked, setclicked] = useState(false)
+    const [ISowner, setisowner] = useState()
+    const [cost, setcost] = useState()
+    const [istokenOnSell, setIsTokenOnSell] = useState()
+    const [clicked, setclicked] = useState()
 
     useEffect(() => {
-        if (istokensMints) {
+        if (data.ismints) {
             checkcost()
         }
-    }, [])
-
+        setisowner(data.isowner)
+        setcost(0)
+        setIsTokenOnSell(false)
+        setclicked(false)
+    }, [chainId, data])
 
     const checkcost = async () => {
         try {
             const provider = new ethers.providers.Web3Provider(window.ethereum)
-            const contract = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, provider)
+            const contract = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, provider)
             const owner = await contract.ownerOf(data.edition)
             const _cost = parseInt(BigInt(await contract.getCost(owner, data.edition))) / 10 ** 18
             if (_cost > 0) {
                 setcost(_cost)
                 setIsTokenOnSell(true)
+            } else {
+                setcost(0)
+                setIsTokenOnSell(false)
             }
         } catch (err) {
             console.log(err)
+            setcost(0)
+            setIsTokenOnSell(false)
         }
     }
 
@@ -43,7 +49,7 @@ export default function NftsShablon({ data, isowner, istokensMints }) {
             try {
                 const provider = new ethers.providers.Web3Provider(window.ethereum)
                 const singer = provider.getSigner()
-                const contract = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, singer)
+                const contract = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, singer)
                 const tx = await contract.putOnSell(data.edition, BigInt(cost * 10 ** 18))
                 await tx.wait()
                 setIsTokenOnSell(true)
@@ -61,7 +67,7 @@ export default function NftsShablon({ data, isowner, istokensMints }) {
         try {
             const provider = new ethers.providers.Web3Provider(window.ethereum)
             const singer = provider.getSigner()
-            const contract = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, singer)
+            const contract = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, singer)
             const tx = await contract.removeFromSell(data.edition)
             await tx.wait()
             setIsTokenOnSell(false)
@@ -73,7 +79,7 @@ export default function NftsShablon({ data, isowner, istokensMints }) {
         try {
             const provider = new ethers.providers.Web3Provider(window.ethereum)
             const singer = provider.getSigner()
-            const contract = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, singer)
+            const contract = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, singer)
             const owner = await contract.ownerOf(data.edition)
             const _cost = await contract.getCost(owner, data.edition)
             const tx = await contract.trigerSell(owner, data.edition, { value: BigInt(_cost) })
@@ -88,23 +94,26 @@ export default function NftsShablon({ data, isowner, istokensMints }) {
 
     let image = `/images/${data.edition}.png`
 
-    if (ISowner || isowner)
+    if (ISowner || data.isowner)
         return (
             <div className='nftsShablon'>
                 <div className='pad'>
                     <div className='bordernft'>
                         <Image src={image} style={{ "border-radius": 10 }} width={200} height={200} />
                         <div className='i'>
-                            <h1 style={{ color: "white" }}>#{data.edition} </h1>
-                            {istokenOnSell && <h1 style={{ color: "white" }}>{cost}</h1>}
-                            {clicked && <input className='input i' onChange={e => setcost(e.target.value)} style={{ width: "70px" }} placeholder='cost' />}
-                            {!istokenOnSell && <button onClick={putOnSell} className='mybutton i'>Sell</button>}
-                            {istokenOnSell && <button onClick={removeFromSell} className='mybutton i'>Cancel</button>}
+                            {istokenOnSell && <div className='inline'>
+                                <div style={{ color: "white", fontSize: 30, alignSelf: "center" }}>{cost}</div>
+                                <Image src="/tokens/ETH.png" style={{ "border-radius": 10 }} width={20} height={20} />
+                            </div>}
+                            {<div style={{ color: "white" }}>{data.edition}{data.ismints ? "+" : "-"}</div>}
+                            {clicked && <input className='input ' onChange={e => setcost(e.target.value)} style={{ width: "70px" }} placeholder='cost' />}
+                            {!istokenOnSell && <button onClick={putOnSell} className='mybutton '>Sell</button>}
+                            {istokenOnSell && <button onClick={removeFromSell} className='mybutton '>Cancel</button>}
                         </div>
-                        <div className={istokensMints ? "greendot absolute" : "reddot absolute"} />
+                        <div className={data.ismints ? "greendot absolute" : "reddot absolute"} />
                     </div>
                 </div>
-            </div>
+            </div >
         )
     else
         return (
@@ -113,11 +122,12 @@ export default function NftsShablon({ data, isowner, istokensMints }) {
                     <div className='bordernft'>
                         <Image src={image} style={{ "border-radius": 10 }} width={200} height={200} />
                         <div className='i'>
-                            <h1 style={{ color: "white" }}>#{data.edition} </h1>
+                            {<div style={{ color: "white" }}>{data.edition}{data.ismints ? "+" : "-"}</div>}
                             {istokenOnSell && <h1 style={{ color: "white" }}> {cost}</h1>}
+                            {istokenOnSell && <Image src="/tokens/ETH.png" style={{ "border-radius": 10 }} width={20} height={20} />}
                             {istokenOnSell && <button onClick={buy} className='mybutton i'>Buy</button>}
                         </div>
-                        <div className={istokensMints ? "greendot absolute" : "reddot absolute"} />
+                        <div className={data.ismints ? "greendot absolute" : "reddot absolute"} />
                     </div>
                 </div>
             </div>

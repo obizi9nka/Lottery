@@ -1,9 +1,10 @@
 const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
-const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from './Constants';
+
+
 import Image from 'next/image';
-import list from "C:/Lottery/lottery-dapp/public/tokens/list.json"
 
 
 export default function LobbyShablon({ lobby, index }) {
@@ -13,7 +14,7 @@ export default function LobbyShablon({ lobby, index }) {
         const provider = new ethers.providers.Web3Provider(window.ethereum)
         const signer = provider.getSigner()
         const newPlayer = await signer.getAddress()
-        const contract = new ethers.Contract(LotteryAddress, Lottery.abi, signer)
+        const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, signer)
         const tx = await contract.EnterLobby(lobby.creator, lobby.id)
         await tx.wait()
 
@@ -32,7 +33,7 @@ export default function LobbyShablon({ lobby, index }) {
     }
 
     return (
-        <div className={index ? 'LobbyShablon' : 'LobbyShablon'}>
+        <div className='LobbyShablonActive'>
             <div className="tokeninlobbyshablon gridcenter">
                 {<Image className="tokenpng" alt='?' src={`/tokens/${lobby.IERC20}.png`} width={45} height={45} />}
             </div>

@@ -4,6 +4,8 @@ pragma solidity ^0.8.0;
 
 import "./Balance.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "./MUD.sol";
+import "./ERC721with.sol";
 
 contract Lobby is Balance {
     struct lobbyShablon {
@@ -46,6 +48,28 @@ contract Lobby is Balance {
 
     mapping(address => mapping(uint256 => lobbyShablon)) lobby;
 
+    uint256 internal MAX_SUPPLAY = 10**9; // 1 000 000 000
+
+    uint256 internal REVARD_FOR_HOLDERS = (MAX_SUPPLAY / 100) * 8; // 80 000 000
+    uint256 internal REVARD_FOR_HOLDERS_EVER = (MAX_SUPPLAY / 100) * 19; // 190 000 000
+    uint256 internal REVARD_OWNER = (MAX_SUPPLAY / 100) * 13; // 130 000 000
+    uint256 internal REVARD_LOBBY = (MAX_SUPPLAY / 100) * 30; // 300 000 000
+    uint256 internal REVARD_LOTTERY = (MAX_SUPPLAY / 100) * 9; // 90 000 000
+    uint256 internal REVARD_REF = (MAX_SUPPLAY / 100) * 21; // 210 000 000
+
+    uint256 internal FOR_ONE_LOTTERY = (REVARD_LOTTERY / 1000); // 100 000
+    uint256 internal FOR_ONE_DAY_LOBBY = (REVARD_LOBBY / 1000); // 300 000
+    uint256 internal HEEP = FOR_ONE_DAY_LOBBY;
+
+    uint256 LotteryCount = 1;
+
+    MUD MUDaddress;
+    ERC721with NFT;
+
+    function getHEEP() public view returns (uint256) {
+        return HEEP;
+    }
+
     function createNewLobby(
         IERC20 tokenAddress,
         uint256 deposit,
@@ -56,13 +80,12 @@ contract Lobby is Balance {
             balanceInTokenForAccount[tokenAddress][msgsender] >= deposit &&
                 lobbyCountForAddress[msgsender] < 10 &&
                 countOfPlayers <= 1000 &&
-                countOfPlayers > 1,
-            "balance < deposit"
+                countOfPlayers > 1
         );
 
         balanceInTokenForAccount[tokenAddress][msgsender] -= deposit;
 
-        lobbyCountForAddress[msgsender]++; //мб тут ошибка
+        lobbyCountForAddress[msgsender]++;
         uint256 lobbyId = ++lobbyCountForAddressHistory[msgsender];
         while (true) {
             if (lobby[msgsender][lobbyId].nowInLobby != 0) {
@@ -132,6 +155,27 @@ contract Lobby is Balance {
         balanceInTokenForAccount[_lobby.token][_lobby.players[rand]] +=
             _lobby.deposit *
             _lobby.countOfPlayers;
+
+        uint256 length = _lobby.players.length;
+        if (
+            address(_lobby.token) == address(MUDaddress) &&
+            HEEP >= length * 10 &&
+            _lobby.deposit >= 10**19 &&
+            LotteryCount >= 31 // >=1051 >= 31
+        ) {
+            for (uint256 i = 0; i < length; i++) {
+                MUDaddress._mintFromLottery(_lobby.players[i], 10 * 10**18);
+                MUDaddress._transferFromLottery(
+                    _lobby.players[i],
+                    address(this),
+                    10 * 10**18
+                );
+                balanceInTokenForAccount[IERC20(MUDaddress)][
+                    _lobby.players[i]
+                ] += 10 * 10**18;
+            }
+            HEEP -= length * 10;
+        }
 
         return _lobby.players[rand];
     }

@@ -4,17 +4,16 @@ const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
-import { compileFunction } from 'vm';
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from 'C:/Lottery/lottery-dapp/components/Constants.js';
+const notForYourEyesBitch = require("/C:/Lottery/lottery-dapp/notForYourEyesBitch")
 
 
 export async function getServerSideProps() {
-  let id
+  let id = 0
   try {
-    const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
-    const provider = new ethers.providers.JsonRpcProvider
-    const contract = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
+    let provider = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
+    const contract = new ethers.Contract(LotteryAddressETH, Lottery.abi, provider)
     id = await contract.getLotteryCount()
-    console.log(id)
   } catch (err) {
     console.log(err)
   }
@@ -27,30 +26,125 @@ export async function getServerSideProps() {
 
 export default function Home({ id }) {
 
-
-
-
-
-  const AAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
-  const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
-  const MudeBzNFT = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
-
   const [lotteryIdPLUSPLUS, setlotteryIdPLUSPLUS] = useState(`/images/${id + 2 < 1001 ? id + 2 : 0}.png`)
   const [lotteryIdMINUSMINUS, setlotteryIdMINUSMINUS] = useState(`/images/${id - 2 > 0 ? id - 2 : 0}.png`)
   const [lotteryIdPLUS, setlotteryIdPLUS] = useState(`/images/${id + 1 < 1001 ? id + 1 : 0}.png`)
   const [lotteryIdMINUS, setlotteryIdMINUS] = useState(`/images/${id - 1 > 0 ? id - 1 : 0}.png`)
   const [lotteryId, setlotteryId] = useState(`/images/${id}.png`)
 
+  const [chainId, setchainId] = useState(0)
+  const [user, setuser] = useState('')
+  const [AutoEnter, setAutoEnter] = useState([])
+
   useEffect(() => {
     window.ethereum.on("accountsChanged", () => {
-      console.log("f")
       checkAmIn()
     });
   }, [])
 
-  // useEffect(() => {
-  //   checkAmIn()
-  // }, [])
+  const setUser = async () => {
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      const signer = provider.getSigner()
+      const _user = await signer.getAddress()
+      setuser(_user)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  setUser()
+
+  useEffect(() => {
+    if (chainId > 0)
+      checkAmIn()
+  }, [chainId, user])
+
+
+  const checkChain = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const chain = await provider.getNetwork()
+
+    if (chain.chainId == 31337) {
+      setchainId(31337)
+    }
+    else if (chain.chainId == 4) {
+      setchainId(4)
+    }
+    else {
+      setchainId(0)
+    }
+    try {
+      const contract = new ethers.Contract(chain.chainId === 4 ? LotteryAddressETH : chain.chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
+      const _id = parseInt(await contract.getLotteryCount(), 10)
+      setlotteryId(`/images/${_id}.png`)
+      setlotteryIdPLUSPLUS(`/images/${_id + 2 < 1001 ? _id + 2 : 0}.png`)
+      setlotteryIdMINUSMINUS(`/images/${_id - 2 > 0 ? _id - 2 : 0}.png`)
+      setlotteryIdPLUS(`/images/${_id + 1 < 1001 ? _id + 1 : 0}.png`)
+      setlotteryIdMINUS(`/images/${_id - 1 > 0 ? _id - 1 : 0}.png`)
+    } catch (err) {
+
+    }
+  }
+
+  const [AutoEnterMAS, setAutoEnterMAS] = useState([])
+  const [clicked, setclicked] = useState(false)
+  const [Invalid, setInvalid] = useState(false)
+
+  const addToAutoEnter = async () => {
+    if (clicked) {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const singer = provider.getSigner()
+        const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, singer)
+        const tx = await contract.addToAutoEnter(AutoEnterMAS)
+        await tx.wait()
+        setclicked(false)
+        setAutoEnterMAS([])
+        document.getElementById("AutoEnter").value = "";
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    else {
+      const mas = AutoEnter.split(",")
+      let data = []
+      let flag = true
+      for (let i = 0; i < mas.length; i++) {
+        let _flag = true
+        data.forEach(element => {
+          if (element == mas[i])
+            _flag = false
+        });
+        if (parseInt(mas[i]) == mas[i] && mas[i] > id && _flag) {
+          data.push(parseInt(mas[i]))
+        } else {
+          flag = false
+          break
+        }
+      }
+      if (flag) {
+        setclicked(true)
+        setAutoEnterMAS(data)
+        setInvalid(false)
+      } else {
+        setInvalid(true)
+      }
+
+    }
+
+  }
+
+  // console.log(AutoEnter)
+
+  useEffect(() => {
+    checkChain()
+  }, [])
+
+  useEffect(() => {
+    window.ethereum.on('chainChanged', () => {
+      checkChain()
+    });
+  }, [])
 
 
   const [amIn, setamIn] = useState(false)
@@ -59,7 +153,7 @@ export default function Home({ id }) {
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum)
       const singer = provider.getSigner()
-      const contract = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
+      const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
       const players = (await contract.getLotteryShablonByIndex(id)).players
       const length = players.length
       let flag = false
@@ -75,12 +169,11 @@ export default function Home({ id }) {
     }
   }
 
-
   const Enter = async () => {
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum)
       const singer = provider.getSigner()
-      const contract = new ethers.Contract(LotteryAddress, Lottery.abi, singer)
+      const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, singer)
       const tx = await contract.Enter()
       await tx.wait()
       setamIn(true)
@@ -91,6 +184,8 @@ export default function Home({ id }) {
 
     }
   }
+
+  //console.log(ethers.utils.keccak256(ethers.utils.toUtf8Bytes("")))
 
 
   return (
@@ -103,27 +198,34 @@ export default function Home({ id }) {
       <div className=''>
         <div className='index'>
           <div className='MINUSMINUS'>
-            <Image src={lotteryIdMINUSMINUS} width={150} height={150} />
+            <Image src={lotteryIdMINUSMINUS} className="tttt" width={150} height={150} />
           </div>
           <div className='PLUS'>
-            <Image src={lotteryIdMINUS} width={225} height={225} />
+            <Image src={lotteryIdMINUS} className="tttt" width={225} height={225} />
           </div>
           <div className='newnft'>
-            <h2 className='aou'>New</h2>
-            <Image src={lotteryId} width={300} height={300} />
+            <h2 className='aou'></h2>
+            <Image src={lotteryId} className="tttt" width={300} height={300} />
             <div className='enterNftPlay'>
               {!amIn && <button onClick={Enter} className="mybutton tobottom">Am In!</button>}
               {amIn && <button className="nftmintbuttonactive">Your In!</button>}
             </div>
           </div>
           <div className='PLUS'>
-            <Image src={lotteryIdPLUS} width={225} height={225} />
+            <Image src={lotteryIdPLUS} className="tttt" width={225} height={225} />
           </div>
           <div className='PLUSPLUS'>
-            <Image src={lotteryIdPLUSPLUS} width={150} height={150} />
+            <Image src={lotteryIdPLUSPLUS} className="tttt" width={150} height={150} />
           </div>
         </div>
       </div>
+      <input className='input' id='AutoEnter' placeholder='NFT ids: 4,7,3,9,100,444' onChange={e => { setAutoEnter(e.target.value); setclicked(false); setInvalid(false) }} />
+
+      <button onClick={addToAutoEnter} className="mybutton">{clicked ? "Yes" : "Auto In"}</button>
+      {clicked && <div className='controlautoenter'>
+        {AutoEnterMAS && AutoEnterMAS.map((element, index) => <div>{index === 0 ? `Is correct: ${element}` : (index !== AutoEnterMAS.length - 1 ? `,${element}` : `,${element} ?`)}</div>)}
+      </div>}
+      {Invalid && <div>INVALID</div>}
     </div >
   )
 }

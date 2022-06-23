@@ -23,7 +23,10 @@
 
 }
 
+
+
 .modallMINT {
+
     margin-top: 107.8px;
     position: fixed;
     top: 0;
@@ -37,7 +40,12 @@
     transition: 0.1s;
 }
 
-@media (max-width: 508px) {}
+@media (max-width: 486px) {
+    .areaMINT {
+        width: 486px;
+        min-height: calc(100vh + 105px);
+    }
+}
 
 .modallMINT.active {
     opacity: 1;
@@ -46,7 +54,7 @@
 
 .areaMINT {
     min-width: 99.5vw;
-    height: 100vh;
+    height: calc(100vh - 105px);
     position: absolute;
     left: 0%;
     top: 0%;
@@ -55,15 +63,22 @@
     background: radial-gradient(circle, rgba(149, 11, 150, 1) 0%, rgba(0, 0, 0, 1) 78%);
 }
 
+.back {
+    background-color: #110e0e;
+    width: 486px;
+    height: 1000vh;
+}
+
 .discord {
     position: absolute;
-    right: 5%;
-    bottom: 20%;
+    margin: 20px;
 }
 
 .space-around {
     display: flex;
     justify-content: space-around;
+    align-items: center;
+    height: inherit;
 }
 
 .MINT {
@@ -71,8 +86,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: auto;
-    height: 100vh;
 }
 
 
@@ -80,6 +93,7 @@
     padding: 10px;
     width: 500px;
     height: 85vh;
+    min-height: 341px;
     background-color: rgb(40, 40, 41);
     border-radius: 12px;
     position: relative;
@@ -87,6 +101,13 @@
     border-style: solid;
     border-color: white;
     overflow-y: auto;
+}
+
+
+@media (max-width: 512px) {
+    .walletalert {
+        margin: 0px 20px;
+    }
 }
 
 .networkAlert {
@@ -103,8 +124,24 @@
 }
 
 .addtoken {
-    position: absolute;
-    right: 10px;
+    justify-self: end;
+}
+
+
+
+.decimals {
+    width: 100px;
+    justify-self: center;
+}
+
+.tokeninput {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.tokeninput.cut {
+    grid-template-columns: 1fr 1fr;
+
 }
 
 .wallettokens {
@@ -114,10 +151,46 @@
 
 .shablonbalance {
     display: flex;
-    height: 3vw;
-    margin-top: 1vw;
+    height: 50px;
     justify-content: space-around;
     align-items: center;
+}
+
+.hei {
+    max-height: 40px;
+    width: 100px;
+}
+
+.PROM {
+    position: absolute;
+    bottom: 3%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: calc(100% - 10px);
+}
+
+.bothpromset {
+    display: flex;
+    color: white;
+    flex-direction: column;
+    width: 100%;
+}
+
+.proms {
+    display: flex;
+    justify-content: space-around;
+}
+
+.earnProm {
+    margin: 3px 0px;
+    align-self: center;
+}
+
+.promseted {
+    display: flex;
+    flex-direction: column;
+    color: rgb(255, 255, 255);
 }
 
 .fixsizebutton {
@@ -145,7 +218,7 @@
     display: flex;
     font-size: x-large;
     font-weight: 700;
-    width: 9vw;
+    width: 120px;
     justify-content: center;
 }
 
@@ -178,15 +251,15 @@
 }
 
 .isReliably {
-    position: absolute;
-    bottom: 1%;
+    margin-top: 5px;
 }
 
 .invalid {
     position: absolute;
     color: red;
     font-size: 13px;
-    left: 10%;
+    left: 22px;
+    top: 37px;
 }
 
 .depositvalue {
@@ -233,6 +306,13 @@
 
 .nftsShablon {}
 
+.i {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 90px;
+}
+
 .data {
     display: inline-flex;
     flex-wrap: wrap;
@@ -242,6 +322,11 @@
 .pad {
     padding: 40px 50px;
 
+}
+
+.inline {
+    display: flex;
+    height: 20px;
 }
 
 .absolute {
@@ -255,6 +340,7 @@
     padding: 10px;
     border: 1px solid white;
     border-radius: 10px;
+    min-height: 323px;
 }
 
 @media (max-width: 730px) {
@@ -281,26 +367,14 @@
     LobbyShablon
 */
 
-.LobbyShablon {
+.LobbyShablonActive {
     padding: 1px;
     margin-right: 2.9vw;
     border: 1px solid white;
     border-radius: 19px;
     min-width: 170px;
     height: 150px;
-    margin: 3% 3%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    background-color: rgba(120, 116, 127, 0.542);
-}
-
-.LobbyShablonKOSTLb {
-    padding: 1px;
-    border-radius: 19px;
-    border: 1px solid white;
-    min-width: 170px;
-    height: 150px;
-    margin: 3% 3%;
+    margin: 0% 3%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     background-color: rgba(120, 116, 127, 0.542);
@@ -312,7 +386,9 @@
     border: 1px solid white;
     margin: 3% 3%;
     min-width: 170px;
-    height: 150px;
+    max-width: 170px;
+    min-height: 150px;
+    max-height: 150px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     background-color: rgba(120, 116, 127, 0.542);
@@ -376,6 +452,18 @@
 
 .onenews.KOSTLb {
     border-bottom: none;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.reload {
+    font-weight: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 42px;
+    border-top: 3px solid rgb(252, 248, 248);
+    color: white;
 }
 
 .nowrap {
@@ -384,8 +472,6 @@
 
 .win {
     background-color: #1fa61dc7;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
 }
 
 .token {
@@ -429,7 +515,8 @@
     background-color: #2a2828;
     height: auto;
     border-radius: 12px;
-    min-width: 600px;
+    min-width: 500px;
+    margin-right: 5px;
 }
 
 .dropdown:hover .wraper {

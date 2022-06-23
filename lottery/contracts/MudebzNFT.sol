@@ -12,12 +12,6 @@ contract MudebzNFT is ERC721with, Ownable {
 
     event NewNFT(address owner, uint256 tokenId);
 
-    uint256[] private tokensMints;
-
-    function gettokensMints() public view returns (uint256[] memory) {
-        return tokensMints;
-    }
-
     constructor(Lottery _lottery) ERC721("MudeBz", "MudeBz") {
         lottery = _lottery;
     }
@@ -28,10 +22,11 @@ contract MudebzNFT is ERC721with, Ownable {
             lottery._findAddressInfirst1000Winers(msgsender, TokenId),
             "Not yours token"
         );
-        require(msg.value >= nftPrice, "Wrong send value");
-
+        if (msg.sender != owner())
+            require(msg.value >= nftPrice, "Wrong send value");
         _safeMint(msgsender, TokenId);
         setTokenMints(TokenId);
+        tokenTransfer[TokenId]++;
 
         if (!_addressHowOwnedNFT[msgsender]) {
             _addressHowOwnedNFT[msgsender] = true;
@@ -89,25 +84,4 @@ contract MudebzNFT is ERC721with, Ownable {
         _transfer(tokenOwner, msg.sender, tokenId);
     }
 
-    /*
-    function sort(uint256 TokenId) private {
-        uint256 last = tokensMints[tokensMints.length - 2];
-        bool flag = false;
-        for (uint256 i = 0; i < tokensMints.length; i++) {
-            if (tokensMints[i] > TokenId) {
-                flag = true;
-                uint256 temp = tokensMints[i];
-                uint256 temp1;
-                tokensMints[i] = TokenId;
-                for (uint256 j = i; j < tokensMints.length - 1; j++) {
-                    temp1 = tokensMints[j + 1];
-                    tokensMints[j + 1] = temp;
-                    temp = temp1;
-                }
-                break;
-            }
-        }
-        if (flag) tokensMints[tokensMints.length - 1] = last;
-    }
-*/
 }

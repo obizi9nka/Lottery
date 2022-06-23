@@ -5,22 +5,36 @@ const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
 
-    const { address, addTokenAddress } = JSON.parse(req.body)
+    const { address, addTokenAddress, chainId } = JSON.parse(req.body)
     let tokensForUser = await prisma.user.findUnique({
         where: {
             address
         }
     })
 
-    tokensForUser = tokensForUser.tokens + addTokenAddress + "_"
+    tokensForUser = (chainId == 4 ? (tokensForUser.tokensETH === null ? null : tokensForUser.tokensETH) : (tokensForUser.tokensBNB === null ? null : tokensForUser.tokensBNB)) + addTokenAddress + "_"
 
-    const result = await prisma.user.update({
-        where: {
-            address
-        },
-        data: {
-            tokens: tokensForUser
-        }
-    })
+    let result
+
+    if (chainId == 4) {
+        result = await prisma.user.update({
+            where: {
+                address
+            },
+            data: {
+                tokensETH: tokensForUser
+            }
+        })
+    }
+    else {
+        result = await prisma.user.update({
+            where: {
+                address
+            },
+            data: {
+                tokensBNB: tokensForUser
+            }
+        })
+    }
     res.json(result)
 }

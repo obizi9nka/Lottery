@@ -6,17 +6,25 @@ import MintNftButton from '../components/MintNftButton';
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/MudebzNFT.json"
 import WalletAlert from './WalletAlert';
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from './Constants';
 
+export default function Wallet({ f, chainId }) {
 
-export default function Wallet({ f }) {
-
-    const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
-    const MudeBzNFTAddress = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
 
     const [NftButton, setNftButton] = useState(false)
     const [isWalletConnect, setisWalletConnect] = useState(false)
     const [isWalletAlert, setisWalletAlert] = useState(false)
     const [user, setuser] = useState("")
+
+    // console.log(NftButton)
+
+    useEffect(() => {
+        if (chainId > 0) {
+            checkNftButton()
+            getAllNews()
+            checkWallet()
+        }
+    }, [isWalletConnect, user, chainId])
 
     const setUser = async () => {
         try {
@@ -39,69 +47,70 @@ export default function Wallet({ f }) {
     }, [])
 
 
-    useEffect(() => {
-        checkNftButton()
-        getAllNews()
-        checkWallet()
-    }, [isWalletConnect, user])
+
+
+    // console.log(user, NftButton)
+
 
 
     async function setNewUSer() {
-        const provider = new ethers.providers.Web3Provider(window.ethereum)
-        const signer = provider.getSigner()
-        const address = await signer.getAddress()
-        const body = { address }
+        try {
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const signer = provider.getSigner()
+            const address = await signer.getAddress()
+            const net = await provider.getNetwork()
+            const body = { address, chainId: net.chainId }
 
-        const prom = new Promise(async (res, rej) => {
-            try {
-                res(await fetch('/api/user', {
-                    method: "POST",
-                    body: JSON.stringify(body)
-                }))
-            } catch (e) {
-            }
-        })
-        prom.then(async (data) => {
-            console.log(await data.json())
-            window.location.reload()
-        })
+            await fetch('/api/user', {
+                method: "POST",
+                body: JSON.stringify(body)
+            }).then((data) => {
+                if (data.status == 200) {
+                    console.log(data.status)
+                    window.location = "http://localhost:3000/About"
+                }
+            })
+        } catch (err) {
+
+        }
+
     }
 
     useEffect(() => {
-        const provider = new ethers.providers.JsonRpcProvider
-        const contract = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
-        const contractM = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, provider)
-        contract.once("play", async (winer) => {
-            checkNftButton()
-        })
-        contractM.once("NewNFT", async (user, id) => {
-            checkNftButton()
-        })
+        try {
+            const provider = new ethers.providers.JsonRpcProvider
+            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
+            const contractM = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, provider)
+            contract.once("play", async (winer) => {
+                checkNftButton()
+            })
+            contractM.once("NewNFT", async (user, id) => {
+                checkNftButton()
+            })
+        } catch (err) {
+        }
     }, [])
 
     const checkNftButton = async () => {
         try {
-            if (typeof window.ethereum !== "undefined") {
-                const provider = new ethers.providers.Web3Provider(window.ethereum)
-                const signer = provider.getSigner()
-                const lottery = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
-                const nft = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, provider)
-                const USER = await signer.getAddress()
-                const wins = await lottery._allowToNFT(USER)
-                let flag = false
-                for (let i = 0; i < parseInt(wins.lotteryes.length, 10); i++) {
-                    if (!await nft.istokenMints(wins.lotteryes[i])) {
-                        flag = true
-                        break
-                    }
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const signer = provider.getSigner()
+            const lottery = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
+            const nft = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, provider)
+            const USER = await signer.getAddress()
+            const wins = await lottery._allowToNFT(USER)
+            let flag = false
+            for (let i = 0; i < parseInt(wins.lotteryes.length, 10); i++) {
+                if (!await nft.istokenMints(parseInt(wins.lotteryes[i], 10))) {
+                    flag = true
+                    break
                 }
-                setNftButton(flag)
             }
+            setNftButton(flag)
         } catch (err) {
             setNftButton(false)
             console.log(err)
         }
-        //setNftButton(true)
     }
 
     const connectWalletHandler = async () => {
@@ -134,6 +143,7 @@ export default function Wallet({ f }) {
     }
 
     const [news, setnews] = useState([])
+    const [now, setnow] = useState()
 
     const getAllNews = async () => {
         try {
@@ -141,9 +151,10 @@ export default function Wallet({ f }) {
             const signer = provider.getSigner()
             const user = await signer.getAddress()
             const constructorNews = []
+            const body = { user, chainId }
             await fetch('/api/getUserData', {
                 method: "POST",
-                body: user
+                body: JSON.stringify(body)
             })
                 .then(async (data) => {
                     const temp = await data.json()
@@ -169,6 +180,8 @@ export default function Wallet({ f }) {
                     });
 
                 })
+            const _now = new Date();
+            setnow(_now)
             constructorNews.reverse()
             setnews(constructorNews)
         } catch (err) {
@@ -191,6 +204,8 @@ export default function Wallet({ f }) {
         }
         setnews([])
     }
+
+
 
     if (isWalletConnect)
         return (
@@ -239,19 +254,22 @@ export default function Wallet({ f }) {
                                             </div>
                                         </div>
                                     )}
+                                    <div className={'reload'}>
+                                        {now && now.toString().substring(16, 24)}
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                     </div >
                 </div>
-                <div className='otstup widthmint'>{NftButton && <MintNftButton />}</div>
+                <div className='otstup widthmint'>{NftButton && <MintNftButton chainId={chainId} />}</div>
                 <div className='otstup'><button onClick={() => {
                     if (!isWalletAlert)
                         document.body.style.overflow = ('overflow', 'hidden')
                     setisWalletAlert(!isWalletAlert)
                 }} className="mybutton size" >{"0x..." + f.substring(38, 42)}</button></div>
-                <WalletAlert active={isWalletAlert} setActive={setisWalletAlert} />
+                <WalletAlert active={isWalletAlert} setActive={setisWalletAlert} chainId={chainId} />
             </div >
         )
     else {

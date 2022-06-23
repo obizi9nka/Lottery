@@ -25,6 +25,16 @@ abstract contract ERC721with is ERC721 {
 
     mapping(address => bool) internal _addressHowOwnedNFT;
 
+    address[] internal addressHowOwnedNFT;
+
+    function getaddressHowOwnedNFT() public view returns (address[] memory) {
+        return addressHowOwnedNFT;
+    }
+
+    function isOwnedEver(address a) public view returns (bool) {
+        return _addressHowOwnedNFT[a];
+    }
+
     struct Owns {
         uint256[] ids;
         uint8 doNotUse;
@@ -40,8 +50,6 @@ abstract contract ERC721with is ERC721 {
         return TokensOwns[adres];
     }
 
-    address[] public addressHowOwnedNFT;
-
     function istokenMints(uint256 TokenId) public view returns (bool) {
         return _istokenMints[TokenId];
     }
@@ -49,6 +57,14 @@ abstract contract ERC721with is ERC721 {
     function setTokenMints(uint256 TokenId) internal {
         _istokenMints[TokenId] = true;
     }
+
+    uint256[] internal tokensMints;
+
+    function gettokensMints() public view returns (uint256[] memory) {
+        return tokensMints;
+    }
+
+    mapping(uint256 => uint256) internal tokenTransfer; //для каждой nft только 100 перемещений с возможностью последующего айрдропа
 
     function _transfer(
         address from,
@@ -93,7 +109,8 @@ abstract contract ERC721with is ERC721 {
         _balances[to] += 1;
         _owners[tokenId] = to;
 
-        if (!_addressHowOwnedNFT[to]) {
+        if (tokenTransfer[tokenId] < 100 && !_addressHowOwnedNFT[to]) {
+            tokenTransfer[tokenId]++;
             _addressHowOwnedNFT[to] = true;
             addressHowOwnedNFT.push(to);
         }

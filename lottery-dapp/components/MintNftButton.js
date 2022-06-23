@@ -3,16 +3,13 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image';
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/MudebzNFT.json"
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from './Constants';
+const notForYourEyesBitch = require("/C:/Lottery/lottery-dapp/notForYourEyesBitch")
 
-
-export default function MintNftButton() {
-
-
-    const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
-    const MudeBzNFTAddress = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
+export default function MintNftButton({ chainId }) {
 
     const [arrayAllowToMint, setarrayAllowToMint] = useState([])
-    const [discord, setdiscord] = useState("")
+    const [Discord, setDiscord] = useState("")
 
     const [user, setuser] = useState("")
 
@@ -30,27 +27,31 @@ export default function MintNftButton() {
     setUser()
 
     useEffect(() => {
-        const provider = new ethers.providers.JsonRpcProvider
-        const contract = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
-        const contractM = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, provider)
-        contract.once("play", async (winer) => {
-            getAllows()
-        })
-        contractM.once("NewNFT", async (user, id) => {
-            getAllows()
-        })
+        try {
+            let provider = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
+            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
+            const contractM = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, provider)
+            contract.once("play", async (winer) => {
+                getAllows()
+            })
+            contractM.once("NewNFT", async (user, id) => {
+                getAllows()
+            })
+        } catch (err) {
+        }
     }, [])
 
     useEffect(() => {
-        getAllows()
-    }, [user])
+        if (chainId > 0)
+            getAllows()
+    }, [user, chainId])
 
     const getAllows = async () => {
         try {
             if (typeof window.ethereum !== "undefined") {
                 const provider = new ethers.providers.Web3Provider(window.ethereum)
-                const lottery = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
-                const nft = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, provider)
+                const lottery = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
+                const nft = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, provider)
                 const wins = await lottery._allowToNFT(user)
                 const array = []
                 for (let i = 0; i < parseInt(wins.lotteryes.length, 10); i++) {
@@ -70,15 +71,22 @@ export default function MintNftButton() {
 
     const MintMarten = async (element) => {
         try {
-            if (typeof window.ethereum !== 'undefined') {
-                const provider = new ethers.providers.Web3Provider(window.ethereum)
-                const singer = provider.getSigner()
-                const contract = new ethers.Contract(MudeBzNFTAddress, MudebzNFT.abi, singer)
-                const tx = await contract.MintMarten(element, {
-                    value: BigInt(32 * 10 ** 15)
-                })
-                await tx.wait()
-            }
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const singer = provider.getSigner()
+            const contract = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, singer)
+            const tx = await contract.MintMarten(element, {
+                value: BigInt(32 * 10 ** 15)
+            })
+            await tx.wait()
+
+            // const body = {
+            //     address: await singer.getAddress(), Discord: `{${element}}` + Discord
+            // }
+
+            // await fetch("/api/discord", {
+            //     method: "POST",
+            //     body: JSON.stringify(body)
+            // })
         } catch (err) {
             console.log(err)
         }
@@ -87,6 +95,12 @@ export default function MintNftButton() {
             document.body.style.overflow = ('overflow', 'auto');
         }
         getAllows()
+    }
+
+    const validateDiscord = (nikename) => {
+        if (nikename.indexOf("@") == 0) {
+            setDiscord(nikename)
+        }
     }
 
 
@@ -109,18 +123,18 @@ export default function MintNftButton() {
             } >MintNFT</button>
             <div className={isMintMartenActive ? "modallMINT active" : "modallMINT"} onClick={() => setisMintMartenActive(false)}>
                 <div className="areaMINT" onClick={e => e.stopPropagation()}>
-                    <input className='input discord' placeholder='Discord' onChange={e => setdiscord(e.target.value)} />
                     <div className='space-around'>
                         {arrayAllowToMint && arrayAllowToMint.map(element =>
                             <div className='MINT'>
-                                <Image src={`/images/${element}.png`} width={350} height={350} /><br />
-                                <button className='mybutton' onClick={() => MintMarten(element)}>Mint{element}</button>
+                                <Image src={`/images/${element}.png`} style={{ "border-radius": 10 }} width={350} height={350} /><br />
+                                <button className='mybutton' onClick={() => { MintMarten(element) }}>Mint{element}</button>
                             </div>
-
                         )}
                     </div>
                 </div>
+                <div className='back' />
             </div>
+
         </div>
     )
 }

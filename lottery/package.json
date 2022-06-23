@@ -13,6 +13,7 @@
     "compile": "/solcjs --abi --include-path node_modules/ --base-path . contracts/Lottery.sol"
   },
   "dependencies": {
+    "@nomiclabs/hardhat-etherscan": "^3.1.0",
     "@openzeppelin/contracts": "^4.5.0",
     "solc": "^0.8.13"
   }

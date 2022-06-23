@@ -2,18 +2,20 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function getServerSideProps() {
-    ;
-    return {
-        props: {
-            allLobbyes: lobbyess
-        }
-    }
-}
-
 export default async function handler(req, res) {
 
-    const lobbyess = await prisma.lobby.findMany()
+
+    let lobbyess
+    if (req.body == "4") {
+        lobbyess = await prisma.lobbyETH.findMany()
+
+    }
+    else {
+        lobbyess = await prisma.lobbyBNB.findMany()
+        console.log("lobbyess")
+    }
 
     res.json(lobbyess)
+
+    console.log(req.body, lobbyess)
 }

@@ -1,11 +1,12 @@
 const { ethers } = require("ethers");
 import { useState, useEffect } from "react";
-const LotteryAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import Image from "next/image";
 import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from './Constants';
 
-export default function TokensBalanceShablon(info) {
+export default function TokensBalanceShablon({ user, token, chainId, setisReliably }) {
+
 
     const [balance, setbalance] = useState(0)
     const [deposit, setDeposit] = useState("null")
@@ -17,50 +18,55 @@ export default function TokensBalanceShablon(info) {
     const [bigBalance, setbigBalance] = useState(0)
     const [Decimals, setDecimals] = useState(18)
 
-    const [isReliably, setisReliably] = useState(false)
-
     const [DELETED, setDELETED] = useState(false)
 
     const [isfaund, setisfaund] = useState(true)
 
+
     const checkBalance = async () => {
         try {
+            // console.log(token, chainId, user)
+            let decimals, _token
+            const tokenDecimalsCheck = token.split(".")
             const provider = new ethers.providers.Web3Provider(window.ethereum)
-            const contract = new ethers.Contract(LotteryAddress, Lottery.abi, provider)
-            const decemals = new ethers.Contract(info.token, A.abi, provider)
+            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB), Lottery.abi, provider)
 
-            const temp = BigInt(await contract.getBalance(info.token, info.user))
+            if (tokenDecimalsCheck == token) {
+                const decemals = new ethers.Contract(token, A.abi, provider)
+                decimals = await decemals.decimals()
+                _token = token
 
-            //console.log(info.token, temp)
-
-            try {
-                const decimals = await decemals.decimals()
-                if (!isReliably)
-                    localStorage.removeItem("isReliably")
-                setDecimals(decimals)
-            } catch (err) {
-                console.log("Net f decimals", err)
-                setisReliably(true)
-                localStorage.setItem("isReliably", "true")
+            } else {
+                decimals = tokenDecimalsCheck[1]
+                _token = tokenDecimalsCheck[0]
+                setisReliably(false)
             }
-            let _balance = parseInt(temp) / 10 ** (Decimals)
 
-            //console.log("bal", _balance)
 
-            if (_balance >= 1) {
-                //console.log(">1", _balance)
-                setbigBalance(_balance + ((isReliably === true) ? '*' : ""))
-                //setbigBalance(temp.toString().substring(0, _balance.toString().length) + "." + temp.toString().substring(_balance.toString().length, temp.toString().length) + ((isReliably === true) ? '*' : ""))
-            }
-            else {
-                //console.log("<1", _balance)
-                setbigBalance((parseInt(temp) / 10 ** (Decimals)).toString() + ((isReliably === true) ? '*' : ""))
-            }
+            const temp = BigInt(await contract.getBalance(_token, user))
+
+            // try {
+
+
+            setDecimals(decimals)
+            // } catch (err) {
+            //     setisReliably(true)
+            //     //localStorage.setItem("isReliably", "true")
+            // }
+            let _balance = (parseInt(temp) / 10 ** (decimals)).toString() + (tokenDecimalsCheck == token ? '' : "*")
+            setbigBalance(_balance)
+
+            // if (_balance >= 1) {
+            //     setbigBalance(_balance)
+            // }
+            // else {
+            //     setbigBalance((parseInt(temp) / 10 ** (decimals)).toString() + (tokenDecimalsCheck == token ? '' : "*"))
+            // }
 
             let str = _balance.toString()
-            if (str.length > 9)
-                _balance = str.substring(0, 9)
-            setbalance(_balance.toString() + ((isReliably === true) ? '*' : ""))
+            if (str.length > 8)
+                _balance = str.substring(0, 8)
+            setbalance(_balance.toString())
         } catch (err) {
             console.log("checkBalance", err)
         }
@@ -70,8 +76,8 @@ export default function TokensBalanceShablon(info) {
         if (typeof window.ethereum !== 'undefined') {
             const provider = new ethers.providers.Web3Provider(window.ethereum)
             const singer = provider.getSigner()
-            const contract = new ethers.Contract(info.token, A.abi, singer)
-            const tx = await contract.approve(LotteryAddress, BigInt(11579208923731619542357098500868790785326998466564056403945758400791312963993))
+            const contract = new ethers.Contract(token, A.abi, singer)
+            const tx = await contract.approve(chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB), BigInt(11579208923731619542357098500868790785326998466564056403945758400791312963993))
             await tx.wait()
             setneedAprove(false)
         }
@@ -82,18 +88,18 @@ export default function TokensBalanceShablon(info) {
         try {
             const provider = new ethers.providers.Web3Provider(window.ethereum)
             const singer = provider.getSigner()
-            const contract = new ethers.Contract(LotteryAddress, Lottery.abi, singer)
-            const tokenContract = new ethers.Contract(info.token, A.abi, provider)
+            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB), Lottery.abi, singer)
+            const tokenContract = new ethers.Contract(token, A.abi, provider)
             const decimals = await tokenContract.decimals()
 
-            console.log("allow", parseInt(await tokenContract.allowance(singer.getAddress(), LotteryAddress)))
-            console.log(parseInt(await tokenContract.allowance(singer.getAddress(), LotteryAddress)), BigInt(deposit * 10 ** decimals))
+            //console.log("allow", parseInt(await tokenContract.allowance(singer.getAddress(), chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB))))
+            //console.log(parseInt(await tokenContract.allowance(singer.getAddress(), chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB))), BigInt(deposit * 10 ** decimals))
 
-            const tx = await contract.addTokensToBalance(info.token, BigInt(deposit * 10 ** decimals))
+            const tx = await contract.addTokensToBalance(token, BigInt(deposit * 10 ** decimals))
             settryed(false)
             await tx.wait()
             setDeposit(0)
-            document.getElementById(info.token).value = "";
+            document.getElementById(token).value = "";
         } catch (err) {
             console.log(err)
         }
@@ -118,8 +124,8 @@ export default function TokensBalanceShablon(info) {
         try {
             const provider = new ethers.providers.Web3Provider(window.ethereum)
             const singer = provider.getSigner()
-            const tokenContract = new ethers.Contract(info.token, A.abi, provider)
-            if (BigInt(await tokenContract.allowance(singer.getAddress(), LotteryAddress)) < BigInt(deposit * 10 ** Decimals)) {
+            const tokenContract = new ethers.Contract(token, A.abi, provider)
+            if (BigInt(await tokenContract.allowance(singer.getAddress(), LotteryAddressETH)) < BigInt(deposit * 10 ** Decimals)) {
                 setneedAprove(true)
             } else {
                 setneedAprove(false)
@@ -131,7 +137,9 @@ export default function TokensBalanceShablon(info) {
     }
 
     const deleteToken = async () => {
-        const body = { address: info.user, deleteTokenAddress: info.token }
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const net = await provider.getNetwork()
+        const body = { address: user, deleteTokenAddress: token, chainId: net.chainId }
         try {
             await fetch('/api/deleteToken', {
                 method: "POST",
@@ -149,30 +157,29 @@ export default function TokensBalanceShablon(info) {
         try {
             const provider = new ethers.providers.Web3Provider(window.ethereum)
             const singer = provider.getSigner()
-            const contract = new ethers.Contract(LotteryAddress, Lottery.abi, singer)
-            const tokenContract = new ethers.Contract(info.token, A.abi, provider)
+            const contract = new ethers.Contract(LotteryAddressETH, Lottery.abi, singer)
+            const tokenContract = new ethers.Contract(token, A.abi, provider)
             let decimals = 18
             try {
                 decimals = await tokenContract.decimals()
             } catch (err) {
                 console.log("Net f desimals", err)
             }
-
-            const tx = await contract.Withdrow(info.token, BigInt(deposit * 10 ** decimals))
+            //console.log(BigInt(deposit * 10 ** decimals))
+            const tx = await contract.Withdrow(token, BigInt(deposit * 10 ** decimals))
             settryed(false)
             await tx.wait()
             setDeposit(0)
-            document.getElementById(info.token).value = "";
+            document.getElementById(token).value = "";
         } catch (err) {
             console.log(err)
         }
     }
 
-    //...{info.token.substr(41, 1)}
     if (!DELETED) {
         return (
             <div className='shablonbalance'>
-                {isfaund && <Image className="tokenpng" src={`/tokens/${info.token}.png`} width={32} height={32} />}
+                {isfaund && <Image className="tokenpng" src={`/tokens/${token}.png`} width={32} height={32} />}
                 {!isfaund && <Image className="tokenpng" src="/question_mark.png" width={32} height={32} />}
 
 
@@ -183,7 +190,7 @@ export default function TokensBalanceShablon(info) {
                     </div>
                 </div>
                 <div className='depositvalue'>
-                    <input className="input_min input" id={info.token} placeholder="Value" onChange={e => setDeposit(e.target.value)} />
+                    <input className="input_min input" id={token} placeholder="Value" onChange={e => setDeposit(e.target.value)} />
                     {(!isvalid && tryed) && <div className="invalidvalue ">Invalid value</div>}
                 </div>
 

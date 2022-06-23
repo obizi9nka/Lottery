@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 export default async function pdf(req, res) {
 
-    const user = req.body
+    const { user, chainId } = JSON.parse(req.body)
 
     let Header = [
         { text: "№", style: "tableHeader" },
@@ -19,8 +19,11 @@ export default async function pdf(req, res) {
     let body = []
 
     body.push(Header)
-    const allLobbyes = await prisma.lobbyHistory.findMany()
-    console.log(allLobbyes)
+    let allLobbyes
+    if (chainId == 4)
+        allLobbyes = await prisma.lobbyHistoryETH.findMany()
+    else
+        allLobbyes = await prisma.lobbyHistoryBNB.findMany()
     let i = 0
     allLobbyes.map((element) => {
         if (element.players.indexOf(user) !== -1) {
