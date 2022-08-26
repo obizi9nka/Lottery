@@ -8,6 +8,8 @@ import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/Mude
 import WalletAlert from './WalletAlert';
 import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from './Constants';
 
+
+
 export default function Wallet({ f, chainId }) {
 
 

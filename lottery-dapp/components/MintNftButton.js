@@ -48,25 +48,22 @@ export default function MintNftButton({ chainId }) {
 
     const getAllows = async () => {
         try {
-            if (typeof window.ethereum !== "undefined") {
-                const provider = new ethers.providers.Web3Provider(window.ethereum)
-                const lottery = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
-                const nft = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, provider)
-                const wins = await lottery._allowToNFT(user)
-                const array = []
-                for (let i = 0; i < parseInt(wins.lotteryes.length, 10); i++) {
-                    if (!await nft.istokenMints(wins.lotteryes[i])) {
-                        array.push(parseInt(wins.lotteryes[i], 10))
-                    }
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const lottery = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
+            const nft = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, provider)
+            const wins = await lottery._allowToNFT(user)
+            const array = []
+            for (let i = 0; i < parseInt(wins.lotteryes.length, 10); i++) {
+                if (!await nft.istokenMints(wins.lotteryes[i])) {
+                    array.push(parseInt(wins.lotteryes[i], 10))
                 }
-                setarrayAllowToMint(array)
             }
+            setarrayAllowToMint(array)
         } catch (err) {
             console.log(err)
         }
     }
 
-    const [TokenId, setTokenId] = useState(1)
     const [isMintMartenActive, setisMintMartenActive] = useState(false)
 
     const MintMarten = async (element) => {

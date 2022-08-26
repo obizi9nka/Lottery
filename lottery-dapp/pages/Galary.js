@@ -55,10 +55,10 @@ export default function Home({ MINTS }) {
 
     const [NFTS, setNFTS] = useState(metadata)
 
-    const [tokensOfUser, settokensOfUser] = useState([])
-    const [tokensMints, settokensMints] = useState(MINTS.list)
-    const [tokensMintsBOOL, settokensMintsBOOL] = useState(MINTS.isMINTS)
+    const [tokensMints, settokensMints] = useState([])
     const [ALL_OR_MINTS, setALL_OR_MINTS] = useState(false)
+
+    const [chainId, setchainId] = useState(0)
 
     const setUser = async () => {
         try {
@@ -66,39 +66,16 @@ export default function Home({ MINTS }) {
             const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
             const signer = provider.getSigner()
             const _user = await signer.getAddress()
-            const AutoEnter = await contract.getAutoEnter(_user)
-            console.log(AutoEnter, "eeeeee")
+
 
             setuser(_user)
-        } catch {
-            console.log("Connect Wallet")
-            setuser("")
-            settokensOfUser([])
-        }
-    }
-    const [chainId, setchainId] = useState(0)
-
-    const [AutoEnter, setAutoEnter] = useState([])
-
-
-    const getAutoEnter = async () => {
-        try {
-            const provider = new ethers.providers.Web3Provider(window.ethereum)
-            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
-            const signer = provider.getSigner()
-            const id = await contract.getLotteryCount()
-            const _user = await signer.getAddress()
-            const data = await contract.getAutoEnter(_user)
-            const temp = data.map((element) => {
-                if (element > id)
-                    return parseInt(element)
-            })
-            setAutoEnter(temp)
         } catch (err) {
-            console.log(err)
+            console.log("Connect Wallet", err)
+            setuser("")
         }
-
     }
+
+
 
 
     const checkChain = async () => {
@@ -121,19 +98,20 @@ export default function Home({ MINTS }) {
     }, [])
 
     useEffect(() => {
-        window.ethereum.on('chainChanged', () => {
-            checkChain()
-        });
-    }, [])
+        setUser()
+    }, [chainId])
 
     useEffect(() => {
+        window.ethereum.on('chainChanged', () => {
+            checkChain()
+        })
         window.ethereum.on("accountsChanged", (data) => {
             setUser()
-            getTokensForUser()
         });
     }, [])
 
-    // console.log(chainId)
+
+
 
     useEffect(() => {
         const provider = new ethers.providers.JsonRpcProvider
@@ -141,32 +119,19 @@ export default function Home({ MINTS }) {
         const contractM = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, provider)
 
         contract.once("play", async (winer) => {
-            getTokensForUser()
+            setNFT()
         })
         contractM.once("NewNFT", async (user, id) => {
-            getTokensForUser()
+            setNFT()
         })
     }, [])
 
-    useEffect(() => {
-        if (chainId > 0)
-            gettokensMints()
-    }, [chainId])
-
-
-    useEffect(() => {
-        if (chainId > 0) {
-            getAutoEnter()
-            getTokensForUser()
-        }
-    }, [user, chainId])
-
-    //console.log(chainId, tokensMints)
-
-
-    const gettokensMints = async () => {
-        let isMINTS = []
+    const setNFT = async () => {
         let list = []
+        let usertokens = []
+        let autoenter = []
+
+        // узнаем какие заминчены
         try {
             let provider
             if (chainId == 4)
@@ -185,95 +150,112 @@ export default function Home({ MINTS }) {
                 list.sort((a, b) => {
                     return a - b
                 })
-                list = list.map(element => {
-                    return (DATA[element - 1])
-                });
 
-                for (let i = 0, j = 0; i < 1001; i++) {
-                    if (list[j].edition === i) {
-                        isMINTS.push(true)
-                        if (j !== list.length - 1)
-                            j++
-                    }
-                    else
-                        isMINTS.push(false)
-                }
-                settokensMints(list)
-                settokensMintsBOOL(isMINTS)
-            } else {
-                settokensMints([])
-                settokensMintsBOOL([])
             }
         } catch (err) {
             console.log(err)
         }
-    }
 
-
-    const getTokensForUser = async () => {
+        // какими владеет поьзователь 
         try {
             const provider = new ethers.providers.Web3Provider(window.ethereum)
             const singer = provider.getSigner()
             const contract = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, provider)
             const USER = await singer.getAddress()
             const tx = await contract.getTokensForAddress(USER)
-
-            const temp = tx.ids.map(element => {
+            usertokens = tx.ids.map(element => {
                 return (parseInt(element))
             });
-            console.log(temp)
-            settokensOfUser(temp)
+
+            usertokens = usertokens.sort((a, b) => {
+                return a - b
+            })
+
+            //Autoenter
+            if (chainId === 31337) {
+                const contractLottery = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
+                const id = await contractLottery.getLotteryCount()
+                const data = await contractLottery.getAutoEnter(_user)
+                let temp = data.map((element) => {
+                    if (element > id)
+                        return parseInt(element)
+                })
+
+                autoenter = temp.sort((a, b) => {
+                    return a - b
+                })
+            }
+
         } catch (err) {
-            console.log("r", err)
+            console.log(err)
+            usertokens = [-1]
         }
+
+
+
+        // minted
+        let minted = []
+        for (let i = 1, j = 0, x = 0, y = 0; i < 1001; i++) {
+            if (list[j] === i) {
+                const ismints = true
+                const isowner = usertokens[x] == i
+                if (isowner)
+                    x++
+                const edition = list[j]
+                const isAutoEnter = autoenter[y] == i
+                if (isAutoEnter)
+                    y++
+                const body = { ismints, isowner, edition, isAutoEnter }
+                minted.push(body)
+                if (j !== list.length - 1)
+                    j++
+            }
+        }
+
+        //all
+        let all = []
+        for (let i = 1, j = 0, x = 0, y = 0, z = 0; i < 1001; i++) {
+            const ismints = list[z] == i
+            if (ismints)
+                z++
+            const isowner = usertokens[x] == i
+            if (isowner)
+                x++
+            const isAutoEnter = autoenter[y] == i
+            if (isAutoEnter)
+                y++
+            const body = { ismints, isowner, edition: i, isAutoEnter }
+            all.push(body)
+            if (j !== list.length - 1)
+                j++
+        }
+
+        setNFTS(all)
+        setDATA(all)
+
+        console.log(usertokens, all, minted)
+
+        settokensMints(minted)
     }
+
 
     useEffect(() => {
-        if (chainId > 0)
-            doNFT()
-    }, [tokensOfUser, tokensMints])
+        setNFT()
+    }, [chainId, user])
 
 
-    const isOWNER = (index) => {
-        let flag = false
-        tokensOfUser.forEach(element => {
-            if (element == index)
-                flag = true
-        });
-        return flag
-    }
 
     const [startIndex, setstartIndex] = useState(1)
     const [countOfRenderNfts, setcountOfRenderNfts] = useState(25)
 
-    const IStokensMints = (index) => {
-        if (tokensMintsBOOL.length > 0 && tokensMintsBOOL[index]) {
-            return true
-        }
-        return false
-    }
-
-    const doNFT = () => {
-        let _DATA = []
-        metadata.forEach((element) => {
-            const ismints = IStokensMints(element.edition)
-            const isowner = isOWNER(element.edition)
-            const edition = element.edition
-            const body = { ismints, isowner, edition }
-            _DATA.push(body)
-        });
-        setNFTS(_DATA)
-        setDATA(_DATA)
-    }
 
     useEffect(() => {
         const temp = localStorage.getItem("ENOUGTH")
         if (temp > 0) {
-            setcountOfRenderNfts(temp)
+            setcountOfRenderNfts(parseInt(temp))
             document.getElementById("enougth").value = temp;
         }
     }, [])
-
 
     const changeState = (isup, isbuttom) => {
         if (isbuttom)
@@ -299,7 +281,7 @@ export default function Home({ MINTS }) {
     }
 
     const isEnogth = (index) => {
-        return (index >= startIndex && index < parseInt(countOfRenderNfts) + parseInt(startIndex))
+        return (index >= startIndex && index < countOfRenderNfts + startIndex)
     }
 
     const filter = (search) => {

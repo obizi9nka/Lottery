@@ -9,6 +9,7 @@ import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/Mude
 
 export default function NftsShablon({ data, chainId }) {
 
+
     const [ISowner, setisowner] = useState()
     const [cost, setcost] = useState()
     const [istokenOnSell, setIsTokenOnSell] = useState()
@@ -23,6 +24,7 @@ export default function NftsShablon({ data, chainId }) {
         setIsTokenOnSell(false)
         setclicked(false)
     }, [chainId, data])
+
 
     const checkcost = async () => {
         try {
@@ -111,6 +113,7 @@ export default function NftsShablon({ data, chainId }) {
                             {istokenOnSell && <button onClick={removeFromSell} className='mybutton '>Cancel</button>}
                         </div>
                         <div className={data.ismints ? "greendot absolute" : "reddot absolute"} />
+
                     </div>
                 </div>
             </div >
@@ -121,6 +124,9 @@ export default function NftsShablon({ data, chainId }) {
                 <div className='pad'>
                     <div className='bordernft'>
                         <Image src={image} style={{ "border-radius": 10 }} width={200} height={200} />
+                        {data.isAutoEnter && <div className="Yes" >
+                            <Image src="/yes.png" width={20} height={20} />
+                        </div>}
                         <div className='i'>
                             {<div style={{ color: "white" }}>{data.edition}{data.ismints ? "+" : "-"}</div>}
                             {istokenOnSell && <h1 style={{ color: "white" }}> {cost}</h1>}
@@ -128,6 +134,7 @@ export default function NftsShablon({ data, chainId }) {
                             {istokenOnSell && <button onClick={buy} className='mybutton i'>Buy</button>}
                         </div>
                         <div className={data.ismints ? "greendot absolute" : "reddot absolute"} />
+
                     </div>
                 </div>
             </div>

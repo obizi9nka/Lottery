@@ -1,11 +1,9 @@
 import Head from 'next/head'
-import Image from 'next/image'
 const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
 import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/MudebzNFT.json"
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
-import { platform } from 'os';
 
 
 export default function Home() {

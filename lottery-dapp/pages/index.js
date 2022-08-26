@@ -12,7 +12,7 @@ export async function getServerSideProps() {
   let id = 0
   try {
     let provider = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
-    const contract = new ethers.Contract(LotteryAddressETH, Lottery.abi, provider)
+    const contract = new ethers.Contract(chain.chainId === 4 ? LotteryAddressETH : chain.chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
     id = await contract.getLotteryCount()
   } catch (err) {
     console.log(err)

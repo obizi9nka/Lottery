@@ -1,0 +1,2 @@
+[0624/153102.472:ERROR:file_io_win.cc(163)] CreateFile C:\Program Files (x86)\Google\Chrome\settings.dat: Отказано в доступе. (0x5)
+[0629/014903.323:ERROR:file_io_win.cc(163)] CreateFile C:\Program Files (x86)\Google\Chrome\settings.dat: Отказано в доступе. (0x5)

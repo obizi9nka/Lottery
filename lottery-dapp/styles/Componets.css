@@ -92,7 +92,7 @@
 .walletalert {
     padding: 10px;
     width: 500px;
-    height: 85vh;
+    height: 600px;
     min-height: 341px;
     background-color: rgb(40, 40, 41);
     border-radius: 12px;
@@ -305,6 +305,11 @@
 
 
 .nftsShablon {}
+
+.Yes {
+    position: absolute;
+    top: 189px;
+}
 
 .i {
     display: flex;

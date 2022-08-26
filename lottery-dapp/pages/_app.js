@@ -9,28 +9,80 @@ import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.
 import Wallet from '../components/Wallet';
 import Head from 'next/head';
 import ChangeNetwork from '../components/ChangeNetwork';
+const notForYourEyesBitch = require("/C:/Lottery/lottery-dapp/notForYourEyesBitch")
+
+
+import '@rainbow-me/rainbowkit/styles.css';
+
+import {
+  getDefaultWallets,
+  RainbowKitProvider,
+  darkTheme
+} from '@rainbow-me/rainbowkit';
+import {
+  chain,
+  configureChains,
+  createClient,
+  WagmiConfig,
+} from 'wagmi';
+
+
+import { infuraProvider } from 'wagmi/providers/infura'
+import { ConnectButton, connectorsForWallets, wallet } from '@rainbow-me/rainbowkit';
+import { publicProvider } from 'wagmi/providers/public';
+
 
 
 function MyApp({ Component, pageProps }) {
 
-  const [token, setToken] = useState('')
+  //////////////////////////////////////////////////////////////
+
+  const { chains, provider } = configureChains(
+    [chain.rinkeby, chain.mainnet],
+    [
+      infuraProvider({ infuraId: notForYourEyesBitch.infuraKey }),
+    ]
+  );
+
+  // const { connectors } = getDefaultWallets({
+  //   appName: 'My RainbowKit App',
+  //   chains,
+  // });
+
+  const connectors = connectorsForWallets([
+    {
+      groupName: 'Recommended',
+      wallets: [
+        wallet.walletConnect({ chains }),
+      ],
+    },
+  ]);
+
+  const wagmiClient = createClient({
+    autoConnect: true,
+    connectors,
+    provider
+  })
+
+
+  ///////////////////////////////////////////////////////////
+
   const [logo, setlogo] = useState('/star-big.png')
   const [Chain, setChain] = useState(true)
-
 
   const [user, setuser] = useState("")
 
   const setUser = async () => {
+
     try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const signer = provider.getSigner()
+      const _provider = new ethers.providers.Web3Provider(window.ethereum)
+      const signer = _provider.getSigner()
       const _user = await signer.getAddress()
       setuser(_user)
     } catch (err) {
-      console.log()
+      console.log(err)
     }
   }
-
 
   useEffect(() => {
     setUser()
@@ -38,6 +90,7 @@ function MyApp({ Component, pageProps }) {
 
 
   const [chainId, setchainId] = useState(0)
+
   const checkChain = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     const chain = await provider.getNetwork()
@@ -81,6 +134,11 @@ function MyApp({ Component, pageProps }) {
       <div className="nav">
         <div className='content'>
           <div className='navigation'>
+            <WagmiConfig client={wagmiClient}>
+              <RainbowKitProvider chains={chains} theme={darkTheme()}>
+                <ConnectButton />
+              </RainbowKitProvider>
+            </WagmiConfig>
             <Link href="/" className="spase">
               <a className='menu'> Lottery </a>
             </Link>
@@ -104,6 +162,7 @@ function MyApp({ Component, pageProps }) {
       </div >
       <Component {...pageProps} />
       <footer>
+
       </footer>
     </div >
   )
