@@ -11,14 +11,15 @@ export default async function handler(req, res) {
 
     countOfPlayers = parseInt(countOfPlayers, 10)
 
-    let id = await prisma.user.findUnique({
+    let needId = await prisma.user.findUnique({
         where: {
             address: user
         }
     })
 
-    id = 1 + chainId === 4 ? id.countOfLobbysETH : id.countOfLobbysBNB
+    const id = 1 + ((chainId === 4) ? needId.countOfLobbysETH : needId.countOfLobbysBNB)
     const players = user + "_"
+    console.log(id, chainId === 4 ? needId.countOfLobbysETH : needId.countOfLobbysBNB, needId.countOfLobbysETH, needId.countOfLobbysBNB)
 
     let result
     if (chainId === 4) {

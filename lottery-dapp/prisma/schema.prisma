@@ -10,21 +10,26 @@ datasource db {
 model user {
   address String @id @unique
 
-  tokensETH             String?
-  countOfLobbysETH      Int               @default(0)
-  newsETH               String?
-  PromSetETH            String?
-  PromInputETH          String?
-  userLobbyesETH        lobbyETH[]
-  userLobbyesHistoryETH lobbyHistoryETH[]
+  tokensETH        String?
+  countOfLobbysETH Int     @default(0)
+  newsETH          String?
+  PromSetETH       String?
+  PromInputETH     String?
+  AutoEnterETH     String?
+  messageETH       String?
 
-  countOfLobbysBNB     Int               @default(0)
-  tokensBNB            String?
-  newsBNB              String?
-  PromSetBNB           String?
-  PromInputBNB         String?
-  userLobbyesBNB       lobbyBNB[]
-  userLobbyesHistoryBN lobbyHistoryBNB[]
+  countOfLobbysBNB Int     @default(0)
+  tokensBNB        String?
+  newsBNB          String?
+  PromSetBNB       String?
+  PromInputBNB     String?
+  AutoEnterBNB     String?
+  messageBNB       String?
+
+  userLobbyesBNB        lobbyBNB[]
+  userLobbyesETH        lobbyETH[]
+  userLobbyesHistoryBNB lobbyHistoryBNB[]
+  userLobbyesHistoryETH lobbyHistoryETH[]
 }
 
 model lobbyETH {
@@ -77,4 +82,24 @@ model lobbyHistoryBNB {
   user           user   @relation(fields: [creator], references: [address])
 
   @@id([creator, id])
+}
+
+model ETH1000 {
+  id       Int     @id @default(autoincrement())
+  isMinted Boolean @default(false)
+  message  String?
+}
+
+model BNB1000 {
+  id       Int     @id @default(autoincrement())
+  isMinted Boolean @default(false)
+  message  String?
+}
+
+model tokens {
+  address      String  @id @unique
+  chain        Int
+  isImageAdded Boolean
+  symbol       String
+  decimals     Int     @default(18)
 }

@@ -20,7 +20,6 @@
 .modall.active {
     opacity: 1;
     pointer-events: all;
-
 }
 
 
@@ -90,17 +89,47 @@
 
 
 .walletalert {
-    padding: 10px;
-    width: 500px;
+    padding: 0px 10px;
+    width: 510px;
+    z-index: 10000;
     height: 85vh;
-    min-height: 341px;
-    background-color: rgb(40, 40, 41);
+    min-height: 580px;
+    max-height: 580px;
+    min-width: 510px;
+    background: rgb(41, 39, 39);
+    background: linear-gradient(35deg, rgba(41, 39, 39, 1) 83%, rgba(187, 20, 195, 1) 97%, rgba(0, 52, 255, 1) 100%);
+    /* background: rgb(41, 39, 39);
+    background: linear-gradient(41deg, rgba(41, 39, 39, 1) 81%, rgba(109, 12, 161, 1) 88%, rgba(171, 0, 255, 1) 95%); */
     border-radius: 12px;
     position: relative;
-    border: 1px;
-    border-style: solid;
-    border-color: white;
     overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.depositAndWitdrow {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 10px;
+    width: 490px;
+    height: 90px;
+    background-color: rgb(19 20 20);
+    border-radius: 12px;
+}
+
+.dopInfo {
+    width: 27px;
+    height: 27px;
+    background-color: aqua;
+    position: absolute;
+    top: 0px;
+    opacity: 0;
+    right: 0px;
+    cursor: pointer;
+}
+
+.walletalert::-webkit-scrollbar {
+    display: none;
 }
 
 
@@ -110,18 +139,6 @@
     }
 }
 
-.networkAlert {
-    padding: 10px;
-    width: 500px;
-    height: 85vh;
-    background-color: rgb(255, 0, 0);
-    border-radius: 12px;
-    position: relative;
-    border: 1px;
-    border-style: solid;
-    border-color: white;
-    overflow-y: auto;
-}
 
 .addtoken {
     justify-self: end;
@@ -150,25 +167,215 @@
 }
 
 .shablonbalance {
-    display: flex;
-    height: 50px;
-    justify-content: space-around;
-    align-items: center;
+    display: grid;
+    height: 60px;
+    grid-template-columns: 2fr 7fr 1.3fr;
+    border-radius: 12px;
+    margin: 10px 0px;
+    background-color: rgb(19, 20, 20);
+}
+
+.shablonbalanceClicked {
+    display: grid;
+    height: 60px;
+    grid-template-columns: 2fr 7fr 1.3fr;
+    border-radius: 12px;
+    margin: 10px 0px;
+    background: rgb(0, 0, 0);
+    background: linear-gradient(10deg, rgba(0, 0, 0, 1) 28%, rgba(130, 49, 135, 1) 75%);
 }
 
 .hei {
     max-height: 40px;
-    width: 100px;
+    width: 145px;
+}
+
+/* OtherPylt */
+
+.areaProm {
+    margin-top: 10px;
+    width: 490px;
+    height: 160px;
+    background-color: rgb(19 20 20);
+    border-radius: 12px;
+}
+
+.NoButtons {
+    display: grid;
+}
+
+.Promocode {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    max-width: 210px;
+    flex-wrap: wrap;
+}
+
+.underProm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.yaxz {
+    display: grid;
+    grid-template-rows: 1fr 2fr;
+}
+
+.AutoEnter {
+    margin-top: 10px;
+    width: 300px;
+    height: 300px;
+    background-color: rgb(19 20 20);
+    border-radius: 12px;
+    display: grid;
+    grid-template-rows: 6fr 1fr 2fr;
+}
+
+.NoAutoEnter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: white;
+}
+
+.DEG180 {
+    transform: scale(-1, 1);
+}
+
+.arow {
+    align-self: center;
+    justify-self: center;
+}
+
+.arow:hover {
+    cursor: pointer;
+}
+
+.imageINAutoEnter {
+    justify-self: center;
+    align-self: center;
+}
+
+.ff {
+    border-radius: 12px;
+}
+
+.areaimageINAutoEnter {
+    justify-content: center;
+    align-items: center;
+    display: grid;
+    grid-template-columns: 4fr 10fr 4fr;
+}
+
+.PDF {
+    align-self: start;
+    justify-self: end;
+    margin-top: 10px;
+    width: 180px;
+    height: 100px;
+    background-color: rgb(19 20 20);
+    border-radius: 12px;
+}
+
+.listAutoEnter {
+    margin: 0px 10px;
+    justify-self: center;
+    align-self: center;
+    color: rgb(255, 255, 255);
+}
+
+.listAutoEnter::-webkit-scrollbar-track {
+    display: none;
+}
+
+.listAutoEnterA {
+    max-width: 230px;
+    max-height: 30px;
+    display: inline-flex;
+    overflow: auto;
+}
+
+.listAutoEnterA:hover {
+    cursor: default;
+}
+
+.buttonAutoEnter {
+    justify-self: center;
+    align-self: center;
+}
+
+.MudebzInfo {
+    align-self: start;
+    justify-self: end;
+    width: 180px;
+    height: 190px;
+    background-color: rgb(19 20 20);
+    border-radius: 12px;
+}
+
+.addToken {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: -35px;
+    width: 490px;
+    height: 80px;
+    background-color: rgb(19 20 20);
+    border-radius: 12px;
 }
 
 .PROM {
-    position: absolute;
-    bottom: 3%;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    width: calc(100% - 10px);
+    display: grid;
+    width: inherit;
+    height: inherit;
+    grid-template-columns: 3fr 4fr;
 }
+
+.shouldRevard {
+    display: grid;
+    font-size: 40px;
+    border-left: 4px solid rgb(41 39 39);
+    grid-template-rows: 1.4fr 6fr 2fr;
+}
+
+.chifra {
+    justify-self: center;
+    align-self: center;
+    color: rgb(255, 234, 0);
+}
+
+.rilchifra {
+    display: flex;
+
+}
+
+
+
+.recive {
+    font-size: 14px;
+    color: aliceblue;
+    justify-self: center;
+    align-self: center;
+}
+
+.position {
+    font-size: 14px;
+    color: aliceblue;
+    align-self: center;
+    justify-self: end;
+    padding-right: 10px;
+}
+
+.PromButtons {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+
+
 
 .bothpromset {
     display: flex;
@@ -218,8 +425,19 @@
     display: flex;
     font-size: x-large;
     font-weight: 700;
-    width: 120px;
+    align-self: center;
+}
+
+.tokenImage {
+    display: flex;
     justify-content: center;
+    align-self: center;
+}
+
+.hover {}
+
+.hover:hover {
+    cursor: pointer;
 }
 
 .balance {
@@ -273,9 +491,71 @@
     color: red;
 }
 
+.trapezoid {
+    width: 110px;
+    border-bottom: 40px solid #5f2020;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    position: absolute;
+    left: 464px;
+    top: 190px;
+    transform: rotate(90deg);
+}
+
+.rigth {
+    transform: rotate(-45deg);
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
 /*
     MintNftButtom
 */
+
+
+
+.pulse {
+    width: fit-content;
+    padding: 10px;
+    border-radius: 12px;
+
+    background: linear-gradient(90deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 10s ease infinite;
+    transform: translate3d(0, 0, 0);
+    border: none;
+    color: #0d0e0f;
+    font-size: 17px;
+}
+
+.pulse:hover {
+    cursor: pointer;
+}
+
+.pulse.active {
+    animation-play-state: paused;
+}
+
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.Mint {
+    background: rgb(157, 97, 97);
+    background: linear-gradient(10deg, rgba(157, 97, 97, 1) 12%, rgba(130, 49, 135, 1) 35%, rgba(42, 113, 111, 1) 63%, rgba(13, 7, 7, 1) 82%);
+}
 
 /* .nftmintbuttonactive:hover {
     cursor: pointer;
@@ -284,6 +564,12 @@
 /*
     Wallet
 */
+
+.widthmint {
+    background: rgb(157, 97, 97);
+    background: linear-gradient(10deg, rgba(157, 97, 97, 1) 12%, rgba(130, 49, 135, 1) 35%, rgba(42, 113, 111, 1) 63%, rgba(13, 7, 7, 1) 82%);
+
+}
 
 .size {
     font-size: 16px;
@@ -304,13 +590,17 @@
 */
 
 
-.nftsShablon {}
+.nftsShablon {
+    /* max-width: 323px;
+    min-width: 323px; */
+}
 
 .i {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    height: 90px;
+    height: 110px;
+    max-width: 200px;
 }
 
 .data {
@@ -320,8 +610,8 @@
 }
 
 .pad {
-    padding: 40px 50px;
-
+    padding: 40px calc(100vw - 99vw);
+    position: relative;
 }
 
 .inline {
@@ -331,16 +621,80 @@
 
 .absolute {
     position: absolute;
-    top: 3.8%;
-    right: 5.5%;
+    top: 5%;
+    right: 7%;
 }
+
+.pylt {
+    max-width: 200px;
+    width: 200px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.inputmessage {
+    margin-top: 10px;
+    word-break: normal;
+    text-align: center;
+    min-height: 100px;
+    min-width: 200px;
+    max-height: 100px;
+    max-width: 200px;
+    color: rgb(255, 255, 255);
+    background-color: #110e0e;
+}
+
+.ok {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
 
 .bordernft {
     position: relative;
-    padding: 10px;
-    border: 1px solid white;
+    padding: 10px 10px 0px 10px;
+    background-color: rgb(29 28 28);
     border-radius: 10px;
-    min-height: 323px;
+    min-height: 320px;
+    max-width: 220px;
+    min-width: 220px;
+}
+
+.bordernft.ID {
+    position: relative;
+    padding: 10px 10px 0px 10px;
+    border-radius: 10px;
+    min-height: 320px;
+    max-width: 220px;
+    min-width: 220px;
+
+    background: linear-gradient(90deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 10s ease infinite;
+    transform: translate3d(0, 0, 0);
+}
+
+
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.imageNftShablon {
+    display: flex;
+    justify-content: center;
+    max-width: 200px;
 }
 
 @media (max-width: 730px) {
@@ -363,6 +717,8 @@
     }
 }
 
+
+
 /*
     LobbyShablon
 */
@@ -370,29 +726,55 @@
 .LobbyShablonActive {
     padding: 1px;
     margin-right: 2.9vw;
-    border: 1px solid white;
+    border: 0px solid white;
     border-radius: 19px;
     min-width: 170px;
     height: 150px;
     margin: 0% 3%;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    background-color: rgba(120, 116, 127, 0.542);
+    background-color: rgb(29 28 28);
 }
 
-.LobbyShablonKOSTLb2 {
-    padding: 1px;
-    border-radius: 19px;
-    border: 1px solid white;
+.LobbyShablon {
+
     margin: 3% 3%;
-    min-width: 170px;
-    max-width: 170px;
-    min-height: 150px;
-    max-height: 150px;
+    display: grid;
+    background-color: rgb(29 28 28);
+    border-radius: 19px;
+    border: 0px solid white;
+    min-width: 200px;
+    max-width: 200px;
+    min-height: 180px;
+    max-height: 180px;
+}
+
+/* .LobbyShablon:hover {} */
+
+.LobbyShablon:hover {
+    cursor: pointer;
+    min-width: 210px;
+    max-width: 210px;
+    min-height: 190px;
+    max-height: 190px;
+}
+
+.areaAraund {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 250px;
+    max-height: 250px;
+    min-height: 250px;
+    min-width: 250px;
+}
+
+.tokenAnd {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    background-color: rgba(120, 116, 127, 0.542);
 }
+
+
 
 .tokeninlobbyshablon {
     margin-top: 10px;
@@ -407,9 +789,8 @@
 .depositlobby {
     color: white;
     overflow-x: auto;
-    max-width: 70px;
-    font-size: 15px;
-    font-weight: 500;
+    font-size: 16px;
+    margin: 0px 12px;
 }
 
 .enter {
@@ -521,4 +902,52 @@
 
 .dropdown:hover .wraper {
     display: block;
+}
+
+.InfoPopUp {
+    position: fixed;
+    max-width: 80px;
+    max-height: 80px;
+    min-width: 80px;
+    min-height: 80px;
+    background: rgb(0, 0, 0);
+    top: 86vh;
+    border-radius: 12px;
+    left: 30px;
+    z-index: 1000000;
+    opacity: 0;
+    pointer-events: none;
+    transition: 1s;
+}
+
+.InfoPopUp.active {
+    pointer-events: all;
+    opacity: 1;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.TracsactionStatus {
+    font-size: 30px;
+}
+
+.LOADER {
+    min-width: inherit;
+    min-height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: 1s;
+    pointer-events: none;
+}
+
+.LOADER.active {
+    pointer-events: all;
+    opacity: 1;
 }

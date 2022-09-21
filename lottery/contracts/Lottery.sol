@@ -171,6 +171,7 @@ contract Lottery is Lobby, Ownable {
         require(PromSetReverse[t] != msg.sender);
         require(Prom[msg.sender].PromInput == bytes32(0));
         require(PromSetReverse[t] != address(0));
+        require(getcountOfLotteryEnter(msg.sender) == 0);
         Prom[msg.sender].PromInput = t;
     }
 
@@ -198,10 +199,10 @@ contract Lottery is Lobby, Ownable {
                 !findAddressInPlayers(msg.sender, LotteryCount)
         );
 
-        if (countOfLotteryEnter[msg.sender]++ == 0 && REVARD_REF_ALLOW >= 200) {
+        if (countOfLotteryEnter[msg.sender] == 0 && REVARD_REF_ALLOW >= 200) {
             checkRef();
         }
-
+        countOfLotteryEnter[msg.sender]++;
         balanceInTokenForAccount[tokenForLottery][msg.sender] -= deposit;
 
         Lotteries[LotteryCount].players.push(msg.sender);

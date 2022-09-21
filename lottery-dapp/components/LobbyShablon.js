@@ -7,7 +7,7 @@ import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLoca
 import Image from 'next/image';
 
 
-export default function LobbyShablon({ lobby, index }) {
+export default function LobbyShablon({ lobby, index, settxData }) {
 
 
     const EnterLobby = async () => {

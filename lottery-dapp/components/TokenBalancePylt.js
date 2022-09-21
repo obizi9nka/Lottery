@@ -1,0 +1,194 @@
+const { ethers } = require("ethers");
+import { useState, useEffect } from "react";
+import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
+import Image from "next/image";
+import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from './Constants';
+import {
+    chain,
+    configureChains,
+    createClient,
+    WagmiConfig,
+    defaultChains,
+    useAccount,
+    useContractWrite,
+    usePrepareContractWrite,
+    useSigner,
+    useConnect,
+    useNetwork, useProvider
+} from 'wagmi';
+
+export default function TokensBalancePylt({ user, rokens, chainId, settxData, deleteTokenFromFronend, setTokenSelected, TokenSelected, settokenTransfered }) {
+
+
+    const [balance, setbalance] = useState(0)
+    const [deposit, setDeposit] = useState("null")
+    const [needApprove, setneedAprove] = useState(false)
+
+    const [tryed, settryed] = useState(false)
+    const [isvalid, setvalid] = useState(false)
+
+    const [bigBalance, setbigBalance] = useState(0)
+    const [Decimals, setDecimals] = useState(18)
+
+    const [placeholder, setplaceholder] = useState("Choose token")
+
+    const [isfaund, setisfaund] = useState(true)
+
+    const provider = useProvider()
+    const { data } = useSigner()
+    const signer = data
+
+
+    useEffect(() => {
+        if (TokenSelected != null) {
+            rokens.forEach((element) => {
+                if (element.address == TokenSelected)
+                    setplaceholder(element.symbol)
+            })
+        }
+        else
+            setplaceholder("Choose token")
+    }, [TokenSelected, user])
+
+
+
+
+    const approve = async () => {
+        settxData({
+            isPending: true,
+            result: null
+        })
+        try {
+            const contract = new ethers.Contract(TokenSelected, A.abi, signer)
+            const tx = await contract.approve(chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB), BigInt(1000000000000000000000))
+            await tx.wait()
+            settxData({
+                isPending: true,
+                result: true
+            })
+        } catch (err) {
+            settxData({
+                isPending: true,
+                result: false
+            })
+            console.log(err)
+        }
+
+        setneedAprove(false)
+    }
+
+    const addTokensToBalance = async () => {
+        settryed(true)
+        try {
+            settxData({
+                isPending: true,
+                result: null
+            })
+            const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
+
+            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB), Lottery.abi, signer)
+            const tokenContract = new ethers.Contract(TokenSelected, A.abi, chainId != 31337 ? provider : providerLocal)
+            const decimals = await tokenContract.decimals()
+
+            const tx = await contract.addTokensToBalance(TokenSelected, BigInt(deposit * 10 ** decimals))
+            settryed(false)
+            await tx.wait()
+            setTokenSelected(null)
+            setDeposit(0)
+            document.getElementById(TokenSelected).value = "";
+            settxData({
+                isPending: true,
+                result: true
+            })
+        } catch (err) {
+            console.log(err)
+            settxData({
+                isPending: true,
+                result: false
+            })
+        }
+
+    }
+
+
+    useEffect(() => {
+        if (deposit / 1 > 0) {
+            setvalid(true)
+        }
+        else {
+            setvalid(false)
+        }
+        checkApprove()
+    }, [deposit])
+
+    const checkApprove = async () => {
+
+        try {
+            const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
+            const tokenContract = new ethers.Contract(TokenSelected, A.abi, chainId != 31337 ? provider : providerLocal)
+            console.log(BigInt(await tokenContract.allowance(user, chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB))), BigInt(deposit * 10 ** Decimals))
+            if (BigInt(await tokenContract.allowance(user, chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB))) < BigInt(deposit * 10 ** Decimals)) {
+                setneedAprove(true)
+            } else {
+                setneedAprove(false)
+            }
+        } catch (err) {
+            console.log(err)
+        }
+
+    }
+
+
+    const withdrow = async () => {
+        settryed(true)
+        try {
+            settxData({
+                isPending: true,
+                result: null
+            })
+
+
+            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB), Lottery.abi, signer)
+            const tokenContract = new ethers.Contract(TokenSelected, A.abi, provider)
+            let decimals = 18
+            try {
+                decimals = await tokenContract.decimals()
+            } catch (err) {
+                console.log("Net f desimals", err)
+            }
+            // console.log(BigInt(deposit * 10 ** decimals))
+            const tx = await contract.Withdrow(TokenSelected, BigInt(deposit * 10 ** decimals))
+            settryed(false)
+            await tx.wait()
+            setTokenSelected(null)
+            setDeposit(0)
+            document.getElementById(TokenSelected).value = "";
+            settxData({
+                isPending: true,
+                result: true
+            })
+        } catch (err) {
+            console.log(err)
+            settxData({
+                isPending: true,
+                result: false
+            })
+        }
+    }
+
+    return (
+        <div className="depositAndWitdrow">
+            {!needApprove && <button onClick={addTokensToBalance} className="mybutton fixsizebutton">Deposit</button>}
+            {needApprove && <button onClick={approve} className="mybutton fixsizebutton">Enable</button>}
+
+            <div className='depositvalue'>
+                <input className=" input" id={TokenSelected} placeholder={placeholder} onChange={e => setDeposit(e.target.value)} />
+                {(!isvalid && tryed) && <div className="invalidvalue ">Invalid value</div>}
+            </div>
+
+            <button onClick={withdrow} className="mybutton fixsizebutton">Withdrow</button>
+        </div>
+    )
+
+}

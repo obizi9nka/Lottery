@@ -8,7 +8,8 @@ import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
 import { platform } from 'os';
 
 
-export default function Home() {
+export default function Home({ tymblerNaNetwork }) {
+
 
 
     const BAddress = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
@@ -214,11 +215,8 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className="about">
-                <h1 className='titel nowrap'>Welcome to !Mudebz!</h1>
                 <div className='syka'>
                     <div>
-
-
                         <div className='colorWHITE'>
                             <h2 >
                                 1. Lottery

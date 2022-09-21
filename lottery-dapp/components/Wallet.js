@@ -8,58 +8,116 @@ import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/Mude
 import WalletAlert from './WalletAlert';
 import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from './Constants';
 
-export default function Wallet({ f, chainId }) {
+
+import {
+    getDefaultWallets,
+    RainbowKitProvider,
+    darkTheme
+} from '@rainbow-me/rainbowkit';
+import {
+    chain,
+    configureChains,
+    createClient,
+    WagmiConfig,
+    defaultChains,
+    useAccount,
+    useContractWrite,
+    usePrepareContractWritde,
+    useConnect,
+    useNetwork, useProvider
+} from 'wagmi';
+
+
+import { infuraProvider } from 'wagmi/providers/infura'
+import { ConnectButton, connectorsForWallets, wallet } from '@rainbow-me/rainbowkit';
+import { publicProvider } from 'wagmi/providers/public';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
+
+
+
+const { chains, provider } = configureChains(
+    [chain.rinkeby, chain.localhost, chain.mainnet],
+    [
+        publicProvider()]
+);
+const { connectors } = getDefaultWallets(
+    {
+        appName: 'e',
+        chains
+    },
+);
+const wagmiClient = createClient({
+    autoConnect: true,
+    connectors,
+    provider
+})
+
+
+
+export default function Wallet({ f, setchainId, setNeedRender, tymblerNaNetwork, settxData, needWallet }) {
+
+
 
 
     const [NftButton, setNftButton] = useState(false)
     const [isWalletConnect, setisWalletConnect] = useState(false)
     const [isWalletAlert, setisWalletAlert] = useState(false)
-    const [user, setuser] = useState("")
 
-    // console.log(NftButton)
+    const { chain } = useNetwork()
+    const provider = useProvider()
 
-    useEffect(() => {
-        if (chainId > 0) {
-            checkNftButton()
-            getAllNews()
-            checkWallet()
-        }
-    }, [isWalletConnect, user, chainId])
-
-    const setUser = async () => {
-        try {
-            const provider = new ethers.providers.Web3Provider(window.ethereum)
-            const signer = provider.getSigner()
-            const _user = await signer.getAddress()
-            setuser(_user)
-        } catch {
-            console.log("Connect Wallet")
-            setuser("")
-        }
-    }
-    setUser()
 
     useEffect(() => {
-        window.ethereum.on("accountsChanged", () => {
-            setUser()
+        console.log(chain)
+        setNeedRender(true)
+        setchainId(chain != undefined ? chain.id : 0)
+    }, [chain])
+
+
+    const { address, isConnected, isConnecting } = useAccount({
+        onConnect() {
+            console.log('Connected', chain.id)
+            localStorage.setItem("WalletConnect", "true")
             setNewUSer()
-        });
-    }, [])
+            setisWalletConnect(true)
+            setchainId(chain.id)
+        },
+        onDisconnect() {
+            console.log('Disconnected')
+            setisWalletConnect(false)
+            localStorage.removeItem("WalletConnect")
+            setchainId(0)
+        },
+    })
 
+    useEffect(() => {
+        checkNftButton()
+    }, [address, chain])
 
-
-
-    // console.log(user, NftButton)
-
-
+    useEffect(() => {
+        if (isConnected) {
+            console.log('Connected', chain.id)
+            localStorage.setItem("WalletConnect", "true")
+            setNewUSer()
+            setisWalletConnect(true)
+            setchainId(chain.id)
+        }
+        else {
+            console.log('Disconnected')
+            setisWalletConnect(false)
+            localStorage.removeItem("WalletConnect")
+            setchainId(0)
+        }
+        setNeedRender(true)
+    }, [isConnected])
 
     async function setNewUSer() {
         try {
-            const provider = new ethers.providers.Web3Provider(window.ethereum)
-            const signer = provider.getSigner()
-            const address = await signer.getAddress()
-            const net = await provider.getNetwork()
-            const body = { address, chainId: net.chainId }
+            // const provider = new ethers.providers.Web3Provider(window.ethereum)
+            // const signer = provider.getSigner()
+            // const address = await signer.getAddress()
+            // const net = await provider.getNetwork()
+            const body = { address, chainId: chain.id }
 
             await fetch('/api/user', {
                 method: "POST",
@@ -76,29 +134,11 @@ export default function Wallet({ f, chainId }) {
 
     }
 
-    useEffect(() => {
-        try {
-            const provider = new ethers.providers.JsonRpcProvider
-            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
-            const contractM = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, provider)
-            contract.once("play", async (winer) => {
-                checkNftButton()
-            })
-            contractM.once("NewNFT", async (user, id) => {
-                checkNftButton()
-            })
-        } catch (err) {
-        }
-    }, [])
-
     const checkNftButton = async () => {
         try {
-            const provider = new ethers.providers.Web3Provider(window.ethereum)
-            const signer = provider.getSigner()
-            const lottery = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
-            const nft = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, provider)
-            const USER = await signer.getAddress()
-            const wins = await lottery._allowToNFT(USER)
+            const lottery = new ethers.Contract(chain.id === 4 ? LotteryAddressETH : chain.id === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, chain.id != 31337 ? provider : providerLocal)
+            const nft = new ethers.Contract(chain.id === 4 ? MudeBzNFTETH : chain.id === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, chain.id != 31337 ? provider : providerLocal)
+            const wins = await lottery._allowToNFT(address)
             let flag = false
             for (let i = 0; i < parseInt(wins.lotteryes.length, 10); i++) {
                 if (!await nft.istokenMints(parseInt(wins.lotteryes[i], 10))) {
@@ -113,45 +153,14 @@ export default function Wallet({ f, chainId }) {
         }
     }
 
-    const connectWalletHandler = async () => {
-        if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
-            try {
-                await window.ethereum.request({ method: "eth_requestAccounts" })
-                localStorage.setItem("WalletConnect", "true")
-                setNewUSer()
-                setisWalletConnect(true)
-            } catch (err) {
-                console.log(err)
-            }
-        } else {
-            /* MetaMask is not installed */
-            console.log("Please install MetaMask")
-        }
-    }
-    const checkWallet = async () => {
-        try {
-            const provider = new ethers.providers.Web3Provider(window.ethereum)
-            const signer = provider.getSigner()
-            await signer.getAddress()
-            if (localStorage.getItem('WalletConnect') === 'true') {
-                setisWalletConnect(true)
-            }
-        } catch (err) {
-            localStorage.removeItem('WalletConnect')
-            setisWalletConnect(false)
-        }
-    }
-
     const [news, setnews] = useState([])
     const [now, setnow] = useState()
 
     const getAllNews = async () => {
         try {
-            const provider = new ethers.providers.Web3Provider(window.ethereum)
-            const signer = provider.getSigner()
-            const user = await signer.getAddress()
+            const user = address
             const constructorNews = []
-            const body = { user, chainId }
+            const body = { user, chainId: chain.id }
             await fetch('/api/getUserData', {
                 method: "POST",
                 body: JSON.stringify(body)
@@ -191,9 +200,9 @@ export default function Wallet({ f, chainId }) {
     }
 
     const deleteNews = async () => {
-        const provider = new ethers.providers.Web3Provider(window.ethereum)
-        const signer = provider.getSigner()
-        const u = await signer.getAddress()
+        // const provider = new ethers.providers.Web3Provider(window.ethereum)
+        // const signer = provider.getSigner()
+        const u = address//await signer.getAddress()
         try {
             await fetch("/api/deleteAllNews", {
                 method: "POST",
@@ -213,6 +222,7 @@ export default function Wallet({ f, chainId }) {
                 <div className='otstup'>
                     <div className="dropdown" onClick={getAllNews}>
                         <Image src="/news.png" width={25} height={25} />
+
                         <div className='wraper'>
                             <div className='fff'>
                                 <div className="dropdown-content">
@@ -263,19 +273,117 @@ export default function Wallet({ f, chainId }) {
 
                     </div >
                 </div>
-                <div className='otstup widthmint'>{NftButton && <MintNftButton chainId={chainId} />}</div>
-                <div className='otstup'><button onClick={() => {
+                <div className='otstup '>{NftButton && <MintNftButton settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} chainId={chain != undefined ? chain.id : 0} address={address} />}</div>
+                {address && <div className='otstup '><button onClick={() => {
                     if (!isWalletAlert)
                         document.body.style.overflow = ('overflow', 'hidden')
                     setisWalletAlert(!isWalletAlert)
-                }} className="mybutton size" >{"0x..." + f.substring(38, 42)}</button></div>
-                <WalletAlert active={isWalletAlert} setActive={setisWalletAlert} chainId={chainId} />
+                }} className="mybutton size" > {"0x..." + address.substring(38, 42)}</button></div>}
+                <WalletAlert settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} active={isWalletAlert} setActive={setisWalletAlert} chainId={chain != undefined ? chain.id : 0} address={address} />
             </div >
+
         )
+    // else if (isConnecting) { }
     else {
         return (
-            <div className='wallet'>
-                <button onClick={connectWalletHandler} className=" mybutton ">Connect Wallet</button>
+            <div className='wallet'  >
+                <WagmiConfig client={wagmiClient}>
+                    <RainbowKitProvider chains={chains} theme={darkTheme()}>
+                        <ConnectButton.Custom>
+                            {({
+                                account,
+                                chain,
+                                openAccountModal,
+                                openChainModal,
+                                openConnectModal,
+                                authenticationStatus,
+                                mounted,
+                            }) => {
+                                // Note: If your app doesn't use authentication, you
+                                // can remove all 'authenticationStatus' checks
+                                const ready = mounted && authenticationStatus !== 'loading';
+                                const connected =
+                                    ready &&
+                                    account &&
+                                    chain &&
+                                    (!authenticationStatus ||
+                                        authenticationStatus === 'authenticated');
+
+                                return (
+                                    <div
+                                        {...(!ready && {
+                                            'aria-hidden': true,
+                                            'style': {
+                                                opacity: 0,
+                                                pointerEvents: 'none',
+                                                userSelect: 'none',
+                                            },
+                                        })}                                    >
+                                        {(() => {
+                                            if (!connected) {
+                                                return (
+                                                    <div >
+                                                        <button onClick={openConnectModal} className={"mybutton"}>
+                                                            Connect Wallet
+                                                        </button>
+                                                    </div>
+
+                                                );
+                                            }
+
+                                            if (chain.unsupported) {
+                                                return (
+                                                    <button onClick={openChainModal} type="button">
+                                                        Wrong network
+                                                    </button>
+                                                );
+                                            }
+
+                                            return (
+                                                <div style={{ display: 'flex', gap: 12 }}>
+                                                    <button
+                                                        onClick={openChainModal}
+                                                        style={{ display: 'flex', alignItems: 'center' }}
+                                                        type="button"
+                                                    >
+                                                        {chain.hasIcon && (
+                                                            <div
+                                                                style={{
+                                                                    background: chain.iconBackground,
+                                                                    width: 12,
+                                                                    height: 12,
+                                                                    borderRadius: 999,
+                                                                    overflow: 'hidden',
+                                                                    marginRight: 4,
+                                                                }}
+                                                            >
+                                                                {chain.iconUrl && (
+                                                                    <img
+                                                                        alt={chain.name ?? 'Chain icon'}
+                                                                        src={chain.iconUrl}
+                                                                        style={{ width: 12, height: 12 }}
+                                                                    />
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                        {chain.name}
+                                                    </button>
+
+                                                    <button onClick={openAccountModal} type="button">
+                                                        {account.displayName}
+                                                        {account.displayBalance
+                                                            ? ` (${account.displayBalance})`
+                                                            : ''}
+                                                    </button>
+                                                </div>
+                                            );
+                                        })()}
+                                    </div>
+                                );
+                            }}
+                        </ConnectButton.Custom>
+                    </RainbowKitProvider>
+                </WagmiConfig>
             </div>
         )
     }

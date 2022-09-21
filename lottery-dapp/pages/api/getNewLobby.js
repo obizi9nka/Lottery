@@ -4,22 +4,22 @@ const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
 
-    const { user, chaainId } = JSON.parse(req.body)
+    const { user, chainId } = JSON.parse(req.body)
 
     let id = await prisma.user.findUnique({
         where: {
-            address: req.body
+            address: user
         }
     });
 
-    id = chaainId === 4 ? id.countOfLobbysETH : id.countOfLobbysBNB
+    id = chainId === 4 ? id.countOfLobbysETH : id.countOfLobbysBNB
 
     let result
-    if (chaainId === 4) {
+    if (chainId === 4) {
         result = await prisma.lobbyETH.findUnique({
             where: {
                 creator_id: {
-                    creator: req.body,
+                    creator: user,
                     id
                 }
             }
@@ -29,7 +29,7 @@ export default async function handler(req, res) {
         result = await prisma.lobbyBNB.findUnique({
             where: {
                 creator_id: {
-                    creator: req.body,
+                    creator: user,
                     id
                 }
             }

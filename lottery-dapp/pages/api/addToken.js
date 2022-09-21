@@ -12,7 +12,7 @@ export default async function handler(req, res) {
         }
     })
 
-    tokensForUser = (chainId == 4 ? (tokensForUser.tokensETH === null ? null : tokensForUser.tokensETH) : (tokensForUser.tokensBNB === null ? null : tokensForUser.tokensBNB)) + addTokenAddress + "_"
+    tokensForUser = (chainId == 4 ? (tokensForUser.tokensETH === null ? '' : tokensForUser.tokensETH) : (tokensForUser.tokensBNB === null ? '' : tokensForUser.tokensBNB)) + addTokenAddress + "_"
 
     let result
 
