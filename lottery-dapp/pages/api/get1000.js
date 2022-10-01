@@ -1,11 +1,9 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from './prisma.js';
 
 export default async function handler(req, res) {
 
 
-    console.log(req.body)
+    // console.log(req.body)
 
     let result
 
@@ -13,8 +11,10 @@ export default async function handler(req, res) {
         result = await prisma.eTH1000.findMany()
     }
     else {
-        result = await prisma.bNB1000.findMany()
+        result = await prisma.BNB1000.findMany()
     }
+
+    // console.log(result)
 
     res.json(result)
 }

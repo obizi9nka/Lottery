@@ -1,3 +1,5 @@
+export const PRODACTION = false
+
 //Rinkeby
 
 export const LotteryAddressETH = "0x3BafF49c9Bf721C22d5a545005Ab161476A76d27"
@@ -22,6 +24,12 @@ export const MudeBzNFTLocalhost = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
 
 // export const LotteryAddressBNB = ""
 // export const MudeBzNFTBNB = ''
+
+export const ETHid = 4
+export const BNBid = 57
+export const LocalhostId = 31337
+
+
 
 
 

@@ -18,7 +18,7 @@ import {
     useNetwork, useProvider
 } from 'wagmi';
 
-export default function TokensBalancePylt({ user, rokens, chainId, settxData, deleteTokenFromFronend, setTokenSelected, TokenSelected, settokenTransfered }) {
+export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, rokens, chainId, settxData, deleteTokenFromFronend, setTokenSelected, TokenSelected, settokenTransfered }) {
 
 
     const [balance, setbalance] = useState(0)
@@ -33,7 +33,7 @@ export default function TokensBalancePylt({ user, rokens, chainId, settxData, de
 
     const [placeholder, setplaceholder] = useState("Choose token")
 
-    const [isfaund, setisfaund] = useState(true)
+    const [needCheck, setneedCheck] = useState(true)
 
     const provider = useProvider()
     const { data } = useSigner()
@@ -61,7 +61,7 @@ export default function TokensBalancePylt({ user, rokens, chainId, settxData, de
         })
         try {
             const contract = new ethers.Contract(TokenSelected, A.abi, signer)
-            const tx = await contract.approve(chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB), BigInt(1000000000000000000000))
+            const tx = await contract.approve(LOTTERY_ADDRESS, BigInt(deposit * 10 ** 18))
             await tx.wait()
             settxData({
                 isPending: true,
@@ -69,7 +69,7 @@ export default function TokensBalancePylt({ user, rokens, chainId, settxData, de
             })
         } catch (err) {
             settxData({
-                isPending: true,
+                isPending: false,
                 result: false
             })
             console.log(err)
@@ -86,11 +86,9 @@ export default function TokensBalancePylt({ user, rokens, chainId, settxData, de
                 result: null
             })
             const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-
-            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB), Lottery.abi, signer)
+            const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
             const tokenContract = new ethers.Contract(TokenSelected, A.abi, chainId != 31337 ? provider : providerLocal)
             const decimals = await tokenContract.decimals()
-
             const tx = await contract.addTokensToBalance(TokenSelected, BigInt(deposit * 10 ** decimals))
             settryed(false)
             await tx.wait()
@@ -98,13 +96,13 @@ export default function TokensBalancePylt({ user, rokens, chainId, settxData, de
             setDeposit(0)
             document.getElementById(TokenSelected).value = "";
             settxData({
-                isPending: true,
+                isPending: false,
                 result: true
             })
         } catch (err) {
             console.log(err)
             settxData({
-                isPending: true,
+                isPending: false,
                 result: false
             })
         }
@@ -127,8 +125,8 @@ export default function TokensBalancePylt({ user, rokens, chainId, settxData, de
         try {
             const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
             const tokenContract = new ethers.Contract(TokenSelected, A.abi, chainId != 31337 ? provider : providerLocal)
-            console.log(BigInt(await tokenContract.allowance(user, chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB))), BigInt(deposit * 10 ** Decimals))
-            if (BigInt(await tokenContract.allowance(user, chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB))) < BigInt(deposit * 10 ** Decimals)) {
+            console.log(BigInt(await tokenContract.allowance(user, LOTTERY_ADDRESS)), BigInt(deposit * 10 ** Decimals))
+            if (BigInt(await tokenContract.allowance(user, LOTTERY_ADDRESS)) < BigInt(deposit * 10 ** Decimals)) {
                 setneedAprove(true)
             } else {
                 setneedAprove(false)
@@ -147,9 +145,7 @@ export default function TokensBalancePylt({ user, rokens, chainId, settxData, de
                 isPending: true,
                 result: null
             })
-
-
-            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB), Lottery.abi, signer)
+            const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
             const tokenContract = new ethers.Contract(TokenSelected, A.abi, provider)
             let decimals = 18
             try {
@@ -165,13 +161,13 @@ export default function TokensBalancePylt({ user, rokens, chainId, settxData, de
             setDeposit(0)
             document.getElementById(TokenSelected).value = "";
             settxData({
-                isPending: true,
+                isPending: false,
                 result: true
             })
         } catch (err) {
             console.log(err)
             settxData({
-                isPending: true,
+                isPending: false,
                 result: false
             })
         }
@@ -183,7 +179,7 @@ export default function TokensBalancePylt({ user, rokens, chainId, settxData, de
             {needApprove && <button onClick={approve} className="mybutton fixsizebutton">Enable</button>}
 
             <div className='depositvalue'>
-                <input className=" input" id={TokenSelected} placeholder={placeholder} onChange={e => setDeposit(e.target.value)} />
+                <input className="input" disabled={TokenSelected == null} id={TokenSelected} placeholder={placeholder} onChange={e => setDeposit(e.target.value)} />
                 {(!isvalid && tryed) && <div className="invalidvalue ">Invalid value</div>}
             </div>
 

@@ -88,12 +88,16 @@ model ETH1000 {
   id       Int     @id @default(autoincrement())
   isMinted Boolean @default(false)
   message  String?
+  players  Int?
+  price    Float?
 }
 
 model BNB1000 {
   id       Int     @id @default(autoincrement())
   isMinted Boolean @default(false)
   message  String?
+  players  Int?
+  price    Float?
 }
 
 model tokens {

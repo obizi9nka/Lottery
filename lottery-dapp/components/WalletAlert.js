@@ -24,7 +24,7 @@ import {
 import TokensBalancePylt from "./TokenBalancePylt";
 
 
-export default function WalletAlert({ settxData, active, setActive, chainId, address, tymblerNaNetwork }) {
+export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, active, setActive, chainId, address, tymblerNaNetwork, txData }) {
 
 
     const [addTokenAddress, setaddTokenAddress] = useState('')
@@ -53,6 +53,8 @@ export default function WalletAlert({ settxData, active, setActive, chainId, add
 
     const [AutoEnter, setAutoEnter] = useState([])
     const [ImageInAutoEnter, setImageInAutoEnter] = useState(0)
+
+    const [shouldrevard, setshouldrevard] = useState({})
 
 
 
@@ -114,7 +116,6 @@ export default function WalletAlert({ settxData, active, setActive, chainId, add
         return data
     }
 
-
     const getTokens = async () => {
         try {
             const body = { user: address, chainId }
@@ -137,6 +138,23 @@ export default function WalletAlert({ settxData, active, setActive, chainId, add
                         In = temp.PromInputBNB
                         Auto = temp.AutoEnterBNB
                     }
+                    const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
+                    const contractLottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, chainId != 31337 ? provider : providerLocal)
+
+                    try {
+                        const temp = parseInt(await contractLottery.getshouldRevard(address))
+                        const r = parseInt(await contractLottery.getcountOfLotteryEnter(address))
+                        console.log(temp, r)
+                        const t = {
+                            count: temp,
+                            isEnteredOnce: r
+                        }
+                        setshouldrevard(t)
+                    } catch (err) {
+
+                    }
+
+
                     if (Auto != null) {
                         Auto = Auto.split("_")
                         Auto.pop()
@@ -145,8 +163,6 @@ export default function WalletAlert({ settxData, active, setActive, chainId, add
                         })
                         let id = 1001
                         try {
-                            const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-                            const contractLottery = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, chainId != 31337 ? provider : providerLocal)
                             id = parseInt(await contractLottery.getLotteryCount())
                         } catch (err) {
                             console.log(err)
@@ -203,56 +219,31 @@ export default function WalletAlert({ settxData, active, setActive, chainId, add
     }
 
     function deleteTokenFromFronend(address) {
-        const index = rokens.indexOf(address)
-        if (index != -1) {
-            rokens.splice(index, 1)
-        }
-        setTokens([...rokens])
+        console.log(address)
+        const temp = []
+        rokens.map(element => {
+            if (element.address != address)
+                temp.push(element)
+        });
+        console.log(temp)
+        setTokens(temp != [] ? temp : [])
     }
 
     const addToAutoEnter = async () => {
-        if (clicked) {
-            try {
-                const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, data)
-                const tx = await contract.addToAutoEnter(AutoEnterMAS)
-                await tx.wait()
-                setclicked(false)
-                setAutoEnterMAS([])
-                document.getElementById("AutoEnter").value = "";
-            } catch (err) {
-                console.log(err)
-            }
-        }
-        else {
-            const mas = AutoEnter.split(",")
-            let data = []
-            let flag = true
-            for (let i = 0; i < mas.length; i++) {
-                let _flag = true
-                data.forEach(element => {
-                    if (element == mas[i])
-                        _flag = false
-                });
-                if (parseInt(mas[i]) == mas[i] && mas[i] > id && _flag) {
-                    data.push(parseInt(mas[i]))
-                } else {
-                    flag = false
-                    break
-                }
-            }
-            if (flag) {
-                setclicked(true)
-                setAutoEnterMAS(data)
-                setInvalid(false)
-            } else {
-                setInvalid(true)
-            }
-
+        try {
+            const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, data)
+            const tx = await contract.addToAutoEnter(AutoEnter)
+            await tx.wait()
+            setclicked(false)
+            setAutoEnter([])
+            document.getElementById("AutoEnter").value = "";
+        } catch (err) {
+            console.log(err)
         }
     }
 
+
     const addToken = async () => {
-        settryed(true)
         const n = new Promise((res) => {
             res(checkValidAddress())
         })
@@ -260,12 +251,21 @@ export default function WalletAlert({ settxData, active, setActive, chainId, add
             if (result.flag) {
                 const _addTokenAddress = addTokenAddress
                 const body = { address, addTokenAddress: _addTokenAddress, chainId, isImageAdded: true, symbol: result.symbol, decimals: result.decimals }
-                setTokens([...rokens, _addTokenAddress])
+                const data = {
+                    address: _addTokenAddress,
+                    symbol: result.symbol,
+                    decimals: result.decimals,
+                    balance: 0
+                }
+                setTokens([...rokens, data])
                 try {
                     await fetch('/api/addToken', {
                         method: "PUT",
                         body: JSON.stringify(body)
+                    }).then(() => {
+                        getTokens()
                     })
+
                     document.getElementById("inputToken").value = "";
                     setaddTokenAddress()
                     settryed(false)
@@ -282,6 +282,10 @@ export default function WalletAlert({ settxData, active, setActive, chainId, add
                 } catch {
                     console.log(err)
                 }
+                setTokenSelected()
+            }
+            else {
+                settryed(true)
             }
             localStorage.setItem("addToken", "true")
         })
@@ -343,22 +347,17 @@ export default function WalletAlert({ settxData, active, setActive, chainId, add
 
                 <div className="dopInfo" onClick={() => setMode(!Mode)} />
 
-
-
-
-
-
                 {Mode && <div className="wallettokens">
-                    <TokensBalancePylt settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} rokens={rokens} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} chainId={chainId} setisReliably={setisReliably} settokenTransfered={settokenTransfered} />
-                    {rokens && rokens.map((element, index) =>
-                        <TokensBalanceShablon settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} tokenTransfered={tokenTransfered} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} element={element} chainId={chainId} settokenTransfered={settokenTransfered} setisReliably={setisReliably} deleteTokenFromFronend={deleteTokenFromFronend} />
+                    <TokensBalancePylt LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} rokens={rokens} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} chainId={chainId} setisReliably={setisReliably} settokenTransfered={settokenTransfered} />
+                    {rokens && rokens.map((element) =>
+                        <TokensBalanceShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} txData={txData} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} rokens={rokens} tymblerNaNetwork={tymblerNaNetwork} tokenTransfered={tokenTransfered} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} element={element} chainId={chainId} settokenTransfered={settokenTransfered} setisReliably={setisReliably} deleteTokenFromFronend={deleteTokenFromFronend} />
                     )}
                 </div>}
 
                 {!Mode && <div className="">
                     <div>
                         <div className="areaProm">
-                            <Prom settxData={settxData} address={address} PromSet={PromSet} PromInput={PromInput} setPromInput={setPromInput} setPromSet={setPromSet} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} />
+                            <Prom LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} shouldrevard={shouldrevard} settxData={settxData} address={address} PromSet={PromSet} PromInput={PromInput} setPromInput={setPromInput} setPromSet={setPromSet} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} />
                         </div>
                         <div className="underProm">
                             {AutoEnter && AutoEnter.length > 0 ?
@@ -401,7 +400,6 @@ export default function WalletAlert({ settxData, active, setActive, chainId, add
                             </div>
                         </div>
                     </div>
-                    {/* <OtherPylt settxData={} rokens={rokens} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} chainId={chainId} /> */}
                 </div>
                 }
 

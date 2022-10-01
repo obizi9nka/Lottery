@@ -10,7 +10,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { _toUtf8String } from '@ethersproject/strings/lib/utf8';
 import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
-import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from 'C:/Lottery/lottery-dapp/components/Constants.js';
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from 'C:/Lottery/lottery-dapp/components/Constants.js';
 
 import {
     chain,
@@ -31,8 +31,37 @@ const prisma = new PrismaClient();
 
 
 export async function getServerSideProps() {
-    const lobbyETH = await prisma.lobbyETH.findMany()
-    const lobbyBNB = await prisma.lobbyBNB.findMany()
+    let lobbyETH = await prisma.lobbyETH.findMany()
+    let lobbyBNB = await prisma.lobbyBNB.findMany()
+
+    if (lobbyETH != [])
+        lobbyETH = lobbyETH.map((element) => {
+            return {
+                deposit: element.deposit,
+                nowInLobby: element.nowInLobby,
+                players: element.players,
+                IERC20: element.IERC20,
+                countOfPlayers: element.countOfPlayers,
+                creator: element.creator,
+                id: element.id,
+                percent: parseInt(`${element.nowInLobby / element.countOfPlayers * 100}`.substring(0, 2))
+            }
+        })
+    if (lobbyBNB != [])
+        lobbyBNB = lobbyBNB.map((element) => {
+            return {
+                deposit: element.deposit,
+                nowInLobby: element.nowInLobby,
+                players: element.players,
+                countOfPlayers: element.countOfPlayers,
+                IERC20: element.IERC20,
+                creator: element.creator,
+                id: element.id,
+                percent: parseInt(`${element.nowInLobby / element.countOfPlayers * 100}`.substring(0, 2))
+            }
+        })
+
+    console.log(lobbyBNB, lobbyETH)
     return {
         props: {
             lobbyETH,
@@ -41,7 +70,7 @@ export async function getServerSideProps() {
     }
 }
 
-export default function Home({ lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }) {
+export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }) {
 
 
 
@@ -62,11 +91,9 @@ export default function Home({ lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }
 
     ///FILTER
     const [tokenn, settokenn] = useState("")
-    const [depositt, setdepositt] = useState(false)
-    const [nowInLobby, setnowInLobby] = useState(true)
-    const [countOfPlayerss, setcountOfPlayerss] = useState(false)
     const [UP, setUP] = useState(true)
-
+    const [filterModeScreen, setfilterMode] = useState(1)
+    let filterMode = filterModeScreen
 
 
     const { chain } = useNetwork()
@@ -75,13 +102,9 @@ export default function Home({ lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }
     const signer = data
     const { address, isConnected } = useAccount()
 
-    const [chainId, setchainId] = useState(0)
+    const [userlobbyActive, setuserlobbyActive] = useState([])
 
 
-    useEffect(() => {
-        if (chain != undefined && isConnected)
-            setchainId(chain.id)
-    }, [chain])
 
     useEffect(() => {
         if (chain == undefined) {
@@ -89,7 +112,7 @@ export default function Home({ lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }
                 setlobbyes([...lobbyETH, ...lobbyETH, ...lobbyETH, ...lobbyETH, ...lobbyETH, ...lobbyETH, ...lobbyETH, ...lobbyETH, ...lobbyETH])
             }
             else {
-                setlobbyes(lobbyBNB)
+                setlobbyes([...lobbyBNB])
             }
         }
     }, [tymblerNaNetwork])
@@ -99,9 +122,19 @@ export default function Home({ lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }
 
     const filterUserLobbyes = async () => {
         try {
-            const f = lobbyes.filter((element) => {
-                return (element.players.indexOf(address) !== -1)
+            const te = []
+            const f = (tymblerNaNetwork ? ALL_LOBBYES.lobbyETH : ALL_LOBBYES.lobbyBNB).filter((element) => {
+                console.log(element)
+                if (element.players.indexOf(address) === -1) {
+                    te.push(false)
+                }
+                else {
+                    te.push(true)
+                    return element
+                }
+
             })
+            setuserlobbyActive(te)
             setlobbyesActive(f)
         } catch (err) {
             setlobbyesActive([])
@@ -111,10 +144,7 @@ export default function Home({ lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }
     }
 
     useEffect(() => {
-        if (chainId > 0) {
-            getTokens()
-            // getAllLobbyes()
-        }
+        getTokens()
     }, [address, chainId])
 
     useEffect(() => {
@@ -129,8 +159,9 @@ export default function Home({ lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }
         if (isConnected) {
             filterUserLobbyes()
         }
-    }, [lobbyes, address])
+    }, [address, chainId, LOTTERY_ADDRESS, ALL_LOBBYES])
 
+    console.log(lobbyesActive)
 
     const getTokens = async () => {
         if (isConnected) {
@@ -149,34 +180,34 @@ export default function Home({ lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }
                         f.pop();
                         settoken(f[0])
 
-                        const promises = f.map(async (item) => {
-                            return await new Promise(resolve => {
-                                const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-                                const contract = new ethers.Contract(item, A.abi, chainId != 31337 ? provider : providerLocal)
-                                try {
-                                    const symbol = contract.symbol()
-                                    resolve(symbol)
-                                } catch (err) {
-                                    resolve(item)
-                                }
-                            });
+                        if (t != null) {
+                            f = t.split("_")
+                            f.pop()
                         }
-                        );
-                        await Promise.all(promises)
 
-                        let tokensSymbols = []
-
-                        const objects = []
-                        promises.forEach((element, index) => {
-                            element.then((e) => {
-                                tokensSymbols.push(e)
-                                objects.push({
-                                    address: f[index],
-                                    symbol: e
-                                })
-                            })
+                        const b = {
+                            addresses: f,
+                            chainId
+                        }
+                        await fetch('/api/getTokensGlobal', {
+                            method: "POST",
+                            body: JSON.stringify(b)
                         })
-                        setTokens(objects)
+                            .then(async (data) => {
+                                const temp = await data.json()
+                                console.log(temp)
+                                let tokensSymbols = []
+
+                                const objects = []
+                                temp.forEach((element) => {
+                                    tokensSymbols.push(element.symbol)
+                                    objects.push({
+                                        address: element.address,
+                                        symbol: element.symbol
+                                    })
+                                })
+                                setTokens(objects)
+                            })
                     })
             } catch (err) {
                 setTokens([{
@@ -226,9 +257,20 @@ export default function Home({ lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }
                 method: "POST",
                 body: JSON.stringify(newy)
             }).then(async (data) => {
-                data = await data.json()
-                setlobbyes([...lobbyes, data])
-                setlobbyesActive([...lobbyesActive, data])
+                const element = await data.json()
+                const _data = {
+                    deposit: element.deposit,
+                    nowInLobby: element.nowInLobby,
+                    players: element.players,
+                    countOfPlayers: element.countOfPlayers,
+                    IERC20: element.IERC20,
+                    creator: element.creator,
+                    id: element.id,
+                    percent: parseInt(`${element.nowInLobby / element.countOfPlayers * 100}`.substring(0, 2))
+
+                }
+                setlobbyes([...lobbyes, _data])
+                setlobbyesActive([...lobbyesActive, _data])
             })
             settxData({
                 isPending: true,
@@ -245,27 +287,24 @@ export default function Home({ lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }
         document.getElementById("countofplayers").value = "";
     }
 
+    const [needLigth, setneedLigth] = useState(false)
 
     const setSettingFOrFilter = () => {
-        console.log(tokenn)
-        let _token
+        setfilterMode(filterMode)
+        setneedLigth(true)
+        let token
         rokens.map((element) => {
             if (element.symbol === tokenn)
-                _token = element.address
+                token = element.address
         })
-        let setting = _token != undefined ? _token : ""
-        if (depositt && UP) setting = setting + " deposit_up"
-        else if (depositt && !UP) setting = setting + " deposit_down"
-
-        else if (countOfPlayerss && UP) setting = setting + " countOfPlayers_up"
-        else if (countOfPlayerss && !UP) setting = setting + " countOfPlayers_down"
-
-        else if (nowInLobby && UP) setting = setting + " nowInLobby_up"
-        else if (nowInLobby && !UP) setting = setting + " nowInLobby_down"
-        console.log(ALL_LOBBYES, "settings", setting)
+        const settings = {
+            token,
+            filterMode,
+            UP
+        }
+        setlobbyes([...Filter(!tymblerNaNetwork ? ALL_LOBBYES.lobbyBNB : ALL_LOBBYES.lobbyETH, settings)])
         try {
-            const filtered = Filter(!tymblerNaNetwork ? ALL_LOBBYES.lobbyBNB : ALL_LOBBYES.lobbyETH, setting)
-            setlobbyes([...filtered])
+
         } catch (err) {
             console.log(err)
         }
@@ -279,14 +318,12 @@ export default function Home({ lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }
                 isPending: true,
                 result: null
             })
-
-
-            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, signer)
+            const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
             const tx = await contract.EnterLobby(lobby.creator, lobby.id)
             await tx.wait()
 
             const creator = lobby.creator
-            const id = lobby.id
+            const id = parseInt(lobby.id)
             const body = { creator, id, newPlayer: address, chainId }
 
             try {
@@ -299,14 +336,17 @@ export default function Home({ lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }
             }
 
             const loby = await contract.getLobby(creator, id)
+            let flag = false
             for (let i = 0; i < lobbyes.length; i++) {
-                if (lobbyes[i].creator === creator && parseInt(id) == lobbyes[i].id) {
+                if (id == lobbyes[i].id && lobbyes[i].creator === creator) {
                     if (parseInt(BigInt(loby.nowInLobby)) != 0) {
                         lobbyes[i].nowInLobby = parseInt(BigInt(loby.nowInLobby))
                         setlobbyesActive([...lobbyesActive, lobbyes[i]])
                     }
-                    else
+                    else {
+                        flag = true
                         lobbyes.splice(i, 1)
+                    }
                     break
                 }
             }
@@ -314,7 +354,8 @@ export default function Home({ lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }
                 isPending: true,
                 result: true
             })
-            setlobbyes([...lobbyes])
+            if (flag)
+                setlobbyes([...lobbyes])
         } catch (err) {
             settxData({
                 isPending: true,
@@ -389,9 +430,24 @@ export default function Home({ lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }
                 </div>
                 <div className='area' >
                     {lobbyesActive && lobbyesActive.map((element, index) =>
-                        <LobbyShablon
-                            lobby={element}
-                            index={index == lobbyesActive.length - 1 ? true : false} />
+                        <div className='LobbyShablon' style={{ borderColor: "antiquewhite", cursor: "default" }} >
+                            <div className='tokenAnd'>
+                                <div className="tokeninlobbyshablon gridcenter">
+                                    {isfaund && <Image className="tokenpng" alt='?' src={`/tokens/${element.IERC20}.png`} width={45} height={45} />}
+                                    {!isfaund && <Image className="tokenpng" src="/question_mark.png" width={45} height={45} />}
+                                </div>
+                                <div className='countofplayers gridcenter'>
+                                    {element.percent}%
+                                </div>
+                            </div>
+                            <div className='predepositlobby'>
+                                <div className='depositlobby'>
+                                    <div>Deposit: {element.deposit}</div>
+                                    <div>Pot: {`${(element.deposit * element.countOfPlayers)}`.substring(0, element.deposit.length)}</div>
+                                    <div>Players: {element.nowInLobby}/{element.countOfPlayers}</div>
+                                </div>
+                            </div>
+                        </div>
                     )}
                 </div>
 
@@ -416,21 +472,26 @@ export default function Home({ lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }
                         )}
                     </select>
                     <div className='UpAndDown'>
-                        <label className="switch">
-                            <input type="checkbox" style={{ display: "none" }} onChange={() => setUP(!UP)} ></input>
+                        <label className="switch" style={{ transform: "rotate(0deg)" }}>
+                            <input type="checkbox" style={{ display: "none" }} onClick={() => setUP(!UP)} ></input>
                             <span className="slider round"></span>
                         </label>
                     </div>
                     <div>
-                        <input onChange={() => { setdepositt(true); setnowInLobby(false); setcountOfPlayerss(false) }} type="radio" id="depositt" name="monster" />
-                        <label for="depositt" className='choosecoler'>deposit</label><br />
-                        <input onChange={() => { setnowInLobby(true); setdepositt(false); setcountOfPlayerss(false) }} type="radio" id="nowInLobby" name="monster" />
-                        <label for="nowInLobby" className='choosecoler'>nowInLobby</label><br />
-                        <input onChange={() => { setcountOfPlayerss(true); setdepositt(false); setnowInLobby(false); }} type="radio" id="countOfPlayerss" name="monster" />
-                        <label for="countOfPlayerss" className='choosecoler'>countOfPlayers</label><br />
+                        <select className="choosetoken" onClick={(e) => { e.target.value == "Deposit" ? filterMode = 1 : e.target.value == "Percent" ? filterMode = 2 : filterMode = 3 }}>
+                            <option style={{ marginBlock: "10px" }}>
+                                Deposit
+                            </option>
+                            <option >
+                                Percent
+                            </option>
+                            <option >
+                                Players
+                            </option>
+                        </select>
                     </div>
 
-                    <button onClick={setSettingFOrFilter} className='mybutton choosetoken'>Filter</button>
+                    <button onClick={() => setSettingFOrFilter()} className='mybutton choosetoken'>Filter</button>
                 </div>
             </div>
             <a name="Steps"></a>
@@ -455,20 +516,23 @@ export default function Home({ lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }
                 <div className='alllobbyes'>
                     {lobbyes && lobbyes.map((element, index) => isEnogth(index + 1) &&
                         <div className='areaAraund'>
-                            <div className='LobbyShablon' onClick={() => EnterLobby(element)}>
+                            <div className='LobbyShablon' onClick={() => { if (!userlobbyActive[index]) { EnterLobby(element) } }} style={!userlobbyActive[index] ? {} : { margin: "0px 30px", borderColor: "antiquewhite", cursor: "default" }}>
                                 <div className='tokenAnd'>
                                     <div className="tokeninlobbyshablon gridcenter">
                                         {isfaund && <Image className="tokenpng" alt='?' src={`/tokens/${element.IERC20}.png`} width={45} height={45} />}
                                         {!isfaund && <Image className="tokenpng" src="/question_mark.png" width={45} height={45} />}
                                     </div>
                                     <div className='countofplayers gridcenter'>
+                                        <strong style={{ color: needLigth && filterModeScreen == 2 ? "rgb(0 16 255)" : null }}>{`${element.percent}%`}</strong>
                                     </div>
                                 </div>
-                                <div className='depositlobby'>
-                                    <li>Deposit: {element.deposit}</li>
-                                    <li>Players: {element.nowInLobby}/{element.countOfPlayers}</li>
+                                <div className='predepositlobby'>
+                                    <div className='depositlobby'>
+                                        <div>Deposit: <strong style={{ color: needLigth && filterModeScreen == 1 ? "rgb(0 16 255)" : null }}>{element.deposit}</strong></div>
+                                        <div>Pot: <strong>{`${(element.deposit * element.countOfPlayers)}`.substring(0, element.deposit.length)}</strong></div>
+                                        <div>Players: <strong style={{ color: needLigth && filterModeScreen == 3 ? "rgb(0 16 255)" : null }}>{element.nowInLobby}/{element.countOfPlayers}</strong></div>
+                                    </div>
                                 </div>
-                                {/* <div className='enter mybutton gridcenter' onClick={() => EnterLobby(element)}> Enter </div> */}
                             </div>
                         </div>
                     )}
@@ -477,6 +541,7 @@ export default function Home({ lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }
             <div className='areaFiter'>
                 <div className='BackNext' style={{ width: 300 }}>
                     <button className='mybutton' onClick={() => changeState(false)}><a href="#Steps" style={{ color: "white" }}>Back</a></button>
+                    <div style={{ minWidth: "130px" }} />
                     <button className='mybutton' onClick={() => changeState(true)}><a href="#Steps" style={{ color: "white" }}>Next</a></button>
                 </div>
             </div>

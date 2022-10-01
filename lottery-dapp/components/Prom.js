@@ -17,7 +17,7 @@ import {
 } from 'wagmi';
 import { resolve } from 'path';
 
-export default function Prom({ address, PromSet, PromInput, setPromInput, setPromSet, chainId, tymblerNaNetwork, settxData }) {
+export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldrevard, PromSet, PromInput, setPromInput, setPromSet, chainId, tymblerNaNetwork, settxData }) {
 
     const [prom, setprom] = useState("")
 
@@ -25,7 +25,6 @@ export default function Prom({ address, PromSet, PromInput, setPromInput, setPro
     const { data } = useSigner()
     const signer = data
 
-    const [shouldrevard, setshouldrevard] = useState(0)
     const [Position, setPosition] = useState({})
 
     const setProm = async () => {
@@ -34,7 +33,7 @@ export default function Prom({ address, PromSet, PromInput, setPromInput, setPro
                 isPending: true,
                 result: null
             })
-            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB), Lottery.abi, signer)
+            const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
             const tx = await contract.setPromSet(prom.toString());
             console.log(tx)
             await tx.wait()
@@ -66,9 +65,7 @@ export default function Prom({ address, PromSet, PromInput, setPromInput, setPro
                 isPending: true,
                 result: null
             })
-
-
-            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB), Lottery.abi, signer)
+            const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
             console.log(prom, tymblerNaNetwork ? LotteryAddressETH : LotteryAddressBNB)
             const tx = await contract.setPromInput(prom);
             await tx.wait()
@@ -93,25 +90,25 @@ export default function Prom({ address, PromSet, PromInput, setPromInput, setPro
         }
     }
 
-    const chechRevard = async () => {
-        try {
-            const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB), Lottery.abi, chainId != 31337 ? provider : providerLocal)
-            const temp = parseInt(await contract.getshouldRevard(address))
-            const r = parseInt(await contract.getcountOfLotteryEnter(address))
-            console.log(temp, r)
-            const t = {
-                count: temp,
-                isEnteredOnce: r
-            }
-            setshouldrevard(t)
-        } catch (err) {
-            console.log(err)
-        }
-    }
+    // const chechRevard = async () => {
+    //     try {
+    //         const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
+    //         const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB), Lottery.abi, chainId != 31337 ? provider : providerLocal)
+    //         const temp = parseInt(await contract.getshouldRevard(address))
+    //         const r = parseInt(await contract.getcountOfLotteryEnter(address))
+    //         console.log(temp, r)
+    //         const t = {
+    //             count: temp,
+    //             isEnteredOnce: r
+    //         }
+    //         setshouldrevard(t)
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
+    // }
 
     useEffect(() => {
-        chechRevard()
+        // chechRevard()
         setPosition({})
     }, [address, chainId])
 
@@ -123,7 +120,7 @@ export default function Prom({ address, PromSet, PromInput, setPromInput, setPro
         }).then(async (data) => {
             const temp = await data.json()
             const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB), Lottery.abi, chainId != 31337 ? provider : providerLocal)
+            const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, chainId != 31337 ? provider : providerLocal)
             const yourRevard = await contract.getshouldRevard(address)
             const position = 1
             const gg = temp.map(async element => {
@@ -152,28 +149,40 @@ export default function Prom({ address, PromSet, PromInput, setPromInput, setPro
         })
     }
 
+    const [IsVisible, setIsVisible] = useState(false)
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsVisible(true)
+        }, 0);
+
+    }, [])
+
 
 
     return (
         <div className="PROM">
-            <div className={PromInput == null || PromSet == null ? 'PromButtons' : "NoButtons"}>
-                <div>
-                    {PromSet == null &&
-                        <button onClick={() => { if (prom.length > 0) setProm() }} className="setProm mybutton hei" >Set your code</button>}
-                    {PromSet != null &&
-                        <div className='Promocode' style={{ color: "purple", height: ((PromInput != null && PromSet != null) ? "80px" : null) }}>{PromSet}</div>}
-                </div>
+            <div style={{ display: "grid" }}>
+                {IsVisible && <div className={(PromInput == null && shouldrevard.isEnteredOnce == 0) || PromSet == null ? 'PromButtons' : "NoButtons"} style={{ gridTemplateRows: "1fr 1fr 1fr" }}>
+                    <div>
+                        {PromSet == null &&
+                            <button onClick={() => { if (prom.length > 0) setProm() }} className="setProm mybutton hei" >Set your code</button>}
+                        {PromSet != null &&
+                            <div className='Promocode' style={{ color: "purple", height: ((!(PromInput == null && shouldrevard.isEnteredOnce == 0) && PromSet != null) ? "80px" : null) }}>{PromSet}</div>}
+                    </div>
 
-                {(PromInput == null || PromSet == null) &&
-                    <input className="input hei" id="Prom" placeholder="Enter promo code" onChange={e => setprom(e.target.value)} />
-                }
-                <div>
-                    {PromInput == null &&
-                        <button onClick={() => { if (prom.length > 0) inputProm() }} className="inputProm mybutton hei" >Enter the code</button>}
-                    {PromInput != null &&
-                        <div className='Promocode' style={{ color: "aqua", height: (PromInput != null && PromSet != null ? "80px" : null), borderTop: (PromInput != null && PromSet != null ? "3px solid rgb(41 39 39)" : null) }}>{PromInput}</div>}
-                </div>
+                    {((PromInput == null && shouldrevard.isEnteredOnce == 0) || PromSet == null) &&
+                        <input className="input hei" id="Prom" placeholder="Enter promo code" onChange={e => setprom(e.target.value)} />
+                    }
+                    <div>
+                        {(PromInput == null && shouldrevard.isEnteredOnce == 0) ?
+                            <button onClick={() => { if (prom.length > 0) inputProm() }} className="inputProm mybutton hei" >Enter the code</button> : <div ></div>}
+                        {!(PromInput == null && shouldrevard.isEnteredOnce == 0) &&
+                            <div className='Promocode' style={{ color: "aqua", height: (!(PromInput == null && shouldrevard.isEnteredOnce == 0) && PromSet != null ? "80px" : null), borderTop: (!(PromInput == null && shouldrevard.isEnteredOnce == 0) && PromSet != null ? "3px solid rgb(41 39 39)" : null) }}>{PromInput}</div>}
+                    </div>
+                </div>}
             </div>
+
             <div className="shouldRevard">
                 <div className='recive'>
                     Your will recive:
@@ -193,7 +202,7 @@ export default function Prom({ address, PromSet, PromInput, setPromInput, setPro
             </div>
 
 
-        </div>
+        </div >
     )
 
 }

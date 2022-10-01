@@ -1,11 +1,10 @@
-import { PrismaClient } from '@prisma/client';
 const { ethers } = require("ethers");
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 
-import { LotteryAddressETH, LotteryAddressLocalhost, LotteryAddressBNB } from './Constants';
+import { LotteryAddressETH, LotteryAddressLocalhost, LotteryAddressBNB } from 'C:/Lottery/lottery-dapp/components/Constants.js';
 const notForYourEyesBitch = require("/C:/Lottery/lottery-dapp/notForYourEyesBitch")
 
-const prisma = new PrismaClient();
+import prisma from './prisma.js';
 
 export default async function handler(req, res) {
 
@@ -37,7 +36,7 @@ export default async function handler(req, res) {
         });
 
         if (loby.countOfPlayers === loby.nowInLobby + 1) {
-            await prisma.lobby.delete({
+            await prisma.lobbyETH.delete({
                 where: {
                     creator_id: {
                         creator,
@@ -52,7 +51,7 @@ export default async function handler(req, res) {
                 provider = new ethers.providers.JsonRpcProvider
             const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
             const lobyWithWinner = await contract.getLobby(creator, id)
-            await prisma.lobbyHistory.create({
+            await prisma.lobbyHistoryETH.create({
                 data: {
                     id,
                     creator,
@@ -71,11 +70,11 @@ export default async function handler(req, res) {
                         address: players[i]
                     },
                     select: {
-                        news: true
+                        newsETH: true
                     }
                 })
 
-                let news = ((AlredyNews.news && AlredyNews.news.length > 0) ? AlredyNews.news : "") + newNews;
+                let news = ((AlredyNews.newsETH && AlredyNews.newsETH.length > 0) ? AlredyNews.newsETH : "") + newNews;
                 if (lobyWithWinner.winer == players[i]) { news += "_1&" }
                 else { news += "_0&" };
 
@@ -114,7 +113,7 @@ export default async function handler(req, res) {
         });
 
         if (loby.countOfPlayers === loby.nowInLobby + 1) {
-            await prisma.lobby.delete({
+            await prisma.lobbyBNB.delete({
                 where: {
                     creator_id: {
                         creator,
@@ -129,7 +128,7 @@ export default async function handler(req, res) {
                 provider = new ethers.providers.JsonRpcProvider
             const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
             const lobyWithWinner = await contract.getLobby(creator, id)
-            await prisma.lobbyHistory.create({
+            await prisma.lobbyHistoryBNB.create({
                 data: {
                     id,
                     creator,
@@ -148,11 +147,11 @@ export default async function handler(req, res) {
                         address: players[i]
                     },
                     select: {
-                        news: true
+                        newsBNB: true
                     }
                 })
 
-                let news = ((AlredyNews.news && AlredyNews.news.length > 0) ? AlredyNews.news : "") + newNews;
+                let news = ((AlredyNews.newsBNB && AlredyNews.newsBNB.length > 0) ? AlredyNews.newsBNB : "") + newNews;
                 if (lobyWithWinner.winer == players[i]) { news += "_1&" }
                 else { news += "_0&" };
 

@@ -18,7 +18,7 @@ import {
     useNetwork, useProvider
 } from 'wagmi';
 
-export default function TokensBalanceShablon({ user, element, chainId, setisReliably, deleteTokenFromFronend, setTokenSelected, TokenSelected, settxData, settokenTransfered }) {
+export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, element, rokens, chainId, setisReliably, deleteTokenFromFronend, setTokenSelected, TokenSelected, settxData, needCheck }) {
 
 
     const [balance, setbalance] = useState(0)
@@ -36,17 +36,22 @@ export default function TokensBalanceShablon({ user, element, chainId, setisReli
 
 
     useEffect(() => {
-        checkBalance()
-    }, [chainId, user, element, TokenSelected])
+        if (element.balance == undefined || TokenSelected == element.address || txData.result) {
+            checkBalance()
+        }
+        else {
+            setbalance(element.balance)
+        }
+    }, [chainId, user, element, TokenSelected, rokens, txData])
 
 
     const checkBalance = async () => {
-        if (element.balance == undefined) {
+        try {
             try {
                 let decimals, _token
                 const tokenDecimalsCheck = element.address.split(".")
                 const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-                const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB), Lottery.abi, chainId != 31337 ? provider : providerLocal)
+                const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, chainId != 31337 ? provider : providerLocal)
 
                 if (tokenDecimalsCheck == element.address) {
                     const decemals = new ethers.Contract(element.address, A.abi, chainId != 31337 ? provider : providerLocal)
@@ -71,9 +76,10 @@ export default function TokensBalanceShablon({ user, element, chainId, setisReli
             } catch (err) {
                 console.log("checkBalance", err)
             }
+        } catch (err) {
+
         }
-        else
-            setbalance(element.balance)
+
     }
 
 
@@ -84,6 +90,7 @@ export default function TokensBalanceShablon({ user, element, chainId, setisReli
                 method: "POST",
                 body: JSON.stringify(body)
             }).then(() => {
+                console.log("DDDDDDDDDDDDDDDF")
                 setDELETED(true)
                 deleteTokenFromFronend(element.address)
             })
@@ -94,21 +101,25 @@ export default function TokensBalanceShablon({ user, element, chainId, setisReli
 
     if (!DELETED) {
         return (
-            <div className={TokenSelected == element.address ? "shablonbalanceClicked" : 'shablonbalance'} onClick={(e) => { if (element.address != TokenSelected) { setTokenSelected(element.address) } else { setTokenSelected(null) } }} >
-                <div className="tokenImage">
-                    {isfaund && <Image className="tokenpng" src={`/tokens/${element.address}.png`} width={32} height={32} />}
-                    {!isfaund && <Image className="tokenpng" src="/question_mark.png" width={32} height={32} />}
+            <div className="relative">
+                <div className={TokenSelected == element.address ? "shablonbalanceClicked" : 'shablonbalance'} onClick={(e) => { if (element.address != TokenSelected) { setTokenSelected(element.address) } else { setTokenSelected(null) } }} >
+                    <div className="tokenImage">
+                        {isfaund && <Image className="tokenpng" src={`/tokens/${element.address}.png`} width={32} height={32} />}
+                        {!isfaund && <Image className="tokenpng" src="/question_mark.png" width={32} height={32} />}
 
-                </div>
+                    </div>
 
 
-                <div class="balanceForToken">
-                    <div class="balance"> {balance}</div>
-                </div>
-                <div className="tokenImage" id="delete" >
+                    <div class="balanceForToken">
+                        <div class="balance"> {balance}</div>
+                    </div>
+
+                </div >
+                <div className="tokenImageDElete" id="delete" >
                     <Image className=" hover" src="/delete.png" onClick={() => { deleteToken() }} width={25} height={25} />
                 </div>
-            </div >
+            </div>
+
         )
     }
 

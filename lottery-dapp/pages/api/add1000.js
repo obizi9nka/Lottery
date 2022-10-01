@@ -1,6 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from './prisma.js';
 
-const prisma = new PrismaClient();
 
 
 export default async function handler(req, res) {
@@ -9,12 +8,12 @@ export default async function handler(req, res) {
 
     console.log("start")
     for (let i = 1; i <= 1000; i++) {
-        await prisma.bNB1000.create({
+        await prisma.BNB1000.create({
             data: {
                 id: i
             }
         })
-        await prisma.eTH1000.create({
+        await prisma.ETH1000.create({
             data: {
                 id: i
             }

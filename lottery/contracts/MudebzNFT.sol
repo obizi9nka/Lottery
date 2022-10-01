@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 import "./ERC721with.sol";
 import "./Lottery.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 
 contract MudebzNFT is ERC721with, Ownable {
     Lottery immutable lottery;
@@ -68,6 +68,7 @@ contract MudebzNFT is ERC721with, Ownable {
 
     function removeFromSell(uint256 tokenId) external {
         require(ownerOf(tokenId) == msg.sender, "not your token");
+        require(tokenOnSell[msg.sender][tokenId] != 0, "token not on sell");
         tokenOnSell[msg.sender][tokenId] = 0;
     }
 

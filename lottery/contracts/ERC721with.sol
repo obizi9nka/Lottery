@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "../node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 abstract contract ERC721with is ERC721 {
     ///IMPORTANT
@@ -66,6 +66,10 @@ abstract contract ERC721with is ERC721 {
 
     mapping(uint256 => uint256) internal tokenTransfer; //для каждой nft только 100 перемещений с возможностью последующего айрдропа
 
+    function getTokenTransferCount(uint tokenId) public view returns(uint){
+        return(tokenTransfer[tokenId]);
+    }
+
     function _transfer(
         address from,
         address to,
@@ -95,7 +99,7 @@ abstract contract ERC721with is ERC721 {
                     for (uint256 index = i; index < array.length - 1; index++) {
                         array[index] = array[index + 1];
                     }
-                    array.pop(); //может быть лишним
+                    array.pop(); 
                 }
                 break;
             }

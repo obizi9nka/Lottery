@@ -1,7 +1,7 @@
 const { ethers } = require("ethers");
 import { useState, useEffect, CSSProperties } from 'react'
 import Image from 'next/image';
-import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from 'C:/Lottery/lottery-dapp/components/Constants.js';
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from 'C:/Lottery/lottery-dapp/components/Constants.js';
 import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/MudebzNFT.json"
 const notForYourEyesBitch = require("/C:/Lottery/lottery-dapp/notForYourEyesBitch")
 
@@ -23,7 +23,7 @@ import {
 } from 'wagmi';
 
 
-export default function NftsShablon({ Data, chainId, tymblerNaNetwork, LotteryId, settxData }) {
+export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, Data, chainId, tymblerNaNetwork, LotteryId, settxData, setNFTS }) {
 
 
     const [ISowner, setisowner] = useState()
@@ -48,45 +48,15 @@ export default function NftsShablon({ Data, chainId, tymblerNaNetwork, LotteryId
 
     let [loading, setLoading] = useState(false);
 
+
     useEffect(() => {
-        if (Data.ismints) {
-            setLoading(true)
-            checkcost()
-        }
+        setcost(Data.price)
+        setIsTokenOnSell(Data.price != null)
         setisowner(Data.isowner)
-        setcost(0)
-        setIsTokenOnSell(false)
         setclicked(false)
         setisAutoEnterPined(Data.autoEnterBD)
         setMessageFromData(Data.message)
     }, [chainId, Data])
-
-    const checkcost = async () => {
-        const tokenChecking = Data.edition
-        try {
-            let provider
-            if (tymblerNaNetwork)
-                provider = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
-            else
-                provider = new ethers.providers.JsonRpcProvider
-            const contract = new ethers.Contract(tymblerNaNetwork ? MudeBzNFTETH : MudeBzNFTLocalhost, MudebzNFT.abi, provider)
-            const owner = await contract.ownerOf(Data.edition)
-            const _cost = parseInt(BigInt(await contract.getCost(owner, Data.edition))) / 10 ** 18
-            if (_cost > 0 && tokenChecking == Data.edition) {
-                Data.isOnSell = _cost
-                setcost(_cost)
-                setIsTokenOnSell(true)
-            } else {
-                setcost(0)
-                setIsTokenOnSell(false)
-            }
-        } catch (err) {
-            console.log(err)
-            setcost(0)
-            setIsTokenOnSell(false)
-        }
-        setLoading(false)
-    }
 
     const putOnSell = async () => {
         try {
@@ -95,17 +65,26 @@ export default function NftsShablon({ Data, chainId, tymblerNaNetwork, LotteryId
                 result: null
             })
 
-
-            const contract = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, data)
+            const contract = new ethers.Contract(NFT_ADDRESS, MudebzNFT.abi, data)
             const tx = await contract.putOnSell(Data.edition, BigInt(cost * 10 ** 18))
             await tx.wait()
+
             setIsTokenOnSell(true)
-            setcost()
             setclicked(false)
             settxData({
                 isPending: true,
                 result: true
             })
+
+            const body = { tokenId: Data.edition, chainId, price: parseFloat(cost) }
+            await fetch('/api/update1000', {
+                method: "POST",
+                body: JSON.stringify(body)
+            })
+
+            setIsTokenOnSell(true)
+            Data.price = cost
+
         } catch (err) {
             console.log(err)
             settxData({
@@ -121,7 +100,7 @@ export default function NftsShablon({ Data, chainId, tymblerNaNetwork, LotteryId
                 isPending: true,
                 result: null
             })
-            const contract = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, data)
+            const contract = new ethers.Contract(NFT_ADDRESS, MudebzNFT.abi, data)
             const tx = await contract.removeFromSell(Data.edition)
             await tx.wait()
             setIsTokenOnSell(false)
@@ -129,6 +108,14 @@ export default function NftsShablon({ Data, chainId, tymblerNaNetwork, LotteryId
                 isPending: true,
                 result: true
             })
+            const body = { tokenId: Data.edition, chainId, price: 0 }
+            await fetch('/api/update1000', {
+                method: "POST",
+                body: JSON.stringify(body)
+            })
+            setcost()
+            setIsTokenOnSell(false)
+            Data.price = null
         } catch (err) {
             console.log(err)
             settxData({
@@ -144,17 +131,26 @@ export default function NftsShablon({ Data, chainId, tymblerNaNetwork, LotteryId
                 isPending: true,
                 result: null
             })
-            const contract = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, data)
+            const contract = new ethers.Contract(NFT_ADDRESS, MudebzNFT.abi, data)
             const owner = await contract.ownerOf(Data.edition)
             const _cost = await contract.getCost(owner, Data.edition)
             const tx = await contract.trigerSell(owner, Data.edition, { value: BigInt(_cost) })
             await tx.wait()
             setIsTokenOnSell(false)
+            setcost()
             setisowner(true)
             settxData({
                 isPending: true,
                 result: true
             })
+            const body = { tokenId: Data.edition, chainId, price: 0 }
+            await fetch('/api/update1000', {
+                method: "POST",
+                body: JSON.stringify(body)
+            })
+
+            setIsTokenOnSell(false)
+            Data.price = null
         } catch (err) {
             console.log(err)
             settxData({
@@ -176,12 +172,12 @@ export default function NftsShablon({ Data, chainId, tymblerNaNetwork, LotteryId
             body: JSON.stringify(body)
         }).then(() => {
             settxData({
-                isPending: true,
+                isPending: false,
                 result: true
             })
         }).catch(() => {
             settxData({
-                isPending: true,
+                isPending: false,
                 result: false
             })
         })
@@ -209,9 +205,10 @@ export default function NftsShablon({ Data, chainId, tymblerNaNetwork, LotteryId
         })
     }
 
-    // console.log(LotteryId)
+    // console.log(Data)
 
-    let image = `/${!tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${Data.edition % 300 + 1}.png`
+    let image = `/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${Data.edition % 300}.png`
+
 
     return (
         <div className='nftsShablon'>
@@ -236,7 +233,7 @@ export default function NftsShablon({ Data, chainId, tymblerNaNetwork, LotteryId
                                         :
                                         wannaSell ?
                                             <div className='pylt'>
-                                                <input className='input' onChange={e => setcost(e.target.value)} style={{ width: "80px" }} placeholder={`${!tymblerNaNetwork ? "ETH" : "BNB"}`} />
+                                                <input className='input' onChange={e => setcost(e.target.value)} style={{ width: "80px" }} placeholder={`${tymblerNaNetwork ? "ETH" : "BNB"}`} />
                                                 <button onClick={putOnSell} className='mybutton '>Put On Sell</button>
                                             </div>
                                             :
@@ -257,19 +254,41 @@ export default function NftsShablon({ Data, chainId, tymblerNaNetwork, LotteryId
                                     <button onClick={() => buy()} className='mybutton'>Buy</button>
                                 </div> : Data.ismints ? <div style={{ color: "white" }}>{MessageFromData}</div>
                                     : Data.isAutoEnter ? < div className='' style={{ color: "white" }}>ENTERED</div>
-                                        : LotteryId < Data.edition ? < div >
+                                        : LotteryId < Data.edition && chainId > 0 ? < div >
                                             {!isAutoEnterPined && < button className='mybutton' onClick={addToAutoEnter}>Add to autoenter</button>}
                                             {isAutoEnterPined && < button className='mybutton' style={{ backgroundColor: 'purple' }} onClick={deleteFromAutoEnter}>Delete from autoenter</button>}
                                         </div>
                                             : LotteryId == Data.edition ? <div >Only once.</div>
-                                                : <div />
+                                                : <div >Data: 30.01.2023</div>
                                 }
                             </div>
                     }
 
                     <div className={Data.ismints ? "greendot absolute" : "reddot absolute "} >
                         <div className='nftinfo'>
-                            {Data.edition}
+                            <div className='nftinfo2'>
+                                <div>
+                                    Token number: {Data.edition}
+                                </div>
+                                <div>
+                                    Data: 30.01.2023
+                                </div>
+                                <div>
+                                    Bank: {Data.players != null ? `${Data.players * 5}` : '—'}
+
+                                </div>
+                                <div>
+                                    Price: {istokenOnSell ? `${cost}` : 'Not on sale'}
+                                </div>
+                                <div>
+                                    Players: {Data.players != null ? `${Data.players}` : '—'}
+
+                                </div>
+                                <div>
+                                    Transfer count: {Data.TransferCount}
+
+                                </div>
+                            </div>
                         </div>
                     </div>
 

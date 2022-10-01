@@ -7,7 +7,7 @@ import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/Mude
 import metadataETH from "C:/Lottery/lottery-dapp/metadats/metadataETH.json"
 import metadataBNB from "C:/Lottery/lottery-dapp/metadats/metadataBNB.json"
 import NftsShablon from '../components/NftsShablon'
-import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from 'C:/Lottery/lottery-dapp/components/Constants.js';
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from 'C:/Lottery/lottery-dapp/components/Constants.js';
 const notForYourEyesBitch = require("/C:/Lottery/lottery-dapp/notForYourEyesBitch")
 
 import {
@@ -26,10 +26,11 @@ import {
 
 import InfoPopUp from '../components/InfoPopUp';
 import { shuffled } from 'ethers/lib/utils';
+import { listenerCount } from 'process';
 
 
 
-export default function Home({ tymblerNaNetwork, setIsSession, isSession, settxData }) {
+export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaNetwork, setIsSession, isSession, settxData }) {
 
 
     const kek = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
@@ -42,9 +43,6 @@ export default function Home({ tymblerNaNetwork, setIsSession, isSession, settxD
 
     const [ALL_OR_MINTS, setALL_OR_MINTS] = useState(1)
 
-    const [chainId, setchainId] = useState(0)
-
-    const { chain } = useNetwork()
     const provider = useProvider()
     const { address, isConnected } = useAccount()
 
@@ -54,40 +52,46 @@ export default function Home({ tymblerNaNetwork, setIsSession, isSession, settxD
 
     const [NotShuffle, setNotShuffle] = useState()
 
-    useEffect(() => {
-        if (chain != undefined && isConnected) {
-            setchainId(chain?.id)
-            // setNFTS(chain.id == 4 ? metadataETH : metadataBNB)
-        }
-        else
-            setchainId(0)
-    }, [chain])
+    const [search, setsearch] = useState("")
+    const [costil, setcostil] = useState(false)
 
 
     useEffect(() => {
         checkLotteryId()
-    }, [chainId])
+    }, [chainId, tymblerNaNetwork])
 
     const checkLotteryId = async () => {
         try {
-            const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-            const contractLottery = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, chainId != 31337 ? provider : providerLocal)
-            const id = await contractLottery.getLotteryCount()
-            setLotteryId(parseInt(id))
+            let provider
+            if (tymblerNaNetwork)
+                provider = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
+            else
+                provider = new ethers.providers.JsonRpcProvider
+            const contractLottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
+            const id = parseInt(await contractLottery.getLotteryCount())
+            setLotteryId(id)
+            const dita = await contractLottery.getLotteryShablonByIndex(id - 1)
+            console.log("dddddd", dita, id)
+            const body = { tokenId: id - 1, chainId, players: parseInt(dita.playersCount) }
+            await fetch('/api/update1000', {
+                method: "POST",
+                body: JSON.stringify(body)
+            })
         } catch (err) {
             console.log(err)
-            setLotteryId(undefined)
         }
     }
 
 
     const setNFT = async () => {
-        setIsKek(true)
         let list = []
+        let listTransferCount = []
         let usertokens = []
         let autoenter = []
         let messages = []
         let AutoEnterFromDB = []
+        let Prices = []
+        let Players = []
 
 
 
@@ -96,27 +100,12 @@ export default function Home({ tymblerNaNetwork, setIsSession, isSession, settxD
         // autoenter
         if (isConnected) {
             try {
-                const body = { user: address, chainId: chainId != 0 ? chainId : (tymblerNaNetwork ? 4 : 31337) }
+                const body = { user: address, chainId: chainId != 0 ? chainId : (tymblerNaNetwork ? ETHid : PRODACTION ? BNBid : LocalhostId) }
                 await fetch('/api/getUserData', {
                     method: "POST",
                     body: JSON.stringify(body)
                 }).then(async (data) => {
                     const temp = await data.json()
-                    // let messages
-                    // if (chainId == 4) {
-                    //     if (temp.messageETH != null) {
-                    //         messages = temp.messageETH.split("_")
-                    //     }
-                    // }
-                    // else {
-                    //     if (temp.messageBNB != null) {
-                    //         messages = temp.messageBNB.split("_")
-                    //     }
-                    // }
-                    // message.map((element) => {
-                    //     console.log(element.splice(0, 3))
-                    // })
-
                     if (chainId == 4) {
                         if (temp.AutoEnterETH != null) {
                             AutoEnterFromDB = temp.AutoEnterETH.split("_")
@@ -145,9 +134,10 @@ export default function Home({ tymblerNaNetwork, setIsSession, isSession, settxD
         try {
             await fetch('/api/get1000', {
                 method: "POST",
-                body: chainId != 0 ? chainId : (tymblerNaNetwork ? 4 : 31337)
+                body: chainId != 0 ? chainId : (tymblerNaNetwork ? ETHid : PRODACTION ? BNBid : LocalhostId)
             }).then(async (data) => {
                 const temp = await data.json()
+                console.log(temp)
                 temp.forEach(element => {
                     if (element.isMinted)
                         list.push(element.id)
@@ -156,35 +146,57 @@ export default function Home({ tymblerNaNetwork, setIsSession, isSession, settxD
                             id: element.id,
                             message: element.message
                         })
+                    Players.push(element.players)
+                    Prices.push(element.price)
                 })
                 console.log(list, messages)
             })
-            // let provider
-            // if (tymblerNaNetwork)
-            //     provider = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
-            // else
-            //     provider = new ethers.providers.JsonRpcProvider
 
-            // const contract = new ethers.Contract(tymblerNaNetwork ? MudeBzNFTETH : MudeBzNFTLocalhost, MudebzNFT.abi, provider)
-            // const tx = await contract.gettokensMints()
-            // if (tx.length > 0) {
-            //     list = tx.map(element => {
-            //         return (parseInt(element))
-            //     });
-            //     list.sort((a, b) => {
-            //         return a - b
-            //     })
-
-            // }
         } catch (err) {
             console.log(err)
+        }
+
+
+        // сколько доступно перемещений
+        if (list != []) {
+            try {
+                let providerr
+                if (tymblerNaNetwork)
+                    providerr = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
+                else
+                    providerr = new ethers.providers.JsonRpcProvider
+                const contract = new ethers.Contract(NFT_ADDRESS, MudebzNFT.abi, providerr)
+                const promises = list.map(async (item) => {
+                    return await new Promise(async resolve => {
+                        try {
+                            const count = await contract.getTokenTransferCount(item)
+                            console.log(count)
+                            const body = {
+                                transfers: parseInt(count),
+                                tokenId: item
+                            }
+                            resolve(body)
+                        } catch (err) {
+                            resolve(0)
+                        }
+                    });
+                }
+                );
+                await Promise.all(promises).then((data) => {
+                    listTransferCount = data
+                })
+            } catch (err) {
+                console.log(err)
+            }
+
+
         }
 
         // какими владеет поьзователь 
         if (isConnected) {
             try {
                 const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-                const contract = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, chainId != 31337 ? provider : providerLocal)
+                const contract = new ethers.Contract(NFT_ADDRESS, MudebzNFT.abi, chainId != LocalhostId ? provider : providerLocal)
                 const tx = await contract.getTokensForAddress(address)
                 usertokens = tx.ids.map(element => {
                     return (parseInt(element))
@@ -196,7 +208,7 @@ export default function Home({ tymblerNaNetwork, setIsSession, isSession, settxD
 
                 //Autoenter
                 if (chainId === 31337) {
-                    const contractLottery = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, chainId != 31337 ? provider : providerLocal)
+                    const contractLottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, chainId != LocalhostId ? provider : providerLocal)
                     const id = await contractLottery.getLotteryCount()
                     const data = await contractLottery.getAutoEnter(address)
                     let temp = data.map((element) => {
@@ -214,11 +226,10 @@ export default function Home({ tymblerNaNetwork, setIsSession, isSession, settxD
             }
         }
 
-
         // minted
         let minted = []
         let notMinted = []
-        for (let i = 1, j = 0, x = 0, y = 0, mes = 0, autoEnterbd = 0; i < 1001; i++) {
+        for (let i = 1, j = 0, x = 0, y = 0, mes = 0, autoEnterbd = 0, Tcount = 0; i < 1001; i++) {
             if (list[j] === i) {
                 const ismints = true
                 const isowner = usertokens[x] == i
@@ -228,10 +239,10 @@ export default function Home({ tymblerNaNetwork, setIsSession, isSession, settxD
                 const message = messages[mes]?.id == i ? messages[mes].message : null
                 if (message)
                     mes++
-                const body = { ismints, isowner, edition, isOnSell: null, message }
+                const TransferCount = listTransferCount[Tcount++].transfers
+                const body = { ismints, isowner, edition, message, TransferCount, price: Prices[i - 1], players: Players[i - 1] }
                 minted.push(body)
-                if (j !== list.length - 1)
-                    j++
+                j++
             }
             else {
                 const edition = i
@@ -241,17 +252,15 @@ export default function Home({ tymblerNaNetwork, setIsSession, isSession, settxD
                 const autoEnterBD = AutoEnterFromDB[autoEnterbd] == i
                 if (autoEnterBD && AutoEnterFromDB.length != autoEnterbd + 1)
                     autoEnterbd++
-                const body = { edition, isAutoEnter, autoEnterBD }
+                const body = { edition, isAutoEnter, autoEnterBD, TransferCount: 0, price: Prices[i - 1], players: Players[i - 1] }
                 notMinted.push(body)
-                if (j !== list.length - 1)
-                    j++
             }
         }
 
         //all
         let all = []
         let noshuffled = []
-        for (let i = 1, j = 0, x = 0, y = 0, z = 0, autoEnterbd = 0, mes = 0; i < 1001; i++) {
+        for (let i = 1, j = 0, x = 0, y = 0, z = 0, autoEnterbd = 0, mes = 0, Tcount = 0; i < 1001; i++) {
             const ismints = list[z] == i
             if (ismints)
                 z++
@@ -267,7 +276,10 @@ export default function Home({ tymblerNaNetwork, setIsSession, isSession, settxD
             const message = messages[mes]?.id == i ? messages[mes].message : null
             if (message)
                 mes++
-            const body = { ismints, isowner, edition: i, isAutoEnter, autoEnterBD, isOnSell: null, message }
+            const TransferCount = listTransferCount[Tcount]?.tokenId == i ? listTransferCount[Tcount].transfers : 0
+            if (TransferCount > 0 && listTransferCount.length > Tcount + 1)
+                Tcount++
+            const body = { ismints, isowner, edition: i, isAutoEnter, autoEnterBD, message, TransferCount, price: Prices[i - 1], players: Players[i - 1] }
             all.push(body)
             noshuffled.push(body)
             if (j !== list.length - 1)
@@ -277,18 +289,19 @@ export default function Home({ tymblerNaNetwork, setIsSession, isSession, settxD
 
         const shuffled = shuffledArr(all)
         setNotShuffle(noshuffled)
-        setNFTS(shuffled)
-        setDATA(shuffled)
+        setNFTS(noshuffled)
+        setDATA(noshuffled)
 
         settokensMints(minted)
         settokensNotMints(notMinted)
 
 
 
-        sessionStorage.setItem("all", JSON.stringify(all))
+        sessionStorage.setItem("all", JSON.stringify(noshuffled))
         sessionStorage.setItem("minted", JSON.stringify(minted))
         sessionStorage.setItem("notMinted", JSON.stringify(notMinted))
         sessionStorage.setItem("chaindata", JSON.stringify(tymblerNaNetwork))
+        sessionStorage.setItem("notShuffle", JSON.stringify(noshuffled))
         setIsSession(false)
 
         console.log(minted, notMinted)
@@ -305,14 +318,15 @@ export default function Home({ tymblerNaNetwork, setIsSession, isSession, settxD
 
     useEffect(() => {
         // setNFT()
-        setLotteryId()
-        if (!isSession || tymblerNaNetwork != JSON.parse(sessionStorage.getItem("chaindata")))
+        if (!isSession || tymblerNaNetwork != JSON.parse(sessionStorage.getItem("chaindata"))) {
             setNFT()
+        }
         else {
             setNFTS(JSON.parse(sessionStorage.getItem("all")))
             setDATA(JSON.parse(sessionStorage.getItem("all")))
             settokensMints(JSON.parse(sessionStorage.getItem("minted")))
-            settokensMints(JSON.parse(sessionStorage.getItem("notMinted")))
+            settokensNotMints(JSON.parse(sessionStorage.getItem("notMinted")))
+            setNotShuffle(JSON.parse(sessionStorage.getItem("notShuffle")))
             setIsKek(false)
         }
     }, [chainId, address, tymblerNaNetwork])
@@ -369,10 +383,26 @@ export default function Home({ tymblerNaNetwork, setIsSession, isSession, settxD
         return (index >= startIndex && index < countOfRenderNfts + startIndex)
     }
 
+    useEffect(() => {
+        if (costil)
+            filter()
+    }, [search])
 
-    const filter = (search) => {
+
+
+    const filter = () => {
         if (search == ".") {
             setNFTS(NotShuffle)
+        }
+        else if (search[0] == ".") {
+            setstartIndex(1)
+            const temp = []
+            NotShuffle.map((element) => {
+                if (`.${element.edition}` == search) {
+                    temp.push(element)
+                }
+            })
+            setNFTS(temp)
         }
         else if (search === '') {
             setNFTS(DATA)
@@ -400,9 +430,10 @@ export default function Home({ tymblerNaNetwork, setIsSession, isSession, settxD
                     <div className='anotherShit'>
                         <button className='mybutton' onClick={() => changeState(false, false)}>Back</button>
                         <input className='input' style={{ width: 90 }} placeholder='Search' onChange={e => {
+                            setcostil(true)
                             setTimeout(() => {
-                                filter(e.target.value)
-                            }, 400);
+                                setsearch(e.target.value)
+                            }, 300);
                         }} />
                         <label className="switch zx">
                             <input type="checkbox" onChange={() => setALL_OR_MINTS(ALL_OR_MINTS == 1 ? 2 : (ALL_OR_MINTS == 2 ? 3 : 1))} />
@@ -420,9 +451,7 @@ export default function Home({ tymblerNaNetwork, setIsSession, isSession, settxD
             </div>
 
             <div className='data'>
-                {ALL_OR_MINTS == 1 && NFTS.map((element, index) => isEnogth(index + 1) && < NftsShablon settxData={settxData} Data={element} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} LotteryId={LotteryId} />)}
-                {ALL_OR_MINTS == 2 && tokensMints.map((element, index) => isEnogth(index + 1) && < NftsShablon settxData={settxData} Data={element} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} LotteryId={LotteryId} />)}
-                {ALL_OR_MINTS == 3 && tokensNotMints.map((element, index) => isEnogth(index + 1) && < NftsShablon settxData={settxData} Data={element} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} LotteryId={LotteryId} />)}
+                {(ALL_OR_MINTS == 1 ? NFTS : ALL_OR_MINTS == 2 ? tokensMints : tokensNotMints).map((element, index) => isEnogth(index + 1) && < NftsShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setNFTS={setNFTS} settxData={settxData} Data={element} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} LotteryId={LotteryId} />)}
                 {iskek && kek.map(() =>
                     <div className='nftsShablon'>
                         <div className='pad'>

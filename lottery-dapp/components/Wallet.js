@@ -24,7 +24,7 @@ import {
     useContractWrite,
     usePrepareContractWritde,
     useConnect,
-    useNetwork, useProvider
+    useNetwork, useProvider, chainId
 } from 'wagmi';
 
 
@@ -34,11 +34,41 @@ import { publicProvider } from 'wagmi/providers/public';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 
 
+const BNBChain = {
+    id: 56,
+    name: 'Binance',
+    network: 'BNB',
+    iconUrl: 'https://example.com/icon.svg',
+    iconBackground: '#fff',
+    nativeCurrency: {
+        decimals: 18,
+        name: 'Binance',
+        symbol: 'BNB',
+    },
+    rpcUrls: {
+        default: 'https://bsc-dataseed.binance.org/',
+    },
+    blockExplorers: {
+        default: { name: 'SnowTrace', url: 'https://bscscan.com' },
+    },
+    testnet: true,
+};
+
+
+
 
 const { chains, provider } = configureChains(
-    [chain.rinkeby, chain.localhost, chain.mainnet],
+    [chain.rinkeby, chain.localhost, chain.ropsten, BNBChain],
     [
-        publicProvider()]
+
+        jsonRpcProvider({
+            rpc: (chain) => {
+                if (chain.id !== BNBChain.id) return null
+                return { http: chain.rpcUrls.default }
+            },
+        }),
+        publicProvider(),
+    ]
 );
 const { connectors } = getDefaultWallets(
     {
@@ -54,9 +84,7 @@ const wagmiClient = createClient({
 
 
 
-export default function Wallet({ f, setchainId, setNeedRender, tymblerNaNetwork, settxData, needWallet }) {
-
-
+export default function Wallet({ LOTTERY_ADDRESS, NFT_ADDRESS, setdaloynavigationSmartfon, setchainId, tymblerNaNetwork, daloyNFTbutton, setdaloyNFTbutton, settxData, needWallet, txData }) {
 
 
     const [NftButton, setNftButton] = useState(false)
@@ -69,30 +97,30 @@ export default function Wallet({ f, setchainId, setNeedRender, tymblerNaNetwork,
 
     useEffect(() => {
         console.log(chain)
-        setNeedRender(true)
         setchainId(chain != undefined ? chain.id : 0)
     }, [chain])
 
 
     const { address, isConnected, isConnecting } = useAccount({
-        onConnect() {
-            console.log('Connected', chain.id)
-            localStorage.setItem("WalletConnect", "true")
-            setNewUSer()
-            setisWalletConnect(true)
-            setchainId(chain.id)
-        },
-        onDisconnect() {
-            console.log('Disconnected')
-            setisWalletConnect(false)
-            localStorage.removeItem("WalletConnect")
-            setchainId(0)
-        },
+        // onConnect() {
+        //     console.log('Connected', chain?.id)
+        //     localStorage.setItem("WalletConnect", "true")
+        //     setNewUSer()
+        //     setisWalletConnect(true)
+        //     setchainId(chain?.id)
+        // },
+        // onDisconnect() {
+        //     console.log('Disconnected')
+        //     setisWalletConnect(false)
+        //     localStorage.removeItem("WalletConnect")
+        //     setchainId(0)
+        // },
     })
 
     useEffect(() => {
         checkNftButton()
-    }, [address, chain])
+        getAllNews()
+    }, [address, chain, LOTTERY_ADDRESS, NFT_ADDRESS])
 
     useEffect(() => {
         if (isConnected) {
@@ -108,7 +136,6 @@ export default function Wallet({ f, setchainId, setNeedRender, tymblerNaNetwork,
             localStorage.removeItem("WalletConnect")
             setchainId(0)
         }
-        setNeedRender(true)
     }, [isConnected])
 
     async function setNewUSer() {
@@ -136,8 +163,11 @@ export default function Wallet({ f, setchainId, setNeedRender, tymblerNaNetwork,
 
     const checkNftButton = async () => {
         try {
-            const lottery = new ethers.Contract(chain.id === 4 ? LotteryAddressETH : chain.id === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, chain.id != 31337 ? provider : providerLocal)
-            const nft = new ethers.Contract(chain.id === 4 ? MudeBzNFTETH : chain.id === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, chain.id != 31337 ? provider : providerLocal)
+            const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
+            const lottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, chain.id != 31337 ? provider : providerLocal)
+            const nft = new ethers.Contract(NFT_ADDRESS, MudebzNFT.abi, chain.id != 31337 ? provider : providerLocal)
+            // const lottery = new ethers.Contract(chain.id === 4 ? LotteryAddressETH : chain.id === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, chain.id != 31337 ? provider : providerLocal)
+            // const nft = new ethers.Contract(chain.id === 4 ? MudeBzNFTETH : chain.id === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, chain.id != 31337 ? provider : providerLocal)
             const wins = await lottery._allowToNFT(address)
             let flag = false
             for (let i = 0; i < parseInt(wins.lotteryes.length, 10); i++) {
@@ -166,10 +196,16 @@ export default function Wallet({ f, setchainId, setNeedRender, tymblerNaNetwork,
                 body: JSON.stringify(body)
             })
                 .then(async (data) => {
-                    const temp = await data.json()
-                    if (!temp.news)
+                    const tr = await data.json()
+
+                    let temp
+                    if (chain.id == 4)
+                        temp = tr.newsETH
+                    else
+                        temp = tr.newsBNB
+                    if (temp == null)
                         return
-                    const t = temp.news.split("&")
+                    const t = temp.split("&")
                     t.pop()
                     t.map(element => {
                         let data = element.split("_")
@@ -214,6 +250,7 @@ export default function Wallet({ f, setchainId, setNeedRender, tymblerNaNetwork,
         setnews([])
     }
 
+    console.log(chains)
 
 
     if (isWalletConnect)
@@ -273,23 +310,25 @@ export default function Wallet({ f, setchainId, setNeedRender, tymblerNaNetwork,
 
                     </div >
                 </div>
-                <div className='otstup '>{NftButton && <MintNftButton settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} chainId={chain != undefined ? chain.id : 0} address={address} />}</div>
+                <div className='otstup '>{NftButton && <MintNftButton LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} tymblerNaNetwork={tymblerNaNetwork} chainId={chain != undefined ? chain.id : 0} address={address} />}</div>
                 {address && <div className='otstup '><button onClick={() => {
                     if (!isWalletAlert)
                         document.body.style.overflow = ('overflow', 'hidden')
                     setisWalletAlert(!isWalletAlert)
+                    setdaloynavigationSmartfon(isWalletAlert)
                 }} className="mybutton size" > {"0x..." + address.substring(38, 42)}</button></div>}
-                <WalletAlert settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} active={isWalletAlert} setActive={setisWalletAlert} chainId={chain != undefined ? chain.id : 0} address={address} />
+                <WalletAlert LOTTERY_ADDRESS={LOTTERY_ADDRESS} txData={txData} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} active={isWalletAlert} setActive={setisWalletAlert} chainId={chain != undefined ? chain.id : 0} address={address} />
             </div >
 
         )
     // else if (isConnecting) { }
     else {
         return (
-            <div className='wallet'  >
+            <div className='wallet' >
                 <WagmiConfig client={wagmiClient}>
-                    <RainbowKitProvider chains={chains} theme={darkTheme()}>
-                        <ConnectButton.Custom>
+                    <RainbowKitProvider chains={chains} theme={darkTheme()} >
+                        <ConnectButton></ConnectButton>
+                        {/* <ConnectButton.Custom  >
                             {({
                                 account,
                                 chain,
@@ -306,6 +345,7 @@ export default function Wallet({ f, setchainId, setNeedRender, tymblerNaNetwork,
                                     ready &&
                                     account &&
                                     chain &&
+                                    TBNBChain &&
                                     (!authenticationStatus ||
                                         authenticationStatus === 'authenticated');
 
@@ -381,7 +421,7 @@ export default function Wallet({ f, setchainId, setNeedRender, tymblerNaNetwork,
                                     </div>
                                 );
                             }}
-                        </ConnectButton.Custom>
+                        </ConnectButton.Custom> */}
                     </RainbowKitProvider>
                 </WagmiConfig>
             </div>

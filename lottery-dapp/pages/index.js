@@ -4,7 +4,7 @@ const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
-import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from 'C:/Lottery/lottery-dapp/components/Constants.js';
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from 'C:/Lottery/lottery-dapp/components/Constants.js';
 const notForYourEyesBitch = require("/C:/Lottery/lottery-dapp/notForYourEyesBitch")
 
 
@@ -24,51 +24,22 @@ import {
 import { ConstructorFragment } from 'ethers/lib/utils';
 
 
-export async function getServerSideProps() {
-  let id = 0
-  try {
-    let provider = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
-    const contract = new ethers.Contract(LotteryAddressETH, Lottery.abi, provider)
-    id = await contract.getLotteryCount()
-  } catch (err) {
-    console.log(err)
-  }
-  return {
-    props: {
-      id: parseInt(id, 10)
-    }
-  }
-}
 
-export default function Home({ id, tymblerNaNetwork, settxData }) {
+
+export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaNetwork, settxData }) {
 
 
 
 
-  const [lotteryIdPLUSPLUS, setlotteryIdPLUSPLUS] = useState(`/images/0.png`)
-  const [lotteryIdMINUSMINUS, setlotteryIdMINUSMINUS] = useState(`/images/0.png`)
-  const [lotteryIdPLUS, setlotteryIdPLUS] = useState(`/images/0.png`)
-  const [lotteryIdMINUS, setlotteryIdMINUS] = useState(`/images/0.png`)
-  const [lotteryId, setlotteryId] = useState(`/images/0.png`)
+  const [lotteryIdPLUSPLUS, setlotteryIdPLUSPLUS] = useState(`/blackFon.png`)
+  const [lotteryIdMINUSMINUS, setlotteryIdMINUSMINUS] = useState(`/blackFon.png`)
+  const [lotteryIdPLUS, setlotteryIdPLUS] = useState(`/blackFon.png`)
+  const [lotteryIdMINUS, setlotteryIdMINUS] = useState(`/blackFon.png`)
+  const [lotteryId, setlotteryId] = useState(`/blackFon.png`)
 
-
-  const [AutoEnter, setAutoEnter] = useState([])
-
-  const { chain } = useNetwork()
   const { data } = useSigner()
   const provider = useProvider()
   const { address, isConnected } = useAccount()
-
-  const [chainId, setchainId] = useState(chain != undefined ? chain.id : 0)
-
-  useEffect(() => {
-    checkAmIn()
-  }, [address])
-
-
-  useEffect(() => {
-    setchainId(chain?.id)
-  }, [chain])
 
   useEffect(() => {
     if (chainId > 0)
@@ -81,15 +52,14 @@ export default function Home({ id, tymblerNaNetwork, settxData }) {
 
   useEffect(() => {
     checkChain()
-  }, [chainId, tymblerNaNetwork])
-
+  }, [chainId, LOTTERY_ADDRESS])
 
 
   const checkChain = async () => {
     // try {
     //   await fetch('/api/add1000', {
     //     method: "POST",
-    //     body: JSON.stringify(4)
+    //     body: JSON.stringify(5)
     //   })
     // }
     // catch (err) {
@@ -101,28 +71,20 @@ export default function Home({ id, tymblerNaNetwork, settxData }) {
         provider = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
       else
         provider = new ethers.providers.JsonRpcProvider
-      const contract = new ethers.Contract(tymblerNaNetwork ? LotteryAddressETH : LotteryAddressLocalhost, Lottery.abi, provider)
-      console.log(tymblerNaNetwork ? MudeBzNFTETH : MudeBzNFTLocalhost, contract)
-      const _id = parseInt(await contract.getLotteryCount(), 10)
+      const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
+      const _id = parseInt(await contract.getLotteryCount())
 
       console.log(_id)
 
-      setlotteryId(`/${!tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${_id}.png`)
-      setlotteryIdPLUSPLUS(`/${!tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${_id + 2 < 1001 ? _id + 2 : 0}.png`)
-      setlotteryIdMINUSMINUS(`/${!tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${_id - 2 > 0 ? _id - 2 : 0}.png`)
-      setlotteryIdPLUS(`/${!tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${_id + 1 < 1001 ? _id + 1 : 0}.png`)
-      setlotteryIdMINUS(`/${!tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${_id - 1 > 0 ? _id - 1 : 0}.png`)
+      setlotteryId(`/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${_id}.png`)
+      setlotteryIdPLUSPLUS(`/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${_id + 2 < 1001 ? _id + 2 : 0}.png`)
+      setlotteryIdMINUSMINUS(`/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${_id - 2 > 0 ? _id - 2 : 0}.png`)
+      setlotteryIdPLUS(`/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${_id + 1 < 1001 ? _id + 1 : 0}.png`)
+      setlotteryIdMINUS(`/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${_id - 1 > 0 ? _id - 1 : 0}.png`)
     } catch (err) {
       console.log(err)
     }
   }
-
-  const [AutoEnterMAS, setAutoEnterMAS] = useState([])
-  const [clicked, setclicked] = useState(false)
-  const [Invalid, setInvalid] = useState(false)
-
-
-
   // console.log(AutoEnter)
 
 
@@ -133,7 +95,7 @@ export default function Home({ id, tymblerNaNetwork, settxData }) {
   const checkAmIn = async () => {
     try {
       const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-      const contract = new ethers.Contract(tymblerNaNetwork ? LotteryAddressETH : LotteryAddressLocalhost, Lottery.abi, chainId != 31337 ? provider : providerLocal)
+      const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, chainId != LocalhostId ? provider : providerLocal)
       const players = (await contract.getLotteryShablonByIndex(await contract.getLotteryCount())).players
       const length = players.length
 
@@ -158,7 +120,7 @@ export default function Home({ id, tymblerNaNetwork, settxData }) {
         isPending: true,
         result: null
       })
-      const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, data)
+      const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, data)
       const tx = await contract.Enter()
       await tx.wait()
       setamIn(true)
@@ -166,13 +128,13 @@ export default function Home({ id, tymblerNaNetwork, settxData }) {
         console.log("Welcome!", address)
       })
       settxData({
-        isPending: true,
+        isPending: false,
         result: true
       })
     } catch (err) {
       console.log(err)
       settxData({
-        isPending: true,
+        isPending: false,
         result: false
       })
     }

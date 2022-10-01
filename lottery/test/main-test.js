@@ -64,6 +64,7 @@ describe("Lottery", async () => {
     expect(await Lottery.getAdrressNFT()).to.equal(MudebzNFT.address)
 
   })
+
   it("Enter Lottery and Play", async () => {
     console.log(parseInt(await Lottery.getBalance(A.address, address2.address)) / 10 ** 18)
     await Lottery.connect(address2).addToAutoEnter([2, 3, 4, 5, 72, 1032])
@@ -152,85 +153,85 @@ describe("Lottery", async () => {
 
   })
 
-  // it("All in all", async () => {
-  //   //Lottery
+  it("All in all", async () => {
+    //Lottery
 
-  //   await Lottery.Play()
-  //   expect(await Lottery.allowToNFT(1)).to.equal(owner.address)
+    await Lottery.Play()
+    expect(await Lottery.allowToNFT(1)).to.equal(owner.address)
 
-  //   await Lottery.connect(owner).setPromSet("owner")
+    await Lottery.connect(owner).setPromSet("owner")
 
-  //   await Lottery.connect(address1).setPromSet("1")
-  //   await Lottery.connect(address1).setPromInput("owner")
+    await Lottery.connect(address1).setPromSet("1")
+    await Lottery.connect(address1).setPromInput("owner")
 
-  //   await Lottery.connect(address2).setPromInput("1")
-  //   for (let i = 2; i < 31; i++) {
+    await Lottery.connect(address2).setPromInput("1")
+    for (let i = 2; i < 31; i++) {
 
-  //     await Lottery.connect(owner).Enter()
-  //     expect(await Lottery.getPlayerByIndex(0)).to.equal(owner.address)
-  //     await Lottery.connect(address1).Enter()
-  //     expect(await Lottery.getPlayerByIndex(1)).to.equal(address1.address)
-  //     await Lottery.connect(address2).Enter()
-  //     expect(await Lottery.getPlayerByIndex(2)).to.equal(address2.address)
+      await Lottery.connect(owner).Enter()
+      // expect(await Lottery.getPlayerByIndex(0)).to.equal(owner.address)
+      await Lottery.connect(address1).Enter()
+      // expect(await Lottery.getPlayerByIndex(1)).to.equal(address1.address)
+      await Lottery.connect(address2).Enter()
+      // expect(await Lottery.getPlayerByIndex(2)).to.equal(address2.address)
 
-  //     await Lottery.connect(owner).Play()
+      await Lottery.connect(owner).Play()
 
-  //     if (i == 29) {
-  //       for (let j = 2; j <= 30; j++) {
-  //         try {
-  //           await MudebzNFT.connect(address2).putOnSell(j, j)
+      if (i == 29) {
+        for (let j = 2; j <= 30; j++) {
+          try {
+            await MudebzNFT.connect(address2).putOnSell(j, j)
 
-  //           await MudebzNFT.connect(address1).trigerSell(address2.address, j, { value: j })
-  //           expect(await MudebzNFT.getCost(address2.address, 2)).to.equal(0)
-  //           expect(await MudebzNFT.ownerOf(j)).to.equal(address1.address)
-  //         } catch (err) {
+            await MudebzNFT.connect(address1).trigerSell(address2.address, j, { value: j })
+            expect(await MudebzNFT.getCost(address2.address, 2)).to.equal(0)
+            expect(await MudebzNFT.ownerOf(j)).to.equal(address1.address)
+          } catch (err) {
 
-  //         }
-  //       }
-  //     }
+          }
+        }
+      }
 
-  //     try {
-  //       await MudebzNFT.connect(owner).MintMarten(i)
-  //       console.log(i, owner.address)
-  //     } catch (e) {
-  //     }
-  //     try {
-  //       await MudebzNFT.connect(address1).MintMarten(i, { value: BigInt(32 * 10 ** 15) })
-  //       console.log(i, address1.address)
-  //     } catch (e) {
-  //     }
-  //     try {
-  //       await MudebzNFT.connect(address2).MintMarten(i, { value: BigInt(32 * 10 ** 15) })
-  //       console.log(i, address2.address)
-  //     } catch (e) {
-  //     }
-  //     console.log(await MUD.balanceOf(owner.address) / 10 ** 18, await Lottery.getBalance(MUD.address, owner.address) / 10 ** 18)
-  //   }
+      try {
+        await MudebzNFT.connect(owner).MintMarten(i)
+        console.log(i, owner.address)
+      } catch (e) {
+      }
+      try {
+        await MudebzNFT.connect(address1).MintMarten(i, { value: BigInt(32 * 10 ** 15) })
+        console.log(i, address1.address)
+      } catch (e) {
+      }
+      try {
+        await MudebzNFT.connect(address2).MintMarten(i, { value: BigInt(32 * 10 ** 15) })
+        console.log(i, address2.address)
+      } catch (e) {
+      }
+      console.log(await MUD.balanceOf(owner.address) / 10 ** 18, await Lottery.getBalance(MUD.address, owner.address) / 10 ** 18)
+    }
 
-  //   console.log("balances")
-  //   console.log(await MUD.balanceOf(owner.address) / 10 ** 18, await Lottery.getBalance(MUD.address, owner.address) / 10 ** 18)
-  //   console.log(await MUD.balanceOf(address1.address) / 10 ** 18, await Lottery.getBalance(MUD.address, address1.address) / 10 ** 18)
-  //   console.log(await MUD.balanceOf(address2.address) / 10 ** 18, await Lottery.getBalance(MUD.address, address2.address) / 10 ** 18)
+    console.log("balances")
+    console.log(await MUD.balanceOf(owner.address) / 10 ** 18, await Lottery.getBalance(MUD.address, owner.address) / 10 ** 18)
+    console.log(await MUD.balanceOf(address1.address) / 10 ** 18, await Lottery.getBalance(MUD.address, address1.address) / 10 ** 18)
+    console.log(await MUD.balanceOf(address2.address) / 10 ** 18, await Lottery.getBalance(MUD.address, address2.address) / 10 ** 18)
 
 
-  //   //Lobby
+    //Lobby
 
-  //   for (let i = 1, j = 2; i <= 4; i++, j *= 4) {
-  //     await Lottery.connect(owner).createNewLobby(MUD.address, BigInt(j * 10 ** 18), 2)
-  //     expect((await Lottery.getLobby(owner.address, i)).nowInLobby).to.equal(1)
-  //   }
-  //   for (let i = 1; i <= 4; i++) {
-  //     await Lottery.connect(address1).EnterLobby(owner.address, i)
-  //     expect((await Lottery.getLobby(owner.address, i)).nowInLobby).to.equal(0)
-  //   }
+    for (let i = 1, j = 2; i <= 4; i++, j *= 4) {
+      await Lottery.connect(owner).createNewLobby(MUD.address, BigInt(j * 10 ** 18), 2)
+      expect((await Lottery.getLobby(owner.address, i)).nowInLobby).to.equal(1)
+    }
+    for (let i = 1; i <= 4; i++) {
+      await Lottery.connect(address1).EnterLobby(owner.address, i)
+      expect((await Lottery.getLobby(owner.address, i)).nowInLobby).to.equal(0)
+    }
 
-  //   console.log(await Lottery.getHEEP())
+    console.log(await Lottery.getHEEP())
 
-  //   console.log("balances")
-  //   console.log(await MUD.balanceOf(owner.address) / 10 ** 18, await Lottery.getBalance(MUD.address, owner.address) / 10 ** 18)
-  //   console.log(await MUD.balanceOf(address1.address) / 10 ** 18, await Lottery.getBalance(MUD.address, address1.address) / 10 ** 18)
-  //   console.log(await MUD.balanceOf(address2.address) / 10 ** 18, await Lottery.getBalance(MUD.address, address2.address) / 10 ** 18)
-  // })
+    console.log("balances")
+    console.log(await MUD.balanceOf(owner.address) / 10 ** 18, await Lottery.getBalance(MUD.address, owner.address) / 10 ** 18)
+    console.log(await MUD.balanceOf(address1.address) / 10 ** 18, await Lottery.getBalance(MUD.address, address1.address) / 10 ** 18)
+    console.log(await MUD.balanceOf(address2.address) / 10 ** 18, await Lottery.getBalance(MUD.address, address2.address) / 10 ** 18)
+  })
 
 
 })

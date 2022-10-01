@@ -49,11 +49,13 @@ export default function InfoPopUp({ data, settxData }) {
     }, [data])
 
     const info = () => {
-        settxData({
-            isPending: null,
-            result: null
-        })
         setActive(false)
+        setTimeout(() => {
+            settxData({
+                isPending: null,
+                result: null
+            })
+        }, 1000);
     }
 
     // const data = {
@@ -63,9 +65,11 @@ export default function InfoPopUp({ data, settxData }) {
 
     // if (data.isPending != null || data.result != null) {
     return (
-        <div className={active ? 'InfoPopUp active' : "InfoPopUp"}>
+        <div className={active ? 'InfoPopUp active' : "InfoPopUp"} onClick={() => {
+            if (data.result != null) { info() }
+        }}>
             <div className={'LOADER active'}>
-                {data.isPending && data.result == null ? <Loader loading={true} color={"white"} size={35} /> : data.result ? <Image src="/succses.png" width={35} height={35} /> : data.result == false ? <Image src="/wrong.png" onClick={() => info()} width={35} height={35} /> : <div />}
+                {data.isPending && data.result == null ? <Loader loading={true} color={"white"} size={35} /> : data.result ? <Image src="/succses.png" width={35} height={35} /> : data.result == false ? <Image src="/wrong.png" width={35} height={35} /> : <div />}
                 {/* {mode == 1 && <Loader loading={true} color={"white"} size={35} />}
                 {mode == 2 && <Image src="/succses.png" width={35} height={35} />}
                 {mode == 3 && <Image src="/wrong.png" width={35} height={35} />} */}

@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 //1100000000000000000
 
 import "./Lobby.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 import "./ERC721with.sol";
 
 contract Lottery is Lobby, Ownable {
@@ -143,7 +143,7 @@ contract Lottery is Lobby, Ownable {
 
     mapping(address => uint256) shouldRevard;
 
-    address[] shouldRevardMas;
+    // address[] shouldRevardMas;
 
     function getshouldRevard(address a) public view returns (uint256) {
         return shouldRevard[a];
@@ -184,9 +184,9 @@ contract Lottery is Lobby, Ownable {
     function checkRef() private {
         bytes32 prom = Prom[msg.sender].PromInput;
         if (bytes32(0) != prom) {
-            shouldRevardMas.push(msg.sender);
+            // shouldRevardMas.push(msg.sender);
             address setter = PromSetReverse[prom];
-            if (shouldRevard[setter] == 0) shouldRevardMas.push(setter);
+            // if (shouldRevard[setter] == 0) shouldRevardMas.push(setter);
             REVARD_REF_ALLOW -= 200;
             shouldRevard[msg.sender] += 100;
             shouldRevard[setter] += 100;
@@ -290,21 +290,12 @@ contract Lottery is Lobby, Ownable {
             HOLDERS();
             HOLDERS_EVER();
             OWNER();
-            REF();
         }
 
         LotteryCount++;
 
-        // Lotteries[++LotteryCount].playersCount = 0;
-        // Lotteries[LotteryCount].winer = address(0);
-
         emit play(winer);
     }
-
-    // function getPlayerByIndex(uint256 index) public view returns (address) {
-    //     if (Lotteries[LotteryCount].playersCount - 1 < index) return address(0);
-    //     return Lotteries[LotteryCount].players[index];
-    // }
 
     function getLotteryShablonByIndex(uint256 lotteryId)
         external
@@ -340,16 +331,22 @@ contract Lottery is Lobby, Ownable {
         MUDaddress._mintFromLottery(owner(), REVARD_OWNER * 10**18);
     }
 
-    function REF() private {
-        uint256 stop = shouldRevardMas.length;
-        for (uint256 i = 0; i < stop; i++) {
-            address user = shouldRevardMas[i];
-            uint256 revard = shouldRevard[shouldRevardMas[i]] * 10**18;
-            MUDaddress._mintFromLottery(user, revard);
-            MUDaddress._transferFromLottery(user, address(this), revard);
-            balanceInTokenForAccount[IERC20(MUDaddress)][user] += revard;
-        }
+     function REF() public {
+        require(shouldRevard[msg.sender] > 0);
+        MUDaddress._mintFromLottery(msg.sender,shouldRevard[msg.sender] * 10**18);
+        shouldRevard[msg.sender] = 0;
     }
+
+    // function REF() private {
+    //     uint256 stop = shouldRevardMas.length;
+    //     for (uint256 i = 0; i < stop; i++) {
+    //         address user = shouldRevardMas[i];
+    //         uint256 revard = shouldRevard[shouldRevardMas[i]] * 10**18;
+    //         MUDaddress._mintFromLottery(user, revard);
+    //         MUDaddress._transferFromLottery(user, address(this), revard);
+    //         balanceInTokenForAccount[IERC20(MUDaddress)][user] += revard;
+    //     }
+    // }
 
     function setAdrressNFT(ERC721with token) public onlyOwner {
         NFT = token;

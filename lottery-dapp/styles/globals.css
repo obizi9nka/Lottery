@@ -3,10 +3,10 @@ body {
   background: #110e0e;
   padding: 0;
   margin: 0;
-  max-width: 99.6vw;
+  max-width: calc(100vw - 0.4em);
   height: auto;
   /* min-width: 486px; */
-  min-width: 530px;
+  min-width: 579px;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
@@ -40,7 +40,7 @@ footer {
 
 ::-webkit-scrollbar-track {
   min-width: 100px;
-  background-color: #0d0e0f;
+  background-color: #110e0e;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -100,13 +100,18 @@ footer {
 
 
 .nav {
-  border-bottom: 3px solid rgb(255, 255, 255);
-  min-height: 105px;
+  /* margin: 0px 90px;
+
+  border-left: 3px solid rgb(255, 255, 255);
+  border-right: 3px solid rgb(255, 255, 255);
+  border-bottom: 3px solid rgb(255, 255, 255); */
+
+  min-height: 110px;
   padding-right: 10%;
   padding-left: 10%;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
 
   .nav {
     padding-right: 2%;
@@ -115,9 +120,7 @@ footer {
 }
 
 
-
-
-@media (max-width: 763px) {
+@media (max-width: 1100px) {
 
   .navigation {
     justify-self: center;
@@ -125,37 +128,80 @@ footer {
     grid-template-columns: 1fr 1fr;
   }
 
+  .wallet {
+    display: none;
+  }
+
+  .content {
+    grid-template-columns: 2fr 2fr;
+  }
+
+  .menu {
+    /* margin: 5px 15px 5px 0px; */
+    margin: 10px 17px;
+  }
+}
+
+.navigationSmartfon {
+  position: fixed;
+  bottom: 0vh;
+  background-color: #131314;
+  left: 0px;
+  right: 0px;
+  height: 50px;
+  display: none;
+  z-index: 100000000000000;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+@media (max-width: 608px) {
+  .navigation {
+    display: none;
+  }
+
+  .navigationSmartfon {
+    display: grid;
+  }
+}
+
+@media (max-width: 610px) {
+  .navigation {
+    justify-self: start;
+
+  }
 
   .menu {
     margin: 5px 15px 5px 0px;
   }
 }
 
+.menuSmartfon {
+  color: #ffffff;
+  justify-self: center;
+  align-self: center;
+}
+
 .content {
   min-height: inherit;
   display: grid;
-  grid-template-columns: 2fr 2fr 2fr;
 }
 
-.MINTnav {}
+@media (max-width: 4000px) {
+  .content {
+    grid-template-columns: 2fr 2fr 2fr;
+  }
+}
 
-
-@media (max-width: 581px) {
-
-
-
-  .dropdown {
-    display: none;
+@media (max-width: 608px) {
+  .content {
+    grid-template-columns: 2fr 2fr;
   }
 }
 
 
 .navigation {
-  word-spacing: 20px;
   align-self: center;
 }
-
-
 
 
 .container {
@@ -178,10 +224,9 @@ footer {
   padding: 0px 0px 0px 10px;
 }
 
-.widthmint {}
-
 .menu {
   color: rgb(255, 255, 255);
+  word-spacing: 20px;
 }
 
 .menu:hover {
@@ -191,10 +236,7 @@ footer {
 @media (min-width: 1700px) {
   .menu {
     font-size: 23px;
-
   }
-
-
 }
 
 
@@ -207,7 +249,10 @@ footer {
 .box {}
 
 .image {
-  max-height: 110px;
+  max-height: 75px;
+  min-height: 75px;
+  max-width: 280px;
+  min-width: 280px;
   justify-self: center;
   align-self: center;
 }
@@ -218,6 +263,21 @@ footer {
   justify-content: flex-end;
 }
 
+@media (max-width: 1100px) {
+  .wallet {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 900px) {
+
+  .image {
+    max-height: 65px;
+    min-height: 65px;
+    max-width: 200px;
+    min-width: 200px;
+  }
+}
 
 
 
@@ -237,7 +297,8 @@ footer {
 
 /*Lottery*/
 .index {
-  min-height: 100vh;
+  /* min-height: calc(100vh - 110px);
+  max-height: calc(100vh - 110px); */
   display: grid;
   align-items: center;
   grid-template-columns: repeat(5, 1fr);
@@ -427,6 +488,7 @@ footer {
 
 
 .alllobbyes {
+  min-width: 505px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -454,7 +516,7 @@ footer {
 }
 
 .mm {
-  margin: 0px 3%;
+  margin: 0px 30px;
 }
 
 .Loby {
@@ -495,7 +557,7 @@ option {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #1f1e1f;
+  background-color: #363636;
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -513,7 +575,7 @@ option {
 }
 
 input:checked+.slider {
-  background-color: #1f1e1f;
+  background-color: #363636;
 }
 
 
@@ -572,11 +634,7 @@ input:checked+.slider:before {
   justify-content: space-around;
 }
 
-@media (max-width: 960px) {
-  .fiter {
-    margin: 4% 2% 0% 2%;
-  }
-}
+
 
 .sliderGREEN {
   position: absolute;
@@ -686,7 +744,7 @@ input:checked+.sliderRED:before {
 }
 
 .nftinfo {
-  opacity: 0.8;
+  opacity: 0.95;
   display: none;
   width: 201px;
   height: 200px;
@@ -695,6 +753,14 @@ input:checked+.sliderRED:before {
   position: absolute;
   top: -6px;
   right: -6px;
+}
+
+.nftinfo2 {
+  color: #000000;
+  height: inherit;
+  display: grid;
+  opacity: 1;
+  padding: 18px;
 }
 
 /* 

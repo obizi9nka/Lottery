@@ -9,6 +9,7 @@ import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.
 import Wallet from '../components/Wallet';
 import Head from 'next/head';
 import ChangeNetwork from '../components/ChangeNetwork';
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from 'C:/Lottery/lottery-dapp/components/Constants.js';
 
 import '@rainbow-me/rainbowkit/styles.css';
 
@@ -35,14 +36,41 @@ import {
 import { infuraProvider } from 'wagmi/providers/infura'
 import { ConnectButton, connectorsForWallets, wallet } from '@rainbow-me/rainbowkit';
 import { publicProvider } from 'wagmi/providers/public';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import InfoPopUp from '../components/InfoPopUp';
 
+const BNBChain = {
+  id: 56,
+  name: 'Binance',
+  network: 'BNB',
+  iconUrl: 'https://example.com/icon.svg',
+  iconBackground: '#fff',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'Binance',
+    symbol: 'BNB',
+  },
+  rpcUrls: {
+    default: 'https://bsc-dataseed.binance.org/',
+  },
+  blockExplorers: {
+    default: { name: 'SnowTrace', url: 'https://bscscan.com' },
+  },
+  testnet: false,
+};
 
 
 const { chains, provider } = configureChains(
-  [chain.rinkeby, chain.localhost, chain.mainnet],
+  [chain.rinkeby, chain.localhost, chain.ropsten, BNBChain],
   [
-    publicProvider()
+
+    jsonRpcProvider({
+      rpc: (chain) => {
+        if (chain.id !== BNBChain.id) return null
+        return { http: chain.rpcUrls.default }
+      },
+    }),
+    publicProvider(),
   ]
 );
 const { connectors } = getDefaultWallets(
@@ -57,17 +85,25 @@ const wagmiClient = createClient({
   provider
 })
 
+
+console.log(wagmiClient)
 function MyApp({ Component, pageProps }) {
 
 
-  const [logo, setlogo] = useState('/star-big.png')
-  const [needRender, setNeedRender] = useState(false)
+  const [logo, setlogo] = useState('/')
 
   const [isSession, setIsSession] = useState(false)
 
   const [tymblerNaNetwork, settymblerNaNetwork] = useState(true)
 
   const [needWallet, setneedWallet] = useState(false)
+
+  const [daloyNFTbutton, setdaloyNFTbutton] = useState(false)
+  const [daloynavigationSmartfon, setdaloynavigationSmartfon] = useState(false)
+
+
+  const [LOTTERY_ADDRESS, setlotteryAddress] = useState("")
+  const [NFT_ADDRESS, setnftAddress] = useState("")
 
   const { chain } = useNetwork()
 
@@ -76,38 +112,54 @@ function MyApp({ Component, pageProps }) {
     result: null
   })
 
+  const [chainId, setchainId] = useState(0)
+
 
   useEffect(() => {
-    settymblerNaNetwork(chain == undefined ? tymblerNaNetwork : (chain.id == 4 ? true : false))
+    settymblerNaNetwork(chain == undefined ? tymblerNaNetwork : (chain.id == ETHid ? true : false))
   }, [chain])
 
 
-  // if (needRender) {
-  //   console.log("was", needRender)
-  //   setNeedRender(false)
-  // }
 
+  useEffect(() => {
+    setchainId(chain != undefined ? chain.id : 0)
+    checkChain()
+    if (chain != undefined) {
+      setlotteryAddress(chain.id === ETHid ? LotteryAddressETH : chain.id === BNBid ? LotteryAddressBNB : LotteryAddressLocalhost)
+      setnftAddress(chain.id === ETHid ? MudeBzNFTETH : chain.id === BNBid ? MudeBzNFTBNB : MudeBzNFTLocalhost)
+    }
+    else {
 
-  const [chainId, setchainId] = useState(0)
+      setlotteryAddress(tymblerNaNetwork ? LotteryAddressETH : PRODACTION ? LotteryAddressBNB : LotteryAddressLocalhost)
+      setnftAddress(tymblerNaNetwork ? MudeBzNFTETH : PRODACTION ? MudeBzNFTBNB : MudeBzNFTLocalhost)
+    }
+  }, [chain, tymblerNaNetwork])
+
+  useEffect(() => {
+    console.log(LOTTERY_ADDRESS, NFT_ADDRESS)
+  }, [LOTTERY_ADDRESS])
+
 
   const checkChain = async () => {
-    if (chainId == 31337) {
+    if (chain?.id == ETHid) {
       setlogo('/logos/black.png')
     }
-    else if (chainId == 4) {
+    else if (chain?.id == 3) {
       setlogo('/logos/orange.png')
+    }
+    else if (chain?.id == LocalhostId) {
+      setlogo('/logos/_LoGo.png')
     }
     else {
       setlogo('/logos/purple.png')
     }
   }
 
+  console.log(daloynavigationSmartfon)
 
-  useEffect(() => {
-    checkChain()
-  }, [chainId])
-
-
+  // useEffect(() => {
+  //   checkChain()
+  // }, [chainId])
 
   return (
 
@@ -120,11 +172,11 @@ function MyApp({ Component, pageProps }) {
       <WagmiConfig client={wagmiClient}>
         <div className="nav">
           <div className='content'>
-            <div className='navigation' onClick={() => setIsSession(true)}>
-              <Link href="/" className="spase">
+            <div className='navigation' onClick={() => { setIsSession(true); setdaloyNFTbutton(true) }}>
+              <Link href="/" >
                 <a className='menu'> Lottery </a>
               </Link>
-              <Link href="/lobbyes">
+              <Link href="/Lobbyes">
                 <a className='menu'> Lobbys </a>
               </Link>
               <Link href="/Galary">
@@ -134,6 +186,20 @@ function MyApp({ Component, pageProps }) {
                 <a className='menu'> About </a>
               </Link>
             </div>
+            <div className='navigationSmartfon' style={{ opacity: daloynavigationSmartfon ? "0" : "1" }} onClick={() => { setIsSession(true); setdaloyNFTbutton(true) }}>
+              <Link href="/" >
+                <a className='menuSmartfon'> Lottery </a>
+              </Link>
+              <Link href="/Lobbyes">
+                <a className='menuSmartfon'> Lobbys </a>
+              </Link>
+              <Link href="/Galary">
+                <a className='menuSmartfon'> Galary </a>
+              </Link>
+              <Link href="/About">
+                <a className='menuSmartfon'> About </a>
+              </Link>
+            </div>
             <div className='image' onClick={() => {
               if (chain == undefined)
                 settymblerNaNetwork(!tymblerNaNetwork)
@@ -141,12 +207,14 @@ function MyApp({ Component, pageProps }) {
                 console.log("sended")
               }
             }} >
-              <Image src={logo} width="280px" height="130px" />
+              <div>
+                <Image src={logo} width="280px" height="75px" />
+              </div>
             </div>
-            <Wallet settxData={settxData} needWallet={needWallet} setchainId={setchainId} setNeedRender={setNeedRender} tymblerNaNetwork={tymblerNaNetwork} />
+            <Wallet LOTTERY_ADDRESS={LOTTERY_ADDRESS} txData={txData} NFT_ADDRESS={NFT_ADDRESS} setdaloynavigationSmartfon={setdaloynavigationSmartfon} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} settxData={settxData} needWallet={needWallet} setchainId={setchainId} tymblerNaNetwork={tymblerNaNetwork} />
           </div>
         </div >
-        <Component {...pageProps} setneedWallet={setneedWallet} settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} isSession={isSession} setIsSession={setIsSession} />
+        <Component {...pageProps} LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} isSession={isSession} setIsSession={setIsSession} chainId={chainId} />
 
         <footer>
         </footer>
