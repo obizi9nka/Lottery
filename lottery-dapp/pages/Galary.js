@@ -289,15 +289,15 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
 
         const shuffled = shuffledArr(all)
         setNotShuffle(noshuffled)
-        setNFTS(noshuffled)
-        setDATA(noshuffled)
+        setNFTS(shuffled)
+        setDATA(shuffled)
 
         settokensMints(minted)
         settokensNotMints(notMinted)
 
 
 
-        sessionStorage.setItem("all", JSON.stringify(noshuffled))
+        sessionStorage.setItem("all", JSON.stringify(shuffled))
         sessionStorage.setItem("minted", JSON.stringify(minted))
         sessionStorage.setItem("notMinted", JSON.stringify(notMinted))
         sessionStorage.setItem("chaindata", JSON.stringify(tymblerNaNetwork))

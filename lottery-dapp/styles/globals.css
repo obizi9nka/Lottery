@@ -297,8 +297,8 @@ footer {
 
 /*Lottery*/
 .index {
-  /* min-height: calc(100vh - 110px);
-  max-height: calc(100vh - 110px); */
+  min-height: calc(100vh - 150px);
+  max-height: calc(100vh - 150px);
   display: grid;
   align-items: center;
   grid-template-columns: repeat(5, 1fr);

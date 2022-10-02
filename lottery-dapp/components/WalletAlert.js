@@ -5,7 +5,6 @@ import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
 import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from './Constants';
 import Image from 'next/image'
-import OtherPylt from "./otherPylt";
 import Prom from "./Prom";
 
 
