@@ -4,7 +4,7 @@ const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
 import Lottery from "/blockchain/Lottery.json"
 import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from '/components/Constants.js';
-const notForYourEyesBitch = require("/notForYourEyesBitch.json")
+import notForYourEyesBitch from "../notForYourEyesBitch.json"
 
 
 import {
