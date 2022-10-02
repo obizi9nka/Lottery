@@ -1,15 +1,12 @@
 import '../styles/globals.css'
-import "C:/Lottery/lottery-dapp/styles/Componets.css"
+import "../styles/Componets.css"
 import Image from 'next/image'
 import Link from 'next/link'
 const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
-import MintNftButton from '../components/MintNftButton';
-import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import Wallet from '../components/Wallet';
 import Head from 'next/head';
-import ChangeNetwork from '../components/ChangeNetwork';
-import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from 'C:/Lottery/lottery-dapp/components/Constants.js';
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from '/components/Constants.js';
 
 import '@rainbow-me/rainbowkit/styles.css';
 

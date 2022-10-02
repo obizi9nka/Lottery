@@ -3,8 +3,8 @@ import Link from 'next/link'
 const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
 import MintNftButton from '../components/MintNftButton';
-import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
-import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/MudebzNFT.json"
+import Lottery from "/blockchain/Lottery.json"
+import MudebzNFT from "/blockchain/MudebzNFT.json"
 import WalletAlert from './WalletAlert';
 import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from './Constants';
 

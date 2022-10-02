@@ -2,13 +2,12 @@ import Head from 'next/head'
 import Image from 'next/image'
 const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
-import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
-import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/MudebzNFT.json"
-import metadataETH from "C:/Lottery/lottery-dapp/metadats/metadataETH.json"
-import metadataBNB from "C:/Lottery/lottery-dapp/metadats/metadataBNB.json"
-import NftsShablon from '../components/NftsShablon'
-import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from 'C:/Lottery/lottery-dapp/components/Constants.js';
-const notForYourEyesBitch = require("/C:/Lottery/lottery-dapp/notForYourEyesBitch")
+import Lottery from "/blockchain/Lottery.json"
+import MudebzNFT from "/blockchain/MudebzNFT.json"
+import metadataETH from "/blockchain/metadataETH.json"
+import NftsShablon from '/components/NftsShablon'
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from '/components/Constants.js';
+const notForYourEyesBitch = require("/notForYourEyesBitch.json")
 
 import {
     chain,

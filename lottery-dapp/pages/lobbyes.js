@@ -2,14 +2,13 @@ import Head from 'next/head'
 import Image from 'next/image'
 const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
-import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
+import Lottery from "/blockchain/Lottery.json"
 import { PrismaClient } from '@prisma/client';
 import LobbyShablon from '../components/LobbyShablon'
 import Filter from '../components/Filter';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import { _toUtf8String } from '@ethersproject/strings/lib/utf8';
-import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
+import A from "/blockchain/A.json"
 import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from 'C:/Lottery/lottery-dapp/components/Constants.js';
 
 import {

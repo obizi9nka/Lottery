@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 const { ethers } = require("ethers");
-import TokensBalanceShablon from '../components/TokensBalanceShablon'
-import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
+
 
 
 export default function ChangeNetwork({ active }) {

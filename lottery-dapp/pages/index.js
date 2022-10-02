@@ -2,10 +2,9 @@ import Head from 'next/head'
 import Image from 'next/image'
 const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
-import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
-import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
-import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from 'C:/Lottery/lottery-dapp/components/Constants.js';
-const notForYourEyesBitch = require("/C:/Lottery/lottery-dapp/notForYourEyesBitch")
+import Lottery from "/blockchain/Lottery.json"
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from '/components/Constants.js';
+const notForYourEyesBitch = require("/notForYourEyesBitch.json")
 
 
 import {

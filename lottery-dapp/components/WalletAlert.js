@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 const { ethers } = require("ethers");
 import TokensBalanceShablon from '../components/TokensBalanceShablon'
-import A from "C:/Lottery/lottery/artifacts/contracts/A.sol/A.json"
-import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
+import A from "/blockchain/A.json"
+import Lottery from "/blockchain/Lottery.json"
 import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from './Constants';
 import Image from 'next/image'
 import Prom from "./Prom";

@@ -1,8 +1,3 @@
-const { ethers } = require("ethers");
-import { useState, useEffect } from 'react'
-import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
-
-
 
 export default function Filter(lobbyes, settings) {
 

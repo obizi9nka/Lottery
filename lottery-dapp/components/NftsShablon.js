@@ -1,9 +1,8 @@
 const { ethers } = require("ethers");
-import { useState, useEffect, CSSProperties } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image';
-import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from 'C:/Lottery/lottery-dapp/components/Constants.js';
-import MudebzNFT from "C:/Lottery/lottery/artifacts/contracts/MudebzNFT.sol/MudebzNFT.json"
-const notForYourEyesBitch = require("/C:/Lottery/lottery-dapp/notForYourEyesBitch")
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from './Constants.js';
+import MudebzNFT from "/blockchain/MudebzNFT.json"
 
 import PropagateLoader from "react-spinners/PropagateLoader";
 
