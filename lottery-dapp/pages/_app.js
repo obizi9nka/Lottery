@@ -83,7 +83,6 @@ const wagmiClient = createClient({
 })
 
 
-console.log(wagmiClient)
 function MyApp({ Component, pageProps }) {
 
 
