@@ -1,8 +1,8 @@
 const { ethers } = require("ethers");
-import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
+import Lottery from "/blockchain/Lottery.json"
 
-import { LotteryAddressETH, LotteryAddressLocalhost, LotteryAddressBNB } from 'C:/Lottery/lottery-dapp/components/Constants.js';
-const notForYourEyesBitch = require("/C:/Lottery/lottery-dapp/notForYourEyesBitch")
+import { LotteryAddressETH, LotteryAddressLocalhost, LotteryAddressBNB } from '../../components/Constants';
+import notForYourEyesBitch from "../../notForYourEyesBitch.json"
 
 import prisma from './prisma.js';
 
