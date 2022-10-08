@@ -1,0 +1,405 @@
+/*
+    WalletAlert
+*/
+.modall {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.545);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0;
+    transition: 0.2s;
+}
+
+.modall.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+
+
+.walletalert {
+    padding: 10px;
+    z-index: 10000;
+    height: fit-content;
+    background: rgb(41, 39, 39);
+    background: linear-gradient(40deg, rgba(41, 39, 39, 1) 86%, rgba(180, 30, 147, 1) 98%);
+    border-radius: 12px;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+@media (max-width: 2000px) {
+    .walletalert {
+        width: 510px;
+    }
+}
+
+
+@media (max-width: 608px) {
+    .walletalert {
+        min-width: 320px;
+        width: 80vw;
+        margin-bottom: 50px;
+    }
+
+}
+
+.depositAndWitdrow {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 10px;
+    height: 90px;
+    background-color: rgb(19 20 20);
+    border-radius: 12px;
+}
+
+.dinamic {
+    min-width: 80px;
+    width: 13vw;
+    font-size: 80%;
+    max-width: 100px;
+}
+
+.dopInfo {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: -10px;
+    opacity: 0;
+    right: -10px;
+    cursor: pointer;
+}
+
+.walletalert::-webkit-scrollbar {
+    display: none;
+}
+
+
+.addtoken {
+    justify-self: end;
+}
+
+.tokeninput {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+
+.wallettokens {
+    margin-top: 7px;
+    height: auto;
+}
+
+.relative {
+    position: relative;
+}
+
+.shablonbalance {
+    display: grid;
+    height: 60px;
+    grid-template-columns: 2fr 7fr;
+    border-radius: 12px;
+    margin: 10px 0px;
+    background-color: rgb(19, 20, 20);
+}
+
+.shablonbalanceClicked {
+    display: grid;
+    height: 60px;
+    grid-template-columns: 2fr 7fr;
+    border-radius: 12px;
+    margin: 10px 0px;
+    background: rgb(0, 0, 0);
+    background: linear-gradient(10deg, rgba(0, 0, 0, 1) 28%, rgba(130, 49, 135, 1) 75%);
+}
+
+.tokenImage {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}
+
+.tokenImageDElete {
+    position: absolute;
+    right: 15px;
+    top: 18px;
+}
+
+/* OtherPylt */
+
+
+
+.areaProm {
+    /* width: 490px;
+    height: 160px; */
+    background-color: rgb(19 20 20);
+    border-radius: 12px;
+}
+
+.NoButtons {
+    display: grid;
+}
+
+.Promocode {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    /* max-width: 210px; */
+    flex-wrap: wrap;
+}
+
+.underProm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+}
+
+.yaxz {
+    display: grid;
+    grid-template-rows: 1fr 2fr;
+    margin-left: 10px;
+}
+
+.AutoEnter {
+    margin-top: 10px;
+    width: 300px;
+    height: 300px;
+    background-color: rgb(19 20 20);
+    border-radius: 12px;
+    display: grid;
+    grid-template-rows: 6fr 1fr 2fr;
+}
+
+.PDF {
+    align-self: start;
+    justify-self: end;
+    margin-top: 10px;
+    width: 180px;
+    height: 100px;
+    background-color: rgb(19 20 20);
+    border-radius: 12px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+}
+
+.MudebzInfo {
+    align-self: start;
+    justify-self: end;
+    width: 180px;
+    height: 190px;
+    background-color: rgb(19 20 20);
+    border-radius: 12px;
+}
+
+.addToken {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: -35px;
+    width: 490px;
+    height: 80px;
+    background-color: rgb(19 20 20);
+    border-radius: 12px;
+}
+
+.droch {
+    width: 160px;
+    margin: 7px;
+    min-width: 125px;
+    font-size: 15px;
+}
+
+
+
+@media (max-width: 608px) {
+    .AutoEnter {
+        width: 45vw;
+        height: 30vh;
+        max-width: 273px;
+        min-width: 190px;
+    }
+
+    .PDF {
+        width: 30vw;
+        height: 12vh;
+    }
+
+    .MudebzInfo {
+        width: 30vw;
+        height: 17vh;
+    }
+
+    .addToken {
+        width: 76vw;
+        height: 12vh;
+        margin-top: -70px;
+        min-width: 300px;
+    }
+
+    .bigdinamic {
+        width: 30vw;
+        font-size: 80%;
+        min-width: 120px;
+    }
+
+    .droch {
+        width: 30vw;
+        font-size: 13px;
+    }
+}
+
+.NoAutoEnter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: white;
+}
+
+.DEG180 {
+    transform: scale(-1, 1);
+}
+
+.arow {
+    align-self: center;
+    justify-self: center;
+}
+
+.arow:hover {
+    cursor: pointer;
+}
+
+.imageINAutoEnter {
+    justify-self: center;
+    align-self: center;
+}
+
+.ff {
+    border-radius: 12px;
+}
+
+.areaimageINAutoEnter {
+    justify-content: center;
+    align-items: center;
+    display: grid;
+    grid-template-columns: 4fr 10fr 4fr;
+}
+
+
+
+
+.listAutoEnter {
+    margin: 0px 10px;
+    justify-self: center;
+    align-self: center;
+    color: rgb(255, 255, 255);
+}
+
+.listAutoEnter::-webkit-scrollbar-track {
+    display: none;
+}
+
+.listAutoEnterA {
+    max-width: 230px;
+    max-height: 30px;
+    display: inline-flex;
+    overflow: auto;
+}
+
+.listAutoEnterA:hover {
+    cursor: default;
+}
+
+.buttonAutoEnter {
+    justify-self: center;
+    align-self: center;
+}
+
+
+
+
+
+/* PROM */
+
+.PROM {
+    display: grid;
+    width: inherit;
+    height: inherit;
+    grid-template-columns: 3fr 4fr;
+}
+
+.shouldRevard {
+    display: grid;
+    font-size: 40px;
+    border-left: 4px solid rgb(41 39 39);
+    grid-template-rows: 1.4fr 6fr 2fr;
+}
+
+.chifra {
+    justify-self: center;
+    align-self: center;
+    color: rgb(255, 234, 0);
+}
+
+.rilchifra {
+    display: flex;
+
+}
+
+
+
+.recive {
+    font-size: 14px;
+    color: aliceblue;
+    justify-self: center;
+    align-self: center;
+}
+
+.position {
+    font-size: 14px;
+    color: aliceblue;
+    align-self: center;
+    justify-self: end;
+    padding-right: 10px;
+}
+
+.PromButtons {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+
+
+.tokenpng {
+    border-radius: 100px;
+}
+
+
+
+
+.balanceForToken {
+    display: flex;
+    font-size: x-large;
+    font-weight: 700;
+    align-self: center;
+}
+
+.balance {
+    color: white;
+    font-size: x-large;
+    border: none;
+}

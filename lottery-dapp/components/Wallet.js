@@ -7,7 +7,7 @@ import Lottery from "/blockchain/Lottery.json"
 import MudebzNFT from "/blockchain/MudebzNFT.json"
 import WalletAlert from './WalletAlert';
 import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from './Constants';
-
+import News from './News';
 
 import {
     getDefaultWallets,
@@ -33,58 +33,7 @@ import { ConnectButton, connectorsForWallets, wallet } from '@rainbow-me/rainbow
 import { publicProvider } from 'wagmi/providers/public';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 
-
-const BNBChain = {
-    id: 56,
-    name: 'Binance',
-    network: 'BNB',
-    iconUrl: 'https://example.com/icon.svg',
-    iconBackground: '#fff',
-    nativeCurrency: {
-        decimals: 18,
-        name: 'Binance',
-        symbol: 'BNB',
-    },
-    rpcUrls: {
-        default: 'https://bsc-dataseed.binance.org/',
-    },
-    blockExplorers: {
-        default: { name: 'SnowTrace', url: 'https://bscscan.com' },
-    },
-    testnet: true,
-};
-
-
-
-
-const { chains, provider } = configureChains(
-    [chain.rinkeby, chain.localhost, chain.ropsten, BNBChain],
-    [
-
-        jsonRpcProvider({
-            rpc: (chain) => {
-                if (chain.id !== BNBChain.id) return null
-                return { http: chain.rpcUrls.default }
-            },
-        }),
-        publicProvider(),
-    ]
-);
-const { connectors } = getDefaultWallets(
-    {
-        appName: 'e',
-        chains
-    },
-);
-const wagmiClient = createClient({
-    autoConnect: true,
-    connectors,
-    provider
-})
-
-
-
-export default function Wallet({ LOTTERY_ADDRESS, NFT_ADDRESS, setdaloynavigationSmartfon, setchainId, tymblerNaNetwork, daloyNFTbutton, setdaloyNFTbutton, settxData, needWallet, txData }) {
+export default function Wallet({ chains, LOTTERY_ADDRESS, NFT_ADDRESS, BNBChain, setdaloynavigationSmartfon, setchainId, tymblerNaNetwork, daloyNFTbutton, setdaloyNFTbutton, settxData, needWallet, txData }) {
 
 
     const [NftButton, setNftButton] = useState(false)
@@ -101,21 +50,7 @@ export default function Wallet({ LOTTERY_ADDRESS, NFT_ADDRESS, setdaloynavigatio
     }, [chain])
 
 
-    const { address, isConnected, isConnecting } = useAccount({
-        // onConnect() {
-        //     console.log('Connected', chain?.id)
-        //     localStorage.setItem("WalletConnect", "true")
-        //     setNewUSer()
-        //     setisWalletConnect(true)
-        //     setchainId(chain?.id)
-        // },
-        // onDisconnect() {
-        //     console.log('Disconnected')
-        //     setisWalletConnect(false)
-        //     localStorage.removeItem("WalletConnect")
-        //     setchainId(0)
-        // },
-    })
+    const { address, isConnected, isConnecting } = useAccount()
 
     useEffect(() => {
         checkNftButton()
@@ -250,68 +185,16 @@ export default function Wallet({ LOTTERY_ADDRESS, NFT_ADDRESS, setdaloynavigatio
         setnews([])
     }
 
-    console.log(chains)
-
 
     if (isWalletConnect)
         return (
             <div className='wallet'>
-                <div className='otstup'>
-                    <div className="dropdown" onClick={getAllNews}>
-                        <Image src="/news.png" width={25} height={25} />
-
-                        <div className='wraper'>
-                            <div className='fff'>
-                                <div className="dropdown-content">
-                                    <div className={news && news.length > 0 ? 'hearder' : 'hearder alone'}>
-                                        <div className='CENTER'>
-                                            <Image className="" onClick={deleteNews} src="/delete.png" width={25} height={25} />
-                                        </div>
-                                        <div className='CENTER'>
-                                            {"Creator"}
-                                        </div>
-                                        <div className='CENTER'>
-                                            {"Deposit"}
-                                        </div>
-                                        <div className='CENTER'>
-                                            {"Players"}
-                                        </div >
-                                        <div className='CENTER'>
-                                            {"Exodus"}
-                                        </div>
-                                    </div>
-                                    {news && news.map((element, index) =>
-                                        <div className={element.isWin == "Win" ? "win" : null}>
-                                            <div className={index === news.length - 1 ? "onenews KOSTLb" : 'onenews'}>
-                                                <div className="CENTER" >
-                                                    <Image className='token' src={`/tokens/${element.token}.png`} width={25} height={25} />
-                                                </div>
-                                                <div className='CENTER'>
-                                                    {"0x..." + element.creator.substr(38, 4)}
-                                                </div>
-                                                <div className='CENTER nowrap'>
-                                                    {element.deposit}
-                                                </div>
-                                                <div className='CENTER'>
-                                                    {element.countOfPlayers}
-                                                </div>
-                                                <div className='CENTER'>
-                                                    {element.isWin}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                    <div className={'reload'}>
-                                        {now && now.toString().substring(16, 24)}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div >
+                <div className="dropdown" onClick={getAllNews}>
+                    <Image src="/news.png" width={25} height={25} />
+                    <News news={news} now={now} deleteNews={deleteNews} />
                 </div>
-                <div className='otstup '>{NftButton && <MintNftButton LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} tymblerNaNetwork={tymblerNaNetwork} chainId={chain != undefined ? chain.id : 0} address={address} />}</div>
-                {address && <div className='otstup '><button onClick={() => {
+                <div className='otstup'>{NftButton && <MintNftButton LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} tymblerNaNetwork={tymblerNaNetwork} chainId={chain != undefined ? chain.id : 0} address={address} />}</div>
+                {address && <div className='otstup'><button onClick={() => {
                     if (!isWalletAlert)
                         document.body.style.overflow = ('overflow', 'hidden')
                     setisWalletAlert(!isWalletAlert)
@@ -321,109 +204,114 @@ export default function Wallet({ LOTTERY_ADDRESS, NFT_ADDRESS, setdaloynavigatio
             </div >
 
         )
-    // else if (isConnecting) { }
     else {
         return (
             <div className='wallet' >
-                <WagmiConfig client={wagmiClient}>
-                    <RainbowKitProvider chains={chains} theme={darkTheme()} >
-                        <ConnectButton></ConnectButton>
-                        {/* <ConnectButton.Custom  >
-                            {({
-                                account,
-                                chain,
-                                openAccountModal,
-                                openChainModal,
-                                openConnectModal,
-                                authenticationStatus,
-                                mounted,
-                            }) => {
-                                // Note: If your app doesn't use authentication, you
-                                // can remove all 'authenticationStatus' checks
-                                const ready = mounted && authenticationStatus !== 'loading';
-                                const connected =
-                                    ready &&
-                                    account &&
-                                    chain &&
-                                    TBNBChain &&
-                                    (!authenticationStatus ||
-                                        authenticationStatus === 'authenticated');
+                <RainbowKitProvider chains={chains} theme={darkTheme()} >
+                    {/* <ConnectButton></ConnectButton> */}
+                    <ConnectButton.Custom  >
+                        {({
+                            account,
+                            chain,
+                            openAccountModal,
+                            openChainModal,
+                            openConnectModal,
+                            authenticationStatus,
+                            mounted,
+                        }) => {
+                            // Note: If your app doesn't use authentication, you
+                            // can remove all 'authenticationStatus' checks
+                            const ready = mounted && authenticationStatus !== 'loading';
+                            const connected =
+                                ready &&
+                                account &&
+                                chain &&
+                                BNBChain &&
+                                (!authenticationStatus ||
+                                    authenticationStatus === 'authenticated');
 
-                                return (
-                                    <div
-                                        {...(!ready && {
-                                            'aria-hidden': true,
-                                            'style': {
-                                                opacity: 0,
-                                                pointerEvents: 'none',
-                                                userSelect: 'none',
-                                            },
-                                        })}                                    >
-                                        {(() => {
-                                            if (!connected) {
-                                                return (
-                                                    <div >
+                            return (
+                                <div
+                                    {...(!ready && {
+                                        'aria-hidden': true,
+                                        'style': {
+                                            opacity: 0,
+                                            pointerEvents: 'none',
+                                            userSelect: 'none',
+                                        },
+                                    })}                                    >
+                                    {(() => {
+                                        if (!connected) {
+                                            return (
+                                                <div>
+                                                    <div className='ConnectWallet'>
                                                         <button onClick={openConnectModal} className={"mybutton"}>
                                                             Connect Wallet
                                                         </button>
                                                     </div>
-
-                                                );
-                                            }
-
-                                            if (chain.unsupported) {
-                                                return (
-                                                    <button onClick={openChainModal} type="button">
-                                                        Wrong network
-                                                    </button>
-                                                );
-                                            }
-
-                                            return (
-                                                <div style={{ display: 'flex', gap: 12 }}>
-                                                    <button
-                                                        onClick={openChainModal}
-                                                        style={{ display: 'flex', alignItems: 'center' }}
-                                                        type="button"
-                                                    >
-                                                        {chain.hasIcon && (
-                                                            <div
-                                                                style={{
-                                                                    background: chain.iconBackground,
-                                                                    width: 12,
-                                                                    height: 12,
-                                                                    borderRadius: 999,
-                                                                    overflow: 'hidden',
-                                                                    marginRight: 4,
-                                                                }}
-                                                            >
-                                                                {chain.iconUrl && (
-                                                                    <img
-                                                                        alt={chain.name ?? 'Chain icon'}
-                                                                        src={chain.iconUrl}
-                                                                        style={{ width: 12, height: 12 }}
-                                                                    />
-                                                                )}
-                                                            </div>
-                                                        )}
-                                                        {chain.name}
-                                                    </button>
-
-                                                    <button onClick={openAccountModal} type="button">
-                                                        {account.displayName}
-                                                        {account.displayBalance
-                                                            ? ` (${account.displayBalance})`
-                                                            : ''}
-                                                    </button>
+                                                    <div className='noConnectWallet'>
+                                                        <button onClick={openConnectModal} className={"mybutton"}>
+                                                            Wallet
+                                                        </button>
+                                                    </div>
                                                 </div>
+
+
                                             );
-                                        })()}
-                                    </div>
-                                );
-                            }}
-                        </ConnectButton.Custom> */}
-                    </RainbowKitProvider>
-                </WagmiConfig>
+                                        }
+
+                                        if (chain.unsupported) {
+                                            return (
+                                                <button onClick={openChainModal} type="button">
+                                                    Wrong network
+                                                </button>
+                                            );
+                                        }
+
+                                        return (
+                                            <div style={{ display: 'flex', gap: 12 }}>
+                                                <button
+                                                    onClick={openChainModal}
+                                                    style={{ display: 'flex', alignItems: 'center' }}
+                                                    type="button"
+                                                >
+                                                    {chain.hasIcon && (
+                                                        <div
+                                                            style={{
+                                                                background: chain.iconBackground,
+                                                                width: 12,
+                                                                height: 12,
+                                                                borderRadius: 999,
+                                                                overflow: 'hidden',
+                                                                marginRight: 4,
+                                                            }}
+                                                        >
+                                                            {chain.iconUrl && (
+                                                                <img
+                                                                    alt={chain.name ?? 'Chain icon'}
+                                                                    src={chain.iconUrl}
+                                                                    style={{ width: 12, height: 12 }}
+                                                                />
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                    {chain.name}
+                                                </button>
+
+                                                <button onClick={openAccountModal} type="button">
+                                                    {account.displayName}
+                                                    {account.displayBalance
+                                                        ? ` (${account.displayBalance})`
+                                                        : ''}
+                                                </button>
+                                            </div>
+                                        );
+                                    })()}
+                                </div>
+                            );
+                        }}
+                    </ConnectButton.Custom>
+                </RainbowKitProvider>
             </div>
         )
     }

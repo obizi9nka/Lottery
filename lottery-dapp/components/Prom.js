@@ -164,19 +164,19 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
         <div className="PROM">
             <div style={{ display: "grid" }}>
                 {IsVisible && <div className={(PromInput == null && shouldrevard.isEnteredOnce == 0) || PromSet == null ? 'PromButtons' : "NoButtons"} style={{ gridTemplateRows: "1fr 1fr 1fr" }}>
-                    <div>
+                    <div >
                         {PromSet == null &&
-                            <button onClick={() => { if (prom.length > 0) setProm() }} className="setProm mybutton hei" >Set your code</button>}
+                            <button onClick={() => { if (prom.length > 0) setProm() }} className="setProm mybutton droch" >Set your code</button>}
                         {PromSet != null &&
                             <div className='Promocode' style={{ color: "purple", height: ((!(PromInput == null && shouldrevard.isEnteredOnce == 0) && PromSet != null) ? "80px" : null) }}>{PromSet}</div>}
                     </div>
 
                     {((PromInput == null && shouldrevard.isEnteredOnce == 0) || PromSet == null) &&
-                        <input className="input hei" id="Prom" placeholder="Enter promo code" onChange={e => setprom(e.target.value)} />
+                        <input className="input droch" id="Prom" placeholder="Enter promo code" onChange={e => setprom(e.target.value)} />
                     }
                     <div>
                         {(PromInput == null && shouldrevard.isEnteredOnce == 0) ?
-                            <button onClick={() => { if (prom.length > 0) inputProm() }} className="inputProm mybutton hei" >Enter the code</button> : <div ></div>}
+                            <button onClick={() => { if (prom.length > 0) inputProm() }} className="inputProm mybutton droch" >Enter the code</button> : <div ></div>}
                         {!(PromInput == null && shouldrevard.isEnteredOnce == 0) &&
                             <div className='Promocode' style={{ color: "aqua", height: (!(PromInput == null && shouldrevard.isEnteredOnce == 0) && PromSet != null ? "80px" : null), borderTop: (!(PromInput == null && shouldrevard.isEnteredOnce == 0) && PromSet != null ? "3px solid rgb(41 39 39)" : null) }}>{PromInput}</div>}
                     </div>
@@ -197,8 +197,6 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
                     Your Position:  {Position.you != null ? `${Position.you}/${Position.all}` : "???/???"}
 
                 </div>
-                {/* <Image src={'/tokens/0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9.png'} width={30} height={30} /> */}
-
             </div>
 
 
@@ -207,55 +205,3 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
 
 }
 
-{/* 
-            {setpromInputed && !setpromSeted &&
-                <div className="promseted">
-                    <div>
-                        {"Your Enter: "}<strong className="colorPURPLE">{PromInput}</strong>
-                    </div>
-                    <div>
-                        Your will earn: <strong className="colorPURPLE">{shouldrevard} MUD</strong>
-                    </div>
-
-                </div>}
-            {!setpromInputed &&
-                <button onClick={inputProm} className="inputProm mybutton hei" >Input</button>}
-
-
-            {setpromSeted && setpromInputed &&
-                <div className='bothpromset'>
-                    <div className='proms'>
-                        <div>
-                            You Enter: <strong className="colorPURPLE">{PromInput}</strong>
-                        </div>
-                        <div>
-                            Your Code: <strong className="colorPURPLE">{(PromSet == null)}</strong>
-                        </div>
-
-
-
-                    </div>
-                    <div className='earnProm'>
-                        Your will earn: <strong className="colorPURPLE">{shouldrevard} MUD</strong>
-                    </div>
-                </div>
-
-            }
-
-            {(!setpromInputed || !setpromSeted) &&
-                <input className="input hei" id="Prom" placeholder="Promocode" onChange={e => setprom(e.target.value)} />
-            }
-
-
-            {setpromSeted && !setpromInputed &&
-                <div className="promseted">
-                    <div>
-                        {"Your Code: "}<strong className="colorPURPLE">{(PromSet == null)}</strong>
-                    </div>
-                    <div>
-                        Your will earn: <strong className="colorPURPLE">{shouldrevard} MUD</strong>
-                    </div>
-
-                </div>}
-            {!setpromSeted &&
-                <button onClick={setProm} className="setProm mybutton hei" >Set</button>} */}

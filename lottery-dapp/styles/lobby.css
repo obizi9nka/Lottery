@@ -1,0 +1,220 @@
+/*Lobby*/
+
+.new_active_lobbys {
+    min-height: 200px;
+    display: grid;
+    grid-template-columns: 1fr 100fr;
+    align-items: center;
+    margin: 0px 8%;
+}
+
+.newLobby {
+    height: 240px;
+    margin: 30px 6px 0px 6px;
+    width: 230px;
+    padding: 17px;
+    background-color: rgb(29 28 28);
+    border-radius: 10px;
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 608px) {
+    .new_active_lobbys {
+        align-items: center;
+        justify-content: center;
+        grid-template-columns: none;
+    }
+
+    .newLobby {
+        min-width: 320px;
+        justify-self: center;
+        align-self: center;
+        margin: 0px;
+    }
+
+    .area {
+        min-width: 320px;
+        max-width: 320px;
+    }
+
+
+}
+
+.area {
+    background-color: rgb(29 28 28);
+    margin: 30px 6px 0px 6px;
+    border-radius: 10px;
+    align-items: center;
+    overflow-x: auto;
+    display: inline-flex;
+    height: 240px;
+}
+
+.area::-webkit-scrollbar {
+    height: .6em;
+}
+
+.area::-webkit-scrollbar-thumb {
+    scroll-padding: 1em;
+}
+
+.area::-webkit-scrollbar-track {
+    display: none;
+}
+
+.g {
+    padding-left: 8vw;
+    color: white;
+}
+
+.overflow {
+    display: inline-flex;
+    justify-content: flex-start;
+}
+
+
+
+
+
+
+.areafilterlobby {
+    padding: 1% 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.FILTER {
+    margin: 30px 0px;
+    min-width: 320px;
+    padding: 1%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgb(29 28 28);
+    border-radius: 12px;
+    width: 40%;
+}
+
+.settings {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.arealobbyes {
+    min-height: 200px;
+    margin: 0% 8%;
+}
+
+
+
+.alllobbyes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.I {
+    width: 100%;
+}
+
+
+.titel {
+    text-align: center;
+    margin-top: 12px;
+    color: #ffffff;
+    margin-bottom: 12px;
+}
+
+.choosetoken {
+    border-radius: 12px;
+    background-color: #110e0ef1;
+    color: white;
+    padding: 10px;
+
+    height: fit-content;
+}
+
+.mm {
+    margin: 0px 30px;
+}
+
+.Loby {
+    display: flex;
+    justify-content: center;
+}
+
+option {
+    background-color: #0d0e0f;
+}
+
+.choosecoler {
+    color: rgb(255, 255, 255);
+}
+
+.UpAndDown {
+    color: rgb(0, 0, 0);
+    display: flex;
+    justify-content: space-between;
+}
+
+/*тумблер*/
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #363636;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: rgb(255, 255, 255);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: #363636;
+}
+
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}

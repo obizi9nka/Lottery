@@ -1,0 +1,89 @@
+/*Lottery*/
+.index {
+    min-height: calc(100vh - 150px);
+    max-height: calc(100vh - 150px);
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+
+.newnft {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    align-self: center;
+}
+
+@media (max-width: 1519px) {
+    .index {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .PLUSPLUS {
+        display: none;
+    }
+
+    .MINUSMINUS {
+        display: none;
+    }
+
+
+}
+
+@media (max-width: 920px) {
+    .index {
+        grid-template-columns: 1fr;
+    }
+
+    .PLUS {
+        display: none;
+    }
+
+}
+
+@media (max-width: 570px) {
+    .index {
+        align-items: flex-start;
+    }
+
+    .newnft {
+        margin-top: 0px;
+    }
+
+
+}
+
+
+
+.tttt {
+    border-radius: 12px;
+}
+
+
+
+.enterNftPlay {
+    margin-top: 7%;
+    align-self: center;
+}
+
+.PLUS {
+    justify-self: center;
+    opacity: 0.6;
+}
+
+.PLUSPLUS {
+    justify-self: start;
+    opacity: 0.3;
+}
+
+.MINUSMINUS {
+    justify-self: end;
+    opacity: 0.3;
+}
+
+.controlautoenter {
+    display: flex;
+    color: white;
+}

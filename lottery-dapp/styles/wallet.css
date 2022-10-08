@@ -1,0 +1,140 @@
+/*
+    Wallet
+*/
+
+.widthmint {
+    background: rgb(157, 97, 97);
+    background: linear-gradient(10deg, rgba(157, 97, 97, 1) 12%, rgba(130, 49, 135, 1) 35%, rgba(42, 113, 111, 1) 63%, rgba(13, 7, 7, 1) 82%);
+}
+
+.size {
+    font-size: 16px;
+}
+
+.walletconnect {
+    position: absolute;
+    right: 0%;
+    margin-top: 40px;
+}
+
+.dropdown {
+    min-height: 25px;
+    min-width: 25px;
+}
+
+.ConnectWallet {}
+
+.noConnectWallet {
+    display: none;
+}
+
+@media (max-width: 570px) {
+    .dropdown {
+        display: none;
+    }
+
+    .ConnectWallet {
+        display: none;
+    }
+
+    .noConnectWallet {
+        display: block;
+    }
+
+}
+
+
+
+
+/*
+    MintNftButtom
+*/
+.modallMINT {
+    background-color: #110e0e;
+    position: fixed;
+    top: 113px;
+    left: 0;
+    right: 100%;
+    z-index: 99;
+    pointer-events: none;
+    opacity: 0;
+    transition: 0.2s;
+    width: 100vw;
+    height: 200vh;
+    min-width: 530px;
+    min-height: calc(100vh - 113px);
+}
+
+
+.modallMINT.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.areaMINT {
+    padding-top: 40px;
+    min-width: inherit;
+    height: calc(100vh - 110px);
+    z-index: 1000;
+    width: inherit;
+    min-width: 578px;
+}
+
+.imageWithArrow {
+    display: flex;
+    justify-content: center;
+}
+
+.MINT {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.space-around {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: inherit;
+}
+
+.pulse {
+    width: fit-content;
+    padding: 10px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 10s ease infinite;
+    transform: translate3d(0, 0, 0);
+    border: none;
+    color: #0d0e0f;
+    font-size: 17px;
+}
+
+.pulse:hover {
+    cursor: pointer;
+}
+
+.pulse.active {
+    animation-play-state: paused;
+}
+
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.Mint {
+    background: rgb(157, 97, 97);
+    background: linear-gradient(10deg, rgba(157, 97, 97, 1) 12%, rgba(130, 49, 135, 1) 35%, rgba(42, 113, 111, 1) 63%, rgba(13, 7, 7, 1) 82%);
+}

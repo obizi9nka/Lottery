@@ -1,5 +1,19 @@
 import '../styles/globals.css'
-import "../styles/Componets.css"
+import '../styles/index.css'
+import '../styles/galary.css'
+import '../styles/lobby.css'
+import '../styles/about.css'
+import '../styles/app.css'
+
+import "../styles/wallet.css"
+import "../styles/walletAlert.css"
+import "../styles/news.css"
+import "../styles/lobbyShablon.css"
+import "../styles/nftShablon.css"
+
+
+import '@rainbow-me/rainbowkit/styles.css';
+
 import Image from 'next/image'
 import Link from 'next/link'
 const { ethers } = require("ethers");
@@ -8,7 +22,7 @@ import Wallet from '../components/Wallet';
 import Head from 'next/head';
 import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from '/components/Constants.js';
 
-import '@rainbow-me/rainbowkit/styles.css';
+
 
 
 
@@ -58,7 +72,7 @@ const BNBChain = {
 
 
 const { chains, provider } = configureChains(
-  [chain.rinkeby, chain.localhost, chain.ropsten, BNBChain],
+  [chain.localhost, BNBChain, chain.sepolia],
   [
 
     jsonRpcProvider({
@@ -119,21 +133,17 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     setchainId(chain != undefined ? chain.id : 0)
+
     checkChain()
     if (chain != undefined) {
       setlotteryAddress(chain.id === ETHid ? LotteryAddressETH : chain.id === BNBid ? LotteryAddressBNB : LotteryAddressLocalhost)
       setnftAddress(chain.id === ETHid ? MudeBzNFTETH : chain.id === BNBid ? MudeBzNFTBNB : MudeBzNFTLocalhost)
     }
     else {
-
       setlotteryAddress(tymblerNaNetwork ? LotteryAddressETH : PRODACTION ? LotteryAddressBNB : LotteryAddressLocalhost)
       setnftAddress(tymblerNaNetwork ? MudeBzNFTETH : PRODACTION ? MudeBzNFTBNB : MudeBzNFTLocalhost)
     }
   }, [chain, tymblerNaNetwork])
-
-  useEffect(() => {
-    console.log(LOTTERY_ADDRESS, NFT_ADDRESS)
-  }, [LOTTERY_ADDRESS])
 
 
   const checkChain = async () => {
@@ -151,11 +161,11 @@ function MyApp({ Component, pageProps }) {
     }
   }
 
-  console.log(daloynavigationSmartfon)
-
   // useEffect(() => {
   //   checkChain()
   // }, [chainId])
+
+
 
   return (
 
@@ -182,20 +192,7 @@ function MyApp({ Component, pageProps }) {
                 <a className='menu'> About </a>
               </Link>
             </div>
-            <div className='navigationSmartfon' style={{ opacity: daloynavigationSmartfon ? "0" : "1" }} onClick={() => { setIsSession(true); setdaloyNFTbutton(true) }}>
-              <Link href="/" >
-                <a className='menuSmartfon'> Lottery </a>
-              </Link>
-              <Link href="/Lobbyes">
-                <a className='menuSmartfon'> Lobbys </a>
-              </Link>
-              <Link href="/Galary">
-                <a className='menuSmartfon'> Galary </a>
-              </Link>
-              <Link href="/About">
-                <a className='menuSmartfon'> About </a>
-              </Link>
-            </div>
+
             <div className='image' onClick={() => {
               if (chain == undefined)
                 settymblerNaNetwork(!tymblerNaNetwork)
@@ -207,7 +204,7 @@ function MyApp({ Component, pageProps }) {
                 <Image src={logo} width="280px" height="75px" />
               </div>
             </div>
-            <Wallet LOTTERY_ADDRESS={LOTTERY_ADDRESS} txData={txData} NFT_ADDRESS={NFT_ADDRESS} setdaloynavigationSmartfon={setdaloynavigationSmartfon} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} settxData={settxData} needWallet={needWallet} setchainId={setchainId} tymblerNaNetwork={tymblerNaNetwork} />
+            <Wallet chains={chains} LOTTERY_ADDRESS={LOTTERY_ADDRESS} BNBChain={BNBChain} txData={txData} NFT_ADDRESS={NFT_ADDRESS} setdaloynavigationSmartfon={setdaloynavigationSmartfon} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} settxData={settxData} needWallet={needWallet} setchainId={setchainId} tymblerNaNetwork={tymblerNaNetwork} />
           </div>
         </div >
         <Component {...pageProps} LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} isSession={isSession} setIsSession={setIsSession} chainId={chainId} />
@@ -215,7 +212,21 @@ function MyApp({ Component, pageProps }) {
         <footer>
         </footer>
       </WagmiConfig>
-
+      <div className='prenavigationSmartfon' />
+      <div className='navigationSmartfon' style={{ opacity: daloynavigationSmartfon ? "0" : "1" }} onClick={() => { setIsSession(true); setdaloyNFTbutton(true) }}>
+        <Link href="/" >
+          <a className='menuSmartfon'> Lottery </a>
+        </Link>
+        <Link href="/Lobbyes">
+          <a className='menuSmartfon'> Lobbys </a>
+        </Link>
+        <Link href="/Galary">
+          <a className='menuSmartfon'> Galary </a>
+        </Link>
+        <Link href="/About">
+          <a className='menuSmartfon'> About </a>
+        </Link>
+      </div>
     </div >
   )
 }

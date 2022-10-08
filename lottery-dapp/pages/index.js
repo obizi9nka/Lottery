@@ -38,6 +38,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
 
   const { data } = useSigner()
   const provider = useProvider()
+  const PROVIDRER = provider
   const { address, isConnected } = useAccount()
 
   useEffect(() => {
@@ -67,13 +68,13 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
     try {
       let provider
       if (tymblerNaNetwork)
-        provider = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
+        provider = PROVIDRER
+      // provider = new ethers.providers.InfuraProvider("sepolia", notForYourEyesBitch.infuraKey)
       else
         provider = new ethers.providers.JsonRpcProvider
       const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
       const _id = parseInt(await contract.getLotteryCount())
 
-      console.log(_id)
 
       setlotteryId(`/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${_id}.png`)
       setlotteryIdPLUSPLUS(`/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${_id + 2 < 1001 ? _id + 2 : 0}.png`)
@@ -158,7 +159,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
             <Image src={lotteryIdMINUS} className="tttt" width={225} height={225} />
           </div>
           <div className='newnft'>
-            <h2 className='aou'></h2>
             <Image src={lotteryId} className="tttt" width={300} height={300} />
             <div className='enterNftPlay'>
               {!amIn && <button onClick={Enter} className="mybutton tobottom">Am In!</button>}

@@ -1,0 +1,171 @@
+/*
+  Marketplace
+*/
+
+.areaNfts {
+    margin: 0px calc(10% - 50px);
+    min-height: 80vh
+}
+
+
+
+.zx {
+    align-self: center;
+    justify-self: center;
+}
+
+.fiter {
+    min-width: calc(100vw - 20vw);
+    padding-top: 15px;
+}
+
+.anotherShit {
+    display: flex;
+    justify-content: space-around;
+    margin: 0px 10vw;
+}
+
+.BackNext {
+    display: flex;
+    padding: 12px 40px 0px 40px;
+    justify-content: space-around;
+}
+
+
+
+.sliderGREEN {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #1f1e1f;
+    transition: .4s;
+}
+
+.sliderGREEN:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: #4fff00;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.sliderGREEN {
+    background-color: #1f1e1f;
+}
+
+
+input:checked+.sliderGREEN:before {
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.sliderGREEN.round {
+    border-radius: 34px;
+}
+
+.sliderGREEN.round:before {
+    border-radius: 50%;
+}
+
+.sliderRED {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #1f1e1f;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.sliderRED:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: rgb(255, 0, 0);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+
+
+input:checked+.sliderRED:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.sliderRED.round {
+    border-radius: 34px;
+
+}
+
+.sliderRED.round:before {
+    border-radius: 50%;
+}
+
+.reddot {
+    width: 14px;
+    height: 14px;
+    background-color: rgb(255, 0, 0);
+    border-radius: 10px;
+
+}
+
+.greendot {
+    width: 14px;
+    height: 14px;
+    background-color: #4fff00;
+    border-radius: 10px;
+}
+
+.reddot:hover .nftinfo {
+    display: block;
+
+}
+
+.greendot:hover .nftinfo {
+    display: block;
+}
+
+.nftinfo {
+    opacity: 0.95;
+    display: none;
+    width: 201px;
+    height: 200px;
+    background-color: #6d6c6c;
+    border-radius: 10px;
+    position: absolute;
+    top: -6px;
+    right: -6px;
+}
+
+.nftinfo2 {
+    color: #000000;
+    height: inherit;
+    display: grid;
+    opacity: 1;
+    padding: 18px;
+}
+
+@media (max-width: 608px) {
+    .butound {
+        display: none;
+    }
+
+    .fiter {
+        min-width: 320px;
+    }
+}

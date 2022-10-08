@@ -174,15 +174,15 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
 
     return (
         <div className="depositAndWitdrow">
-            {!needApprove && <button onClick={addTokensToBalance} className="mybutton fixsizebutton">Deposit</button>}
-            {needApprove && <button onClick={approve} className="mybutton fixsizebutton">Enable</button>}
+            {!needApprove && <button onClick={addTokensToBalance} className="mybutton dinamic">Deposit</button>}
+            {needApprove && <button onClick={approve} className="mybutton dinamic">Enable</button>}
 
             <div className='depositvalue'>
-                <input className="input" disabled={TokenSelected == null} id={TokenSelected} placeholder={placeholder} onChange={e => setDeposit(e.target.value)} />
+                <input className="input dinamic" style={{ minWidth: "110px" }} disabled={TokenSelected == null} id={TokenSelected} placeholder={placeholder} onChange={e => setDeposit(e.target.value)} />
                 {(!isvalid && tryed) && <div className="invalidvalue ">Invalid value</div>}
             </div>
 
-            <button onClick={withdrow} className="mybutton fixsizebutton">Withdrow</button>
+            <button onClick={withdrow} className="mybutton dinamic">Withdrow</button>
         </div>
     )
 

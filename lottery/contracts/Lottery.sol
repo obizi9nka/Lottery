@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 //1100000000000000000
 
 import "./Lobby.sol";
-import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "./ERC721with.sol";
 
 contract Lottery is Lobby, Ownable {
@@ -19,6 +19,16 @@ contract Lottery is Lobby, Ownable {
         uint8 dont_use;
     }
 
+    struct PromShablon {
+        bytes32 PromSet;
+        bytes32 PromInput;
+    }
+
+    struct AUTOENTER {
+        uint256[] lotteryes;
+        uint8 dont_use;
+    }
+
     event enter(address user);
     event play(address winer);
 
@@ -28,17 +38,20 @@ contract Lottery is Lobby, Ownable {
 
     mapping(address => wins) _first1000Winers;
 
-    uint256 deposit;
+    mapping(address => AUTOENTER) autoEnter;
 
+    mapping(address => uint256) countOfLotteryEnter;
+
+    mapping(address => PromShablon) Prom;
+
+    mapping(bytes32 => address) PromSetReverse;
+
+    mapping(address => uint256) shouldRevard;
+
+    uint256 deposit;
     IERC20 tokenForLottery;
     address autotask;
-
-    struct AUTOENTER {
-        uint256[] lotteryes;
-        uint8 dont_use;
-    }
-
-    mapping(address => AUTOENTER) autoEnter;
+    uint256 REVARD_REF_ALLOW = REVARD_REF;
 
     function getAutoEnter(address a) public view returns (uint256[] memory) {
         return autoEnter[a].lotteryes;
@@ -70,11 +83,6 @@ contract Lottery is Lobby, Ownable {
                 pointer.lotteryes.push(_lotteryes[i]);
             }
         }
-    }
-
-    constructor(IERC20 _tokenForLottery, uint256 _deposit) {
-        tokenForLottery = _tokenForLottery;
-        deposit = _deposit;
     }
 
     function getLotteryCount() public view returns (uint256) {
@@ -130,21 +138,6 @@ contract Lottery is Lobby, Ownable {
         first1000Winers[TokenId] = newAddress;
     }
 
-    mapping(address => uint256) countOfLotteryEnter;
-
-    struct PromShablon {
-        bytes32 PromSet;
-        bytes32 PromInput;
-    }
-
-    mapping(address => PromShablon) Prom;
-
-    mapping(bytes32 => address) PromSetReverse;
-
-    mapping(address => uint256) shouldRevard;
-
-    // address[] shouldRevardMas;
-
     function getshouldRevard(address a) public view returns (uint256) {
         return shouldRevard[a];
     }
@@ -174,8 +167,6 @@ contract Lottery is Lobby, Ownable {
         require(getcountOfLotteryEnter(msg.sender) == 0);
         Prom[msg.sender].PromInput = t;
     }
-
-    uint256 REVARD_REF_ALLOW = REVARD_REF;
 
     function getREVARD_REF_ALLOW() public view returns (uint256) {
         return REVARD_REF_ALLOW;
@@ -285,11 +276,11 @@ contract Lottery is Lobby, Ownable {
             HEEP += FOR_ONE_DAY_LOBBY;
         }
 
-        if (LotteryCount == 30) {
-            //1050 / 30
+        if (LotteryCount == 1050) {
             HOLDERS();
             HOLDERS_EVER();
             OWNER();
+            tokenForLottery = MUDaddress;
         }
 
         LotteryCount++;
@@ -331,22 +322,11 @@ contract Lottery is Lobby, Ownable {
         MUDaddress._mintFromLottery(owner(), REVARD_OWNER * 10**18);
     }
 
-     function REF() public {
+    function REF() public {
         require(shouldRevard[msg.sender] > 0);
         MUDaddress._mintFromLottery(msg.sender,shouldRevard[msg.sender] * 10**18);
         shouldRevard[msg.sender] = 0;
     }
-
-    // function REF() private {
-    //     uint256 stop = shouldRevardMas.length;
-    //     for (uint256 i = 0; i < stop; i++) {
-    //         address user = shouldRevardMas[i];
-    //         uint256 revard = shouldRevard[shouldRevardMas[i]] * 10**18;
-    //         MUDaddress._mintFromLottery(user, revard);
-    //         MUDaddress._transferFromLottery(user, address(this), revard);
-    //         balanceInTokenForAccount[IERC20(MUDaddress)][user] += revard;
-    //     }
-    // }
 
     function setAdrressNFT(ERC721with token) public onlyOwner {
         NFT = token;
@@ -358,5 +338,13 @@ contract Lottery is Lobby, Ownable {
 
     function setMUD(MUD a) public onlyOwner {
         MUDaddress = a;
+    }
+
+    function setDeposit(uint256 _deposit) public onlyOwner {
+        deposit = _deposit;
+    }
+
+    function setTokenForLottery(IERC20 _tokenForLottery) public onlyOwner {
+        tokenForLottery = _tokenForLottery;
     }
 }

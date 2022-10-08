@@ -424,28 +424,26 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
                 <meta name="description" content="An Ethereum Lottery dApp" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className='areaFiter'>
-                <div className='fiter'>
-                    <div className='anotherShit'>
-                        <button className='mybutton' onClick={() => changeState(false, false)}>Back</button>
-                        <input className='input' style={{ width: 90 }} placeholder='Search' onChange={e => {
-                            setcostil(true)
-                            setTimeout(() => {
-                                setsearch(e.target.value)
-                            }, 300);
-                        }} />
-                        <label className="switch zx">
-                            <input type="checkbox" onChange={() => setALL_OR_MINTS(ALL_OR_MINTS == 1 ? 2 : (ALL_OR_MINTS == 2 ? 3 : 1))} />
-                            <span className={ALL_OR_MINTS == 1 ? "slider round" : ALL_OR_MINTS == 2 ? "sliderGREEN round" : "sliderRED round"} ></span>
-                        </label>
-                        <select className="choosetoken" id="enougth" onClick={(e) => { localStorage.setItem("ENOUGTH", e.target.value); setcountOfRenderNfts(parseInt(e.target.value)) }}>
-                            <option>25</option>
-                            <option>100</option>
-                            <option>250</option>
-                            <option>1000</option>
-                        </select>
-                        <button className='mybutton' onClick={() => changeState(true, false)}>Next</button>
-                    </div>
+            <div className='fiter'>
+                <div className='anotherShit'>
+                    <button className='mybutton butound' onClick={() => changeState(false, false)}>Back</button>
+                    <input className='input' style={{ width: 70 }} placeholder='Search' onChange={e => {
+                        setcostil(true)
+                        setTimeout(() => {
+                            setsearch(e.target.value)
+                        }, 300);
+                    }} />
+                    <label className="switch zx">
+                        <input type="checkbox" onChange={() => setALL_OR_MINTS(ALL_OR_MINTS == 1 ? 2 : (ALL_OR_MINTS == 2 ? 3 : 1))} />
+                        <span className={ALL_OR_MINTS == 1 ? "slider round" : ALL_OR_MINTS == 2 ? "sliderGREEN round" : "sliderRED round"} style={{ minWidth: "60px" }}></span>
+                    </label>
+                    <select className="choosetoken" id="enougth" onClick={(e) => { localStorage.setItem("ENOUGTH", e.target.value); setcountOfRenderNfts(parseInt(e.target.value)) }}>
+                        <option>25</option>
+                        <option>100</option>
+                        <option>250</option>
+                        <option>1000</option>
+                    </select>
+                    <button className='mybutton butound' onClick={() => changeState(true, false)}>Next</button>
                 </div>
             </div>
 

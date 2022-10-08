@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 import "./ERC721with.sol";
 import "./Lottery.sol";
-import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract MudebzNFT is ERC721with, Ownable {
     Lottery immutable lottery;
@@ -84,5 +84,4 @@ contract MudebzNFT is ERC721with, Ownable {
         tokenOnSell[tokenOwner][tokenId] = 0;
         _transfer(tokenOwner, msg.sender, tokenId);
     }
-
 }

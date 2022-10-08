@@ -12,6 +12,10 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   }
 });
 
+// const { ProxyAgent, setGlobalDispatcher } = require("undici");
+// const proxyAgent = new ProxyAgent('http://127.0.0.1:7890'); // change to yours
+// setGlobalDispatcher(proxyAgent);
+
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
@@ -23,15 +27,17 @@ module.exports = {
   solidity: "0.8.11",
   defaultNetwork: "hardhat",
   networks: {
-    rinkeby: {
-      url: secret.url,
-      accounts: [secret.key]
-    },
     hardhat: {
       chainId: 31337
+    },
+    sepolia: {
+      url: secret.url,
+      accounts: [secret.key]
     }
   },
   etherscan: {
-    apiKey: "YQADQIC7H32XZ5KA99PDAJPXGBGAGCYWSQ"
+    apiKey: {
+      sepolia: "YQADQIC7H32XZ5KA99PDAJPXGBGAGCYWSQ"
+    }
   }
 };

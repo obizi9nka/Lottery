@@ -1,11 +1,13 @@
-// SPDX-License-Identifier: GPL-3.0
+// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.0;
 
-import "./Balance.sol";
-import "../node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./MUD.sol";
 import "./ERC721with.sol";
+
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
+import "./Balance.sol";
 
 contract Lobby is Balance {
     struct lobbyShablon {
@@ -43,8 +45,8 @@ contract Lobby is Balance {
         address winer
     );
 
-    mapping(address => uint256) lobbyCountForAddress;
-    mapping(address => uint256) lobbyCountForAddressHistory;
+    mapping(address => uint256) lobbyCountForAddress; // количество активных лобби пользователя
+    mapping(address => uint256) lobbyCountForAddressHistory; //количество когда-либо созданных лобби
 
     mapping(address => mapping(uint256 => lobbyShablon)) lobby;
 
@@ -68,6 +70,22 @@ contract Lobby is Balance {
 
     function getHEEP() public view returns (uint256) {
         return HEEP;
+    }
+
+    function getlobbyCountForAddress(address _address)
+        public
+        view
+        returns (uint256)
+    {
+        return lobbyCountForAddress[_address];
+    }
+
+    function getlobbyCountForAddressHistory(address _address)
+        public
+        view
+        returns (uint256)
+    {
+        return lobbyCountForAddressHistory[_address];
     }
 
     function createNewLobby(
