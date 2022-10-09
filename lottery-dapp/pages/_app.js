@@ -72,7 +72,7 @@ const BNBChain = {
 
 
 const { chains, provider } = configureChains(
-  [chain.localhost, BNBChain, chain.sepolia],
+  [chain.sepolia, chain.localhost, BNBChain],
   [
 
     jsonRpcProvider({

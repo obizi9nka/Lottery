@@ -2,8 +2,8 @@ export const PRODACTION = false
 
 //Rinkeby
 
-export const LotteryAddressETH = "0x1D07D2CE5e6C8047150fb7bC40C648ED64cfaf79"
-export const MudeBzNFTETH = "0x5AC3B94F4284976aF1397De8EbB3d8F07D2Fdc93"
+export const LotteryAddressETH = "0xB6a0aD33308196269b9ABb9Ed08fB353cD9DA2Bd"
+export const MudeBzNFTETH = "0xA91E19C675B3448102282D4E896092Fa45B80b1D"
 
 //BNBtestNet
 
