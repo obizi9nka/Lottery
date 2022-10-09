@@ -3,6 +3,7 @@ import Lottery from "/blockchain/Lottery.json"
 
 import { LotteryAddressETH, LotteryAddressLocalhost, LotteryAddressBNB } from '../../components/Constants';
 import notForYourEyesBitch from "../../notForYourEyesBitch.json"
+import { ETHid, BNBid, PRODACTION } from '../../components/Constants.js';
 
 import prisma from './prisma.js';
 
@@ -12,7 +13,7 @@ export default async function handler(req, res) {
 
     let result
 
-    if (chainId == 4) {
+    if (chainId == ETHid) {
         const loby = await prisma.lobbyETH.findUnique({
             where: {
                 creator_id: {
@@ -45,11 +46,11 @@ export default async function handler(req, res) {
                 }
             })
             let provider
-            if (chainId != 31337)
+            if (chainId != BNBid)
                 provider = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
             else
                 provider = new ethers.providers.JsonRpcProvider
-            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
+            const contract = new ethers.Contract(chainId === ETHid ? LotteryAddressETH : chainId === BNBid ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
             const lobyWithWinner = await contract.getLobby(creator, id)
             await prisma.lobbyHistoryETH.create({
                 data: {
@@ -122,11 +123,11 @@ export default async function handler(req, res) {
                 }
             })
             let provider
-            if (chainId != 31337)
+            if (chainId != BNBid)
                 provider = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
             else
                 provider = new ethers.providers.JsonRpcProvider
-            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
+            const contract = new ethers.Contract(chainId === ETHid ? LotteryAddressETH : chainId === BNBid ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
             const lobyWithWinner = await contract.getLobby(creator, id)
             await prisma.lobbyHistoryBNB.create({
                 data: {

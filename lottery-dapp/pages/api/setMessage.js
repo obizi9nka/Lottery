@@ -1,4 +1,5 @@
 import prisma from './prisma.js';
+import { ETHid, BNBid, PRODACTION } from '../../components/Constants.js';
 
 export default async function handler(req, res) {
 
@@ -10,7 +11,7 @@ export default async function handler(req, res) {
     })
 
 
-    if (chainId == 4) {
+    if (chainId == ETHid) {
         await prisma.eTH1000.update({
             where: {
                 id: tokenId

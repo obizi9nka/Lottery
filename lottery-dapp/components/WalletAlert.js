@@ -3,7 +3,7 @@ const { ethers } = require("ethers");
 import TokensBalanceShablon from '../components/TokensBalanceShablon'
 import A from "/blockchain/A.json"
 import Lottery from "/blockchain/Lottery.json"
-import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from './Constants';
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, LocalhostId } from './Constants';
 import Image from 'next/image'
 import Prom from "./Prom";
 
@@ -124,8 +124,9 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
             })
                 .then(async (data) => {
                     const temp = await data.json()
+                    console.log(temp)
                     let t, set, In, Auto, f = []
-                    if (chainId === 4) {
+                    if (chainId === ETHid) {
                         t = temp.tokensETH
                         set = temp.PromSetETH
                         In = temp.PromInputETH
@@ -334,6 +335,8 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
         pdfMake.createPdf(pdf).open();
     }
 
+
+    console.log(rokens)
     return (
         <div className={active ? "modall active" : "modall"} onClick={() => {
             setActive(false)
@@ -346,66 +349,60 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
 
                 <div className="dopInfo" onClick={() => setMode(!Mode)} />
 
-                {Mode && <div className="wallettokens">
+                {Mode && <div className="" style={{ padding: "10px 10px 0px 10px" }}>
                     <TokensBalancePylt LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} rokens={rokens} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} chainId={chainId} setisReliably={setisReliably} settokenTransfered={settokenTransfered} />
                     {rokens && rokens.map((element) =>
                         <TokensBalanceShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} txData={txData} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} rokens={rokens} tymblerNaNetwork={tymblerNaNetwork} tokenTransfered={tokenTransfered} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} element={element} chainId={chainId} settokenTransfered={settokenTransfered} setisReliably={setisReliably} deleteTokenFromFronend={deleteTokenFromFronend} />
                     )}
                 </div>}
 
-                {!Mode && <div className="">
-                    <div >
-                        <div className="areaProm">
-                            <Prom LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} shouldrevard={shouldrevard} settxData={settxData} address={address} PromSet={PromSet} PromInput={PromInput} setPromInput={setPromInput} setPromSet={setPromSet} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} />
-                        </div>
-                        <div className="underProm">
-                            {AutoEnter && AutoEnter.length > 0 ?
-                                <div className="AutoEnter">
-                                    <div className="areaimageINAutoEnter">
-                                        <div className="arow DEG180" onClick={() => { if (ImageInAutoEnter != 0) { setImageInAutoEnter(parseInt(ImageInAutoEnter) - 1) } }}>
-                                            <Image src={"/rigth.png"} width={30} height={30} />
-                                        </div>
-                                        <div className="imageINAutoEnter">
-                                            <Image src={`/${chainId == 31337 ? "imagesETH" : "imagesBNB"}/${AutoEnter[ImageInAutoEnter]}.png`} width={160} height={160} className="ff" />
-                                        </div>
-                                        <div className="arow" onClick={() => { if (ImageInAutoEnter != AutoEnter.length - 1) { setImageInAutoEnter(parseInt(ImageInAutoEnter) + 1) } }}>
-                                            <Image src={"/rigth.png"} width={30} height={30} />
-                                        </div>
+                {!Mode && <div className="" style={{ padding: "10px 10px 10px 10px" }}>
+                    <div className="areaProm">
+                        <Prom LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} shouldrevard={shouldrevard} settxData={settxData} address={address} PromSet={PromSet} PromInput={PromInput} setPromInput={setPromInput} setPromSet={setPromSet} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} />
+                    </div>
+                    <div className="underProm">
+                        {AutoEnter && AutoEnter.length > 0 ?
+                            <div className="AutoEnter">
+                                <div className="areaimageINAutoEnter">
+                                    <div className="arow DEG180" onClick={() => { if (ImageInAutoEnter != 0) { setImageInAutoEnter(parseInt(ImageInAutoEnter) - 1) } }}>
+                                        <Image src={"/rigth.png"} width={30} height={30} />
                                     </div>
-                                    <div className="listAutoEnter">
-                                        <div className="listAutoEnterA">
-                                            {AutoEnter.map((e, i) => { if (i != ImageInAutoEnter) { return <div style={{ padding: "0px 2px" }}>{`${e}`}</div> } else { return <div style={{ color: "purple", padding: "0px 2px" }}>{`${e}`}</div> } })}
-                                        </div>
+                                    <div className="imageINAutoEnter">
+                                        <Image src={`/${chainId == LocalhostId ? "imagesETH" : "imagesBNB"}/${AutoEnter[ImageInAutoEnter]}.png`} width={160} height={160} className="ff" />
                                     </div>
-                                    <div className="buttonAutoEnter">
-                                        <button className="mybutton" onClick={() => addToAutoEnter()}>Pay entrance to selected {`${AutoEnter.length * 5} USDT`}</button>
+                                    <div className="arow" onClick={() => { if (ImageInAutoEnter != AutoEnter.length - 1) { setImageInAutoEnter(parseInt(ImageInAutoEnter) + 1) } }}>
+                                        <Image src={"/rigth.png"} width={30} height={30} />
                                     </div>
-                                </div> :
-                                <div className="AutoEnter" />}
-                            <div className="yaxz">
-                                <div className="PDF">
                                 </div>
-                                <div className="MudebzInfo">
+                                <div className="listAutoEnter">
+                                    <div className="listAutoEnterA">
+                                        {AutoEnter.map((e, i) => { if (i != ImageInAutoEnter) { return <div style={{ padding: "0px 2px" }}>{`${e}`}</div> } else { return <div style={{ color: "purple", padding: "0px 2px" }}>{`${e}`}</div> } })}
+                                    </div>
                                 </div>
+                                <div className="buttonAutoEnter">
+                                    <button className="mybutton" onClick={() => addToAutoEnter()}>Pay entrance to selected {`${AutoEnter.length * 5} USDT`}</button>
+                                </div>
+                            </div> :
+                            <div className="AutoEnter" />}
+                        <div className="yaxz">
+                            <div className="PDF">
+                            </div>
+                            <div className="MudebzInfo">
                             </div>
                         </div>
-                        <div className="addToken">
-                            <div>
-                                <input className="input bigdinamic" id="inputToken" placeholder="Token Address" onChange={e => setaddTokenAddress(e.target.value)} />
-                            </div>
-                            {(!isvalid && tryed) && <div className="invalid">Invalid Address</div>}
-                            <div>
-                                <button onClick={() => addToken()} className="mybutton" >Add new token</button>
-                            </div>
+                    </div>
+                    <div className="addToken">
+                        <div>
+                            <input className="input bigdinamic" id="inputToken" placeholder="Token Address" onChange={e => setaddTokenAddress(e.target.value)} />
+                        </div>
+                        {(!isvalid && tryed) && <div className="invalid">Invalid Address</div>}
+                        <div>
+                            <button onClick={() => addToken()} className="mybutton" >Add new token</button>
                         </div>
                     </div>
                 </div>
                 }
-
-
             </div>
-
-
         </div >
     )
 }

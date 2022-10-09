@@ -43,6 +43,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
     const [ALL_OR_MINTS, setALL_OR_MINTS] = useState(1)
 
     const provider = useProvider()
+    const PROVIDER = provider
     const { address, isConnected } = useAccount()
 
     const [iskek, setIsKek] = useState(true)
@@ -63,7 +64,8 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
         try {
             let provider
             if (tymblerNaNetwork)
-                provider = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
+                provider = PROVIDER
+            // provider = new ethers.providers.InfuraProvider("sepolia", notForYourEyesBitch.infuraKey)
             else
                 provider = new ethers.providers.JsonRpcProvider
             const contractLottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
@@ -365,17 +367,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
             else
                 setstartIndex(1)
         }
-        // settxData({
-        //     isPending: true,
-        //     pesult: null
-        // })
-        // setTimeout(() => {
-        //     settxData({
-        //         isPending: false,
-        //         result: true
-        //     })
-        // }, 2000);
-
     }
 
     const isEnogth = (index) => {

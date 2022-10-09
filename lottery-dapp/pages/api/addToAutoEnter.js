@@ -1,4 +1,5 @@
 import prisma from './prisma.js';
+import { ETHid, BNBid, PRODACTION } from '../../components/Constants.js';
 
 
 
@@ -11,11 +12,11 @@ export default async function handler(req, res) {
         }
     })
 
-    const AutoEnter = (chainId == 4 ? data.AutoEnterETH : data.AutoEnterBNB) + tokenId + "_"
+    const AutoEnter = (chainId == ETHid ? data.AutoEnterETH : data.AutoEnterBNB) + tokenId + "_"
 
     let result
 
-    if (chainId == 4) {
+    if (chainId == ETHid) {
         result = await prisma.user.update({
             where: {
                 address

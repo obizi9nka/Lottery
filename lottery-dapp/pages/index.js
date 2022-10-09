@@ -65,6 +65,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
     // catch (err) {
     //   console.log(err)
     // }
+    console.log("FFFFFFFFFFF")
     try {
       let provider
       if (tymblerNaNetwork)
@@ -72,6 +73,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
       // provider = new ethers.providers.InfuraProvider("sepolia", notForYourEyesBitch.infuraKey)
       else
         provider = new ethers.providers.JsonRpcProvider
+      console.log(provider)
       const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
       const _id = parseInt(await contract.getLotteryCount())
 

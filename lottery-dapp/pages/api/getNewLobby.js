@@ -1,4 +1,5 @@
 import prisma from './prisma.js';
+import { ETHid, BNBid, PRODACTION } from '../../components/Constants.js';
 
 export default async function handler(req, res) {
 
@@ -10,10 +11,10 @@ export default async function handler(req, res) {
         }
     });
 
-    id = chainId === 4 ? id.countOfLobbysETH : id.countOfLobbysBNB
+    id = chainId === ETHid ? id.countOfLobbysETH : id.countOfLobbysBNB
 
     let result
-    if (chainId === 4) {
+    if (chainId === ETHid) {
         result = await prisma.lobbyETH.findUnique({
             where: {
                 creator_id: {

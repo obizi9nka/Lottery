@@ -159,7 +159,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
         }
     }, [address, chainId, LOTTERY_ADDRESS, ALL_LOBBYES])
 
-    console.log(lobbyesActive)
 
     const getTokens = async () => {
         if (isConnected) {
@@ -172,7 +171,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                     .then(async (data) => {
                         const temp = await data.json()
                         let t = temp.tokensBNB
-                        if (chainId === 4)
+                        if (chainId === ETHid)
                             t = temp.tokensETH
                         let f = t.split("_")
                         f.pop();
@@ -231,7 +230,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
             })
 
 
-            const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, signer)
+            const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
             const tokenContract = new ethers.Contract(token, A.abi, provider)
             let decimals = 18
             try {
@@ -354,6 +353,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
             })
             if (flag)
                 setlobbyes([...lobbyes])
+            setuserlobbyActive([...userlobbyActive, true])
         } catch (err) {
             settxData({
                 isPending: true,

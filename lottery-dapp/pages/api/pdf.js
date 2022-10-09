@@ -1,4 +1,5 @@
 import prisma from './prisma.js';
+import { ETHid, BNBid, PRODACTION } from '../../components/Constants.js';
 
 export default async function pdf(req, res) {
 
@@ -18,7 +19,7 @@ export default async function pdf(req, res) {
 
     body.push(Header)
     let allLobbyes
-    if (chainId == 4)
+    if (chainId == ETHid)
         allLobbyes = await prisma.lobbyHistoryETH.findMany()
     else
         allLobbyes = await prisma.lobbyHistoryBNB.findMany()

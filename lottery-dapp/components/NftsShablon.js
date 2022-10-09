@@ -204,8 +204,6 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, Data, chainI
         })
     }
 
-    // console.log(Data)
-
     let image = `/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${Data.edition % 300}.png`
 
 

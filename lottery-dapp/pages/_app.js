@@ -136,12 +136,12 @@ function MyApp({ Component, pageProps }) {
 
     // checkChain()
     if (chain != undefined) {
-      setlotteryAddress(chain.id === ETHid ? LotteryAddressETH : chain.id === BNBid ? LotteryAddressBNB : LotteryAddressLocalhost)
-      setnftAddress(chain.id === ETHid ? MudeBzNFTETH : chain.id === BNBid ? MudeBzNFTBNB : MudeBzNFTLocalhost)
+      setlotteryAddress(chain.id === ETHid ? LotteryAddressETH : LotteryAddressBNB)
+      setnftAddress(chain.id === ETHid ? MudeBzNFTETH : MudeBzNFTBNB)
     }
     else {
-      setlotteryAddress(tymblerNaNetwork ? LotteryAddressETH : PRODACTION ? LotteryAddressBNB : LotteryAddressLocalhost)
-      setnftAddress(tymblerNaNetwork ? MudeBzNFTETH : PRODACTION ? MudeBzNFTBNB : MudeBzNFTLocalhost)
+      setlotteryAddress(tymblerNaNetwork ? LotteryAddressETH : LotteryAddressBNB)
+      setnftAddress(tymblerNaNetwork ? MudeBzNFTETH : MudeBzNFTBNB)
     }
   }, [chain, tymblerNaNetwork])
 
@@ -150,11 +150,8 @@ function MyApp({ Component, pageProps }) {
     if (chain?.id == ETHid) {
       setlogo('/Logos/black.png')
     }
-    else if (chain?.id == 3) {
+    else if (chain?.id == BNBid) {
       setlogo('/Logos/orange.png')
-    }
-    else if (chain?.id == LocalhostId) {
-      setlogo('/Logos/_LoGo.png')
     }
     else {
       setlogo('/Logos/purple.png')

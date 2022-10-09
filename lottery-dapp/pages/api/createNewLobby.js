@@ -1,4 +1,5 @@
 import prisma from './prisma.js';
+import { ETHid, BNBid, PRODACTION } from '../../components/Constants.js';
 
 
 export default async function handler(req, res) {
@@ -7,7 +8,7 @@ export default async function handler(req, res) {
 
     deposit = `${deposit}`
 
-    countOfPlayers = parseInt(countOfPlayers, 10)
+    countOfPlayers = parseInt(countOfPlayers)
 
     let needId = await prisma.user.findUnique({
         where: {
@@ -15,12 +16,12 @@ export default async function handler(req, res) {
         }
     })
 
-    const id = 1 + ((chainId === 4) ? needId.countOfLobbysETH : needId.countOfLobbysBNB)
+    const id = 1 + ((chainId === ETHid) ? needId.countOfLobbysETH : needId.countOfLobbysBNB)
     const players = user + "_"
-    console.log(id, chainId === 4 ? needId.countOfLobbysETH : needId.countOfLobbysBNB, needId.countOfLobbysETH, needId.countOfLobbysBNB)
+    console.log(id, chainId === ETHid ? needId.countOfLobbysETH : needId.countOfLobbysBNB, needId.countOfLobbysETH, needId.countOfLobbysBNB)
 
     let result
-    if (chainId === 4) {
+    if (chainId === ETHid) {
         result = await prisma.lobbyETH.create({
             data: {
                 id,
@@ -46,7 +47,7 @@ export default async function handler(req, res) {
         })
     }
 
-    if (chainId === 4) {
+    if (chainId === ETHid) {
         await prisma.user.update({
             where: {
                 address: user

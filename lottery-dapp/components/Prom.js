@@ -90,25 +90,7 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
         }
     }
 
-    // const chechRevard = async () => {
-    //     try {
-    //         const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-    //         const contract = new ethers.Contract(chainId === 4 ? LotteryAddressETH : (chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB), Lottery.abi, chainId != 31337 ? provider : providerLocal)
-    //         const temp = parseInt(await contract.getshouldRevard(address))
-    //         const r = parseInt(await contract.getcountOfLotteryEnter(address))
-    //         console.log(temp, r)
-    //         const t = {
-    //             count: temp,
-    //             isEnteredOnce: r
-    //         }
-    //         setshouldrevard(t)
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    // }
-
     useEffect(() => {
-        // chechRevard()
         setPosition({})
     }, [address, chainId])
 
