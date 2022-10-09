@@ -47,39 +47,16 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
 
     const checkBalance = async () => {
         try {
-            try {
-                let decimals, _token
-                const tokenDecimalsCheck = element.address.split(".")
-                const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-                const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, chainId != 31337 ? provider : providerLocal)
+            const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
+            const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, chainId != 31337 ? provider : providerLocal)
 
-                if (tokenDecimalsCheck == element.address) {
-                    const decemals = new ethers.Contract(element.address, A.abi, chainId != 31337 ? provider : providerLocal)
-                    decimals = await decemals.decimals()
-                    _token = element.address
-
-                } else {
-                    decimals = tokenDecimalsCheck[1]
-                    _token = tokenDecimalsCheck[0]
-                    setisReliably(false)
-                }
-                const temp = BigInt(await contract.getBalance(_token, user))
-
-                setDecimals(decimals)
-                let _balance = (parseInt(temp) / 10 ** (decimals)).toString() + (tokenDecimalsCheck == element.address ? '' : "*")
-                setbigBalance(_balance)
-                let str = _balance.toString()
-                if (str.length > 8)
-                    _balance = str.substring(0, 8)
-                setbalance(_balance.toString())
-                element.balance = _balance.toString()
-            } catch (err) {
-                console.log("checkBalance", err)
-            }
+            const temp = BigInt(await contract.getBalance(element.address, user))
+            let _balance = parseInt(temp / BigInt(10 ** element.decimals))
+            element.balance = _balance.toString()
+            setbalance(_balance)
         } catch (err) {
-
+            console.log("checkBalance", err)
         }
-
     }
 
 
