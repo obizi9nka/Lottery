@@ -124,7 +124,6 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
             })
                 .then(async (data) => {
                     const temp = await data.json()
-                    console.log(temp)
                     let t, set, In, Auto, f = []
                     if (chainId === ETHid) {
                         t = temp.tokensETH
@@ -145,11 +144,11 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                         const temp = parseInt(await contractLottery.getshouldRevard(address))
                         const r = parseInt(await contractLottery.getcountOfLotteryEnter(address))
                         console.log(temp, r)
-                        const t = {
+                        const tyy = {
                             count: temp,
                             isEnteredOnce: r
                         }
-                        setshouldrevard(t)
+                        setshouldrevard(tyy)
                     } catch (err) {
 
                     }
@@ -336,7 +335,6 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
     }
 
 
-    console.log(rokens)
     return (
         <div className={active ? "modall active" : "modall"} onClick={() => {
             setActive(false)

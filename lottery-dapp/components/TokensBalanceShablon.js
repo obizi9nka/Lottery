@@ -36,12 +36,12 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
 
 
     useEffect(() => {
-        if (element.balance == undefined || TokenSelected == element.address || txData.result) {
-            checkBalance()
-        }
-        else {
-            setbalance(element.balance)
-        }
+        // if (element.balance == undefined || TokenSelected == element.address || txData.result) {
+        checkBalance()
+        // }
+        // else {
+        //     setbalance(element.balance)
+        // }
     }, [chainId, user, element, TokenSelected, rokens, txData])
 
 
