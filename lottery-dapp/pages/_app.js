@@ -100,7 +100,7 @@ const wagmiClient = createClient({
 function MyApp({ Component, pageProps }) {
 
 
-  const [logo, setlogo] = useState('/')
+  const [logo, setlogo] = useState('/logos/purple.png')
 
   const [isSession, setIsSession] = useState(false)
 
@@ -134,7 +134,7 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     setchainId(chain != undefined ? chain.id : 0)
 
-    checkChain()
+    // checkChain()
     if (chain != undefined) {
       setlotteryAddress(chain.id === ETHid ? LotteryAddressETH : chain.id === BNBid ? LotteryAddressBNB : LotteryAddressLocalhost)
       setnftAddress(chain.id === ETHid ? MudeBzNFTETH : chain.id === BNBid ? MudeBzNFTBNB : MudeBzNFTLocalhost)
@@ -161,9 +161,9 @@ function MyApp({ Component, pageProps }) {
     }
   }
 
-  // useEffect(() => {
-  //   checkChain()
-  // }, [chainId])
+  useEffect(() => {
+    checkChain()
+  }, [chainId])
 
 
 
