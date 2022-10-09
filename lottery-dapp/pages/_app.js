@@ -162,7 +162,7 @@ function MyApp({ Component, pageProps }) {
   }
 
   useEffect(() => {
-    checkChain()
+    // checkChain()
   }, [chainId])
 
 

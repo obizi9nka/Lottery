@@ -437,7 +437,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
                         <input type="checkbox" onChange={() => setALL_OR_MINTS(ALL_OR_MINTS == 1 ? 2 : (ALL_OR_MINTS == 2 ? 3 : 1))} />
                         <span className={ALL_OR_MINTS == 1 ? "slider round" : ALL_OR_MINTS == 2 ? "sliderGREEN round" : "sliderRED round"} style={{ minWidth: "60px" }}></span>
                     </label>
-                    <select className="choosetoken" id="enougth" onClick={(e) => { localStorage.setItem("ENOUGTH", e.target.value); setcountOfRenderNfts(parseInt(e.target.value)) }}>
+                    <select className="choosetoken" style={{ minWidth: "40px" }} id="enougth" onClick={(e) => { localStorage.setItem("ENOUGTH", e.target.value); setcountOfRenderNfts(parseInt(e.target.value)) }}>
                         <option>25</option>
                         <option>100</option>
                         <option>250</option>
