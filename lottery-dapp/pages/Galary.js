@@ -56,6 +56,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
     const [costil, setcostil] = useState(false)
 
 
+
     useEffect(() => {
         checkLotteryId()
     }, [chainId, tymblerNaNetwork])
@@ -80,6 +81,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
             })
         } catch (err) {
             console.log(err)
+            setLotteryId(1)
         }
     }
 

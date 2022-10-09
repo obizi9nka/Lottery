@@ -22,6 +22,11 @@ footer {
   background-color: #110e0e;
 }
 
+select {
+  width: auto;
+  height: fit-content;
+}
+
 * {
   box-sizing: border-box;
 }
