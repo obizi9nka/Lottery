@@ -100,7 +100,7 @@ const wagmiClient = createClient({
 function MyApp({ Component, pageProps }) {
 
 
-  const [logo, setlogo] = useState('/logos/purple.png')
+  const [logo, setlogo] = useState('/Logos/purple.png')
 
   const [isSession, setIsSession] = useState(false)
 
@@ -148,16 +148,16 @@ function MyApp({ Component, pageProps }) {
 
   const checkChain = async () => {
     if (chain?.id == ETHid) {
-      setlogo('/logos/black.png')
+      setlogo('/Logos/black.png')
     }
     else if (chain?.id == 3) {
-      setlogo('/logos/orange.png')
+      setlogo('/Logos/orange.png')
     }
     else if (chain?.id == LocalhostId) {
-      setlogo('/logos/_LoGo.png')
+      setlogo('/Logos/_LoGo.png')
     }
     else {
-      setlogo('/logos/purple.png')
+      setlogo('/Logos/purple.png')
     }
   }
 
