@@ -86,8 +86,7 @@ export default function Wallet({ chains, LOTTERY_ADDRESS, NFT_ADDRESS, BNBChain,
                 body: JSON.stringify(body)
             }).then((data) => {
                 if (data.status == 200) {
-                    console.log(data.status)
-                    window.location = "http://localhost:3000/About"
+                    // window.location = "http://localhost:3000/About"
                 }
             })
         } catch (err) {

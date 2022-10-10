@@ -59,7 +59,6 @@ export async function getServerSideProps() {
             }
         })
 
-    console.log(lobbyBNB, lobbyETH)
     return {
         props: {
             lobbyETH,
@@ -146,17 +145,22 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
     }, [address, chainId])
 
     useEffect(() => {
-        if (chainId == 31337) {
-            setlobbyes(lobbyBNB)
+        if (chainId == ETHid) {
+            setlobbyes(lobbyETH)
         }
         else
-            setlobbyes(lobbyETH)
+            setlobbyes(lobbyBNB)
     }, [chainId])
 
     useEffect(() => {
         if (isConnected) {
             filterUserLobbyes()
         }
+        else {
+            userlobbyActive([])
+            setlobbyesActive([])
+        }
+
     }, [address, chainId, LOTTERY_ADDRESS, ALL_LOBBYES])
 
 
@@ -206,11 +210,25 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                                 setTokens(objects)
                             })
                     })
+
             } catch (err) {
                 setTokens([{
                     address: "0",
                     symbol: "Tokens"
                 }])
+            }
+
+            try {
+                const body = { address, chainId }
+                await fetch('/api/getUserTokens', {
+                    method: "POST",
+                    body: JSON.stringify(body)
+                }).then(async (data) => {
+                    const temp = await data.json()
+                    console.log("getUserTokens", temp)
+                })
+            } catch (err) {
+                console.log("getUserTokens", err)
             }
         }
         else {

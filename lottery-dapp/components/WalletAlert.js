@@ -3,7 +3,7 @@ const { ethers } = require("ethers");
 import TokensBalanceShablon from '../components/TokensBalanceShablon'
 import A from "/blockchain/A.json"
 import Lottery from "/blockchain/Lottery.json"
-import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, LocalhostId } from './Constants';
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid } from './Constants';
 import Image from 'next/image'
 import Prom from "./Prom";
 
@@ -143,7 +143,6 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                     try {
                         const temp = parseInt(await contractLottery.getshouldRevard(address))
                         const r = parseInt(await contractLottery.getcountOfLotteryEnter(address))
-                        console.log(temp, r)
                         const tyy = {
                             count: temp,
                             isEnteredOnce: r
@@ -179,14 +178,12 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                                 method: "POST",
                                 body: JSON.stringify(body)
                             })
-                        });
-
+                        })
                     }
                     if (t != null) {
                         f = t.split("_")
                         f.pop()
                     }
-
                     const b = {
                         addresses: f,
                         chainId
@@ -218,13 +215,11 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
     }
 
     function deleteTokenFromFronend(address) {
-        console.log(address)
         const temp = []
         rokens.map(element => {
             if (element.address != address)
                 temp.push(element)
         });
-        console.log(temp)
         setTokens(temp != [] ? temp : [])
     }
 
@@ -366,7 +361,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                                         <Image src={"/rigth.png"} width={30} height={30} />
                                     </div>
                                     <div className="imageINAutoEnter">
-                                        <Image src={`/${chainId == LocalhostId ? "imagesETH" : "imagesBNB"}/${AutoEnter[ImageInAutoEnter]}.png`} width={160} height={160} className="ff" />
+                                        <Image src={`/${chainId == ETHid ? "imagesETH" : "imagesBNB"}/${AutoEnter[ImageInAutoEnter]}.png`} width={160} height={160} className="ff" />
                                     </div>
                                     <div className="arow" onClick={() => { if (ImageInAutoEnter != AutoEnter.length - 1) { setImageInAutoEnter(parseInt(ImageInAutoEnter) + 1) } }}>
                                         <Image src={"/rigth.png"} width={30} height={30} />

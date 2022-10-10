@@ -10,7 +10,5 @@ export default async function handler(req, res) {
         }
     });
 
-    console.log(result)
-
     res.json(result)
 }
