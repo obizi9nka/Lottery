@@ -166,57 +166,55 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
 
     const getTokens = async () => {
         if (isConnected) {
-            try {
-                const body = { user: address, chainId }
-                await fetch('/api/getUserData', {
-                    method: "POST",
-                    body: JSON.stringify(body)
-                })
-                    .then(async (data) => {
-                        const temp = await data.json()
-                        let t = temp.tokensBNB
-                        if (chainId === ETHid)
-                            t = temp.tokensETH
-                        let f = t.split("_")
-                        f.pop();
-                        settoken(f[0])
+            // try {
+            //     const body = { user: address, chainId }
+            //     await fetch('/api/getUserData', {
+            //         method: "POST",
+            //         body: JSON.stringify(body)
+            //     })
+            //         .then(async (data) => {
+            //             const temp = await data.json()
+            //             let t = temp.tokensBNB
+            //             if (chainId === ETHid)
+            //                 t = temp.tokensETH
+            //             let f = t.split("_")
+            //             f.pop();
+            //             settoken(f[0])
 
-                        if (t != null) {
-                            f = t.split("_")
-                            f.pop()
-                        }
+            //             if (t != null) {
+            //                 f = t.split("_")
+            //                 f.pop()
+            //             }
 
-                        const b = {
-                            addresses: f,
-                            chainId
-                        }
-                        await fetch('/api/getTokensGlobal', {
-                            method: "POST",
-                            body: JSON.stringify(b)
-                        })
-                            .then(async (data) => {
-                                const temp = await data.json()
-                                console.log(temp)
-                                let tokensSymbols = []
+            //             const b = {
+            //                 addresses: f,
+            //                 chainId
+            //             }
+            //             await fetch('/api/getTokensGlobal', {
+            //                 method: "POST",
+            //                 body: JSON.stringify(b)
+            //             })
+            //                 .then(async (data) => {
+            //                     const temp = await data.json()
+            //                     console.log(temp)
 
-                                const objects = []
-                                temp.forEach((element) => {
-                                    tokensSymbols.push(element.symbol)
-                                    objects.push({
-                                        address: element.address,
-                                        symbol: element.symbol
-                                    })
-                                })
-                                setTokens(objects)
-                            })
-                    })
+            //                     const objects = []
+            //                     temp.forEach((element) => {
+            //                         objects.push({
+            //                             address: element.address,
+            //                             symbol: element.symbol
+            //                         })
+            //                     })
+            //                     setTokens(objects)
+            //                 })
+            //         })
 
-            } catch (err) {
-                setTokens([{
-                    address: "0",
-                    symbol: "Tokens"
-                }])
-            }
+            // } catch (err) {
+            //     setTokens([{
+            //         address: "0",
+            //         symbol: "Tokens"
+            //     }])
+            // }
 
             try {
                 const body = { address, chainId }
@@ -225,7 +223,16 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                     body: JSON.stringify(body)
                 }).then(async (data) => {
                     const temp = await data.json()
-                    console.log("getUserTokens", temp)
+                    console.log(temp)
+
+                    const objects = []
+                    temp.forEach((element) => {
+                        objects.push({
+                            address: element.address,
+                            symbol: element.symbol
+                        })
+                    })
+                    setTokens(objects)
                 })
             } catch (err) {
                 console.log("getUserTokens", err)

@@ -126,13 +126,13 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                     const temp = await data.json()
                     let t, set, In, Auto, f = []
                     if (chainId === ETHid) {
-                        t = temp.tokensETH
+                        // t = temp.tokensETH
                         set = temp.PromSetETH
                         In = temp.PromInputETH
                         Auto = temp.AutoEnterETH
                     }
                     else {
-                        t = temp.tokensBNB
+                        // t = temp.tokensBNB
                         set = temp.PromSetBNB
                         In = temp.PromInputBNB
                         Auto = temp.AutoEnterBNB
@@ -180,34 +180,31 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                             })
                         })
                     }
-                    if (t != null) {
-                        f = t.split("_")
-                        f.pop()
-                    }
-                    const b = {
-                        addresses: f,
-                        chainId
-                    }
-                    await fetch('/api/getTokensGlobal', {
-                        method: "POST",
-                        body: JSON.stringify(b)
-                    })
-                        .then(async (data) => {
+                    try {
+                        const body = { address, chainId }
+                        await fetch('/api/getUserTokens', {
+                            method: "POST",
+                            body: JSON.stringify(body)
+                        }).then(async (data) => {
                             const temp = await data.json()
-                            const r = f.map((address, index) => {
-                                const l = {
-                                    address,
-                                    symbol: temp[index].symbol,
-                                    decimals: temp[index].decimals,
-                                    balance: undefined
-                                }
-                                return l
+                            console.log(temp)
+
+                            const objects = []
+                            temp.forEach((element) => {
+                                objects.push({
+                                    address: element.address,
+                                    symbol: element.symbol
+                                })
                             })
-                            setPromSet(set)
-                            setPromInput(In)
-                            setTokens(r)
-                            setAutoEnter(Auto)
+                            setTokens(objects)
                         })
+                    } catch (err) {
+                        console.log("getUserTokens", err)
+                    }
+                    setPromSet(set)
+                    setPromInput(In)
+                    setTokens(r)
+                    setAutoEnter(Auto)
                 })
         } catch (err) {
             console.log(err)
