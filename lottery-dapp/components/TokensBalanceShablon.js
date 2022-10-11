@@ -28,7 +28,8 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
     const [bigBalance, setbigBalance] = useState(0)
     const [Decimals, setDecimals] = useState(18)
 
-    const [isfaund, setisfaund] = useState(true)
+    const [isfaund, setisfaund] = useState(element.isImageAdded)
+
 
     const provider = useProvider()
     const { data } = useSigner()
@@ -42,6 +43,7 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
         else {
             setbalance(element.balance)
         }
+        setisfaund(element.isImageAdded)
     }, [chainId, user, element, TokenSelected, rokens, txData])
 
 
@@ -62,7 +64,6 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
             element.balance = "0"
         }
     }
-
 
     const deleteToken = async () => {
         const body = { address: user, deleteTokenAddress: element.address, chainId }
@@ -93,7 +94,7 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
 
 
                         <div class="balanceForToken">
-                            <div class="balance"> {balance}</div>
+                            <div class="balance"> {balance} {!isfaund ? element.symbol : null}</div>
                         </div>
 
                     </div >

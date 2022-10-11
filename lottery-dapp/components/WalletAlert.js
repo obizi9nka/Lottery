@@ -89,7 +89,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
             try {
                 const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
                 const contract = new ethers.Contract(addTokenAddress, A.abi, chainId != 31337 ? provider : providerLocal)
-                console.log(contract)
+                console.log(contract, addTokenAddress, provider)
                 sup = await contract.totalSupply()//проверка на валидность
                 try {
                     dec = await contract.decimals()
@@ -126,6 +126,32 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
     }
 
     const getTokens = async () => {
+        try {
+            const body = { address, chainId }
+            await fetch('/api/getUserTokens', {
+                method: "POST",
+                body: JSON.stringify(body)
+            }).then(async (data) => {
+                const temp = await data.json()
+                console.log(temp)
+
+                const objects = []
+                temp.forEach((element) => {
+                    objects.push({
+                        address: element.address,
+                        symbol: element.symbol,
+                        decimals: element.decimals,
+                        balance: undefined,
+                        isImageAdded: element.isImageAdded
+                    })
+                })
+                setTokens(objects)
+                console.log("tokensCount")
+                localStorage.setItem("tokensCount", objects.length)
+            })
+        } catch (err) {
+            console.log("getUserTokens", err)
+        }
         try {
             const body = { user: address, chainId }
             await fetch('/api/getUserData', {
@@ -195,33 +221,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                     setPromSet(set)
                     setPromInput(In)
                     setAutoEnter(Auto)
-
                 })
-            try {
-                const body = { address, chainId }
-                await fetch('/api/getUserTokens', {
-                    method: "POST",
-                    body: JSON.stringify(body)
-                }).then(async (data) => {
-                    const temp = await data.json()
-                    console.log(temp)
-
-                    const objects = []
-                    temp.forEach((element) => {
-                        objects.push({
-                            address: element.address,
-                            symbol: element.symbol,
-                            decimals: element.decimals,
-                            balance: undefined
-                        })
-                    })
-                    setTokens(objects)
-                    console.log("tokensCount")
-                    localStorage.setItem("tokensCount", objects.length)
-                })
-            } catch (err) {
-                console.log("getUserTokens", err)
-            }
         } catch (err) {
             console.log(err)
         }
@@ -257,7 +257,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
         n.then(async (result) => {
             if (result.flag) {
                 const _addTokenAddress = addTokenAddress
-                const body = { address, addTokenAddress: _addTokenAddress, chainId, isImageAdded: true, symbol: result.symbol, decimals: result.decimals }
+                const body = { address, addTokenAddress: _addTokenAddress, chainId, symbol: result.symbol, decimals: result.decimals }
                 const data = {
                     address: _addTokenAddress,
                     symbol: result.symbol,
