@@ -21,7 +21,7 @@ import {
 export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, element, rokens, chainId, setisReliably, deleteTokenFromFronend, setTokenSelected, TokenSelected, settxData, needCheck }) {
 
 
-    const [balance, setbalance] = useState(0)
+    const [balance, setbalance] = useState(-1)
 
     const [DELETED, setDELETED] = useState(false)
 
@@ -36,12 +36,12 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
 
 
     useEffect(() => {
-        // if (element.balance == undefined || TokenSelected == element.address || txData.result) {
-        checkBalance()
-        // }
-        // else {
-        //     setbalance(element.balance)
-        // }
+        if (element.balance == undefined || TokenSelected == element.address || txData.result) {
+            checkBalance()
+        }
+        else {
+            setbalance(element.balance)
+        }
     }, [chainId, user, element, TokenSelected, rokens, txData])
 
 
@@ -51,7 +51,9 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
             const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, chainId != 31337 ? provider : providerLocal)
 
             const temp = BigInt(await contract.getBalance(element.address, user))
-            let _balance = parseInt(temp / BigInt(10 ** element.decimals))
+            console.log(temp, element)
+            let _balance = parseInt(BigInt(temp) / BigInt(10 ** parseInt(element.decimals)))
+
             element.balance = _balance.toString()
             setbalance(_balance)
         } catch (err) {
@@ -77,27 +79,34 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
     }
 
     if (!DELETED) {
-        return (
-            <div className="relative">
-                <div className={TokenSelected == element.address ? "shablonbalanceClicked" : 'shablonbalance'} onClick={(e) => { if (element.address != TokenSelected) { setTokenSelected(element.address) } else { setTokenSelected(null) } }} >
-                    <div className="tokenImage">
-                        {isfaund && <Image className="tokenpng" src={`/tokens/${element.address}.png`} width={32} height={32} />}
-                        {!isfaund && <Image className="tokenpng" src="/question_mark.png" width={32} height={32} />}
+        if (element.address != 0 && balance != -1)
+            return (
+                <div className="relative">
+                    <div className={TokenSelected == element.address ? "shablonbalanceClicked" : 'shablonbalance'} onClick={(e) => { if (element.address != TokenSelected) { setTokenSelected(element.address) } else { setTokenSelected(null) } }} >
+                        <div className="tokenImage">
+                            {isfaund && <Image className="tokenpng" src={`/tokens/${element.address}.png`} width={32} height={32} />}
+                            {!isfaund && <Image className="tokenpng" src="/question_mark.png" width={32} height={32} />}
 
+                        </div>
+
+
+                        <div class="balanceForToken">
+                            <div class="balance"> {balance}</div>
+                        </div>
+
+                    </div >
+                    <div className="tokenImageDElete" id="delete" >
+                        <Image className=" hover" src="/delete.png" onClick={() => { deleteToken() }} width={25} height={25} />
                     </div>
-
-
-                    <div class="balanceForToken">
-                        <div class="balance"> {balance}</div>
-                    </div>
-
-                </div >
-                <div className="tokenImageDElete" id="delete" >
-                    <Image className=" hover" src="/delete.png" onClick={() => { deleteToken() }} width={25} height={25} />
                 </div>
-            </div>
 
-        )
+            )
+        else
+            return (
+                <div className="shablonbalance">
+
+                </div>
+            )
     }
 
 }

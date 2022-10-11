@@ -157,7 +157,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
             filterUserLobbyes()
         }
         else {
-            userlobbyActive([])
+            setuserlobbyActive([])
             setlobbyesActive([])
         }
 
@@ -166,56 +166,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
 
     const getTokens = async () => {
         if (isConnected) {
-            // try {
-            //     const body = { user: address, chainId }
-            //     await fetch('/api/getUserData', {
-            //         method: "POST",
-            //         body: JSON.stringify(body)
-            //     })
-            //         .then(async (data) => {
-            //             const temp = await data.json()
-            //             let t = temp.tokensBNB
-            //             if (chainId === ETHid)
-            //                 t = temp.tokensETH
-            //             let f = t.split("_")
-            //             f.pop();
-            //             settoken(f[0])
-
-            //             if (t != null) {
-            //                 f = t.split("_")
-            //                 f.pop()
-            //             }
-
-            //             const b = {
-            //                 addresses: f,
-            //                 chainId
-            //             }
-            //             await fetch('/api/getTokensGlobal', {
-            //                 method: "POST",
-            //                 body: JSON.stringify(b)
-            //             })
-            //                 .then(async (data) => {
-            //                     const temp = await data.json()
-            //                     console.log(temp)
-
-            //                     const objects = []
-            //                     temp.forEach((element) => {
-            //                         objects.push({
-            //                             address: element.address,
-            //                             symbol: element.symbol
-            //                         })
-            //                     })
-            //                     setTokens(objects)
-            //                 })
-            //         })
-
-            // } catch (err) {
-            //     setTokens([{
-            //         address: "0",
-            //         symbol: "Tokens"
-            //     }])
-            // }
-
             try {
                 const body = { address, chainId }
                 await fetch('/api/getUserTokens', {
@@ -457,7 +407,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                             <div className='tokenAnd'>
                                 <div className="tokeninlobbyshablon gridcenter">
                                     {isfaund && <Image className="tokenpng" alt='?' src={`/tokens/${element.IERC20}.png`} width={45} height={45} />}
-                                    {!isfaund && <Image className="tokenpng" src="/question_mark.png" width={45} height={45} />}
+                                    {!isfaund && <Image className="tokenpng" src="/questionMark.png" width={45} height={45} />}
                                 </div>
                                 <div className='countofplayers gridcenter'>
                                     {element.percent}%
@@ -502,7 +452,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                     </div>
                     <div>
                         <select className="choosetoken" onClick={(e) => { e.target.value == "Deposit" ? filterMode = 1 : e.target.value == "Percent" ? filterMode = 2 : filterMode = 3 }}>
-                            <option style={{ marginBlock: "10px" }}>
+                            <option>
                                 Deposit
                             </option>
                             <option >

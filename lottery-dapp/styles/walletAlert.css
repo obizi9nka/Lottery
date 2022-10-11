@@ -67,6 +67,13 @@
     max-width: 100px;
 }
 
+.dinamic.withdrow {
+    min-width: 85px;
+    width: 13vw;
+    font-size: 87%;
+    max-width: 100px;
+}
+
 
 .dopInfo {
     width: 40px;
@@ -130,9 +137,8 @@
     top: 18px;
 }
 
+
 /* OtherPylt */
-
-
 
 .areaProm {
     /* width: 490px;
@@ -150,24 +156,27 @@
     justify-content: center;
     align-items: center;
     font-size: 20px;
-    /* max-width: 210px; */
     flex-wrap: wrap;
 }
 
 .underProm {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    height: fit-content;
+    margin-top: 10px;
+    overflow-x: scroll;
+}
 
+.underProm::-webkit-scrollbar {
+    display: none;
 }
 
 .yaxz {
     display: grid;
-    grid-template-rows: 1fr 2fr;
     margin-left: 10px;
 }
 
 .AutoEnter {
-    margin-top: 10px;
     width: 300px;
     height: 300px;
     background-color: rgb(19 20 20);
@@ -179,7 +188,6 @@
 .PDF {
     align-self: start;
     justify-self: end;
-    margin-top: 10px;
     width: 180px;
     height: 100px;
     background-color: rgb(19 20 20);
@@ -199,10 +207,10 @@
 }
 
 .addToken {
+    margin-top: 10px;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-top: -35px;
     width: 490px;
     height: 80px;
     background-color: rgb(19 20 20);
@@ -219,27 +227,21 @@
 
 
 @media (max-width: 608px) {
-    .AutoEnter {
-        width: 45vw;
-        height: 30vh;
-        max-width: 273px;
-        min-width: 190px;
-    }
+    .AutoEnter {}
 
     .PDF {
-        width: 30vw;
-        height: 12vh;
+        /* width: 30vw;
+        height: 12vh; */
     }
 
     .MudebzInfo {
-        width: 30vw;
-        height: 17vh;
+        /* width: 30vw;
+        height: 17vh; */
     }
 
     .addToken {
         width: 76vw;
         height: 12vh;
-        margin-top: -70px;
         min-width: 300px;
     }
 
@@ -248,6 +250,7 @@
         font-size: 80%;
         min-width: 120px;
     }
+
 
     .droch {
         width: 30vw;

@@ -23,14 +23,18 @@ footer {
 }
 
 select {
-  width: auto;
-  height: fit-content;
-  text-indent: 10px;
   /* -webkit-appearance: none; */
 }
 
 * {
+  /* font-size: 16px; */
   box-sizing: border-box;
+}
+
+@media (max-width: 608px) {
+  * {
+    font-size: 18px;
+  }
 }
 
 .main {

@@ -33,7 +33,17 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
     const [Decimals, setDecimals] = useState()
 
     const [user, setuser] = useState("")
-    const [rokens, setTokens] = useState([])
+    const [rokens, setTokens] = useState(() => {
+        const f = localStorage.getItem("tokensCount")
+        const g = []
+        for (let i = 0; i < f; i++) {
+            g.push({
+                address: 0
+            })
+        }
+        console.log("g", g)
+        return g
+    })
 
     const [PromSet, setPromSet] = useState(null)
     const [PromInput, setPromInput] = useState(null)
@@ -124,15 +134,13 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
             })
                 .then(async (data) => {
                     const temp = await data.json()
-                    let t, set, In, Auto, f = []
+                    let set, In, Auto, f = []
                     if (chainId === ETHid) {
-                        // t = temp.tokensETH
                         set = temp.PromSetETH
                         In = temp.PromInputETH
                         Auto = temp.AutoEnterETH
                     }
                     else {
-                        // t = temp.tokensBNB
                         set = temp.PromSetBNB
                         In = temp.PromInputBNB
                         Auto = temp.AutoEnterBNB
@@ -193,18 +201,22 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                             temp.forEach((element) => {
                                 objects.push({
                                     address: element.address,
-                                    symbol: element.symbol
+                                    symbol: element.symbol,
+                                    decimals: element.decimals,
+                                    balance: undefined
                                 })
                             })
                             setTokens(objects)
+                            console.log("tokensCount")
+                            localStorage.setItem("tokensCount", objects.length)
                         })
                     } catch (err) {
                         console.log("getUserTokens", err)
                     }
                     setPromSet(set)
                     setPromInput(In)
-                    setTokens(r)
                     setAutoEnter(Auto)
+
                 })
         } catch (err) {
             console.log(err)
@@ -327,6 +339,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
     }
 
 
+
     return (
         <div className={active ? "modall active" : "modall"} onClick={() => {
             setActive(false)
@@ -354,13 +367,13 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                         {AutoEnter && AutoEnter.length > 0 ?
                             <div className="AutoEnter">
                                 <div className="areaimageINAutoEnter">
-                                    <div className="arow DEG180" onClick={() => { if (ImageInAutoEnter != 0) { setImageInAutoEnter(parseInt(ImageInAutoEnter) - 1) } }}>
+                                    <div className="arow DEG180" onClick={() => { if (ImageInAutoEnter != 0) { setImageInAutoEnter(ImageInAutoEnter - 1) } }}>
                                         <Image src={"/rigth.png"} width={30} height={30} />
                                     </div>
                                     <div className="imageINAutoEnter">
-                                        <Image src={`/${chainId == ETHid ? "imagesETH" : "imagesBNB"}/${AutoEnter[ImageInAutoEnter]}.png`} width={160} height={160} className="ff" />
+                                        <Image src={`/${chainId == ETHid ? "imagesETH" : "imagesBNB"}/${AutoEnter[ImageInAutoEnter] % 300}.png`} width={160} height={160} className="ff" />
                                     </div>
-                                    <div className="arow" onClick={() => { if (ImageInAutoEnter != AutoEnter.length - 1) { setImageInAutoEnter(parseInt(ImageInAutoEnter) + 1) } }}>
+                                    <div className="arow" onClick={() => { if (ImageInAutoEnter != AutoEnter.length - 1) { setImageInAutoEnter(ImageInAutoEnter + 1) } }}>
                                         <Image src={"/rigth.png"} width={30} height={30} />
                                     </div>
                                 </div>

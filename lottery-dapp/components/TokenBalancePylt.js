@@ -182,7 +182,7 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
                 {(!isvalid && tryed) && <div className="invalidvalue ">Invalid value</div>}
             </div>
 
-            <button onClick={withdrow} className="mybutton dinamic">Withdrow</button>
+            <button onClick={withdrow} className="mybutton dinamic withdrow">Withdrow</button>
         </div>
     )
 
