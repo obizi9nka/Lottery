@@ -22,9 +22,19 @@ footer {
   background-color: #110e0e;
 }
 
+
+
 select {
+  text-indent: 4px;
+  border: 3px solid rgb(74, 69, 69);
+  border-radius: 12px;
+  background-color: #110e0ef1;
+  color: white;
+  height: 40px;
   /* -webkit-appearance: none; */
 }
+
+
 
 * {
   /* font-size: 16px; */
@@ -33,7 +43,7 @@ select {
 
 @media (max-width: 608px) {
   * {
-    font-size: 18px;
+    font-size: 17px;
   }
 }
 

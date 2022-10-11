@@ -188,6 +188,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                             })
                         })
                     }
+                    //
                     try {
                         const body = { address, chainId }
                         await fetch('/api/getUserTokens', {

@@ -11,8 +11,8 @@ export default async function handler(req, res) {
             address
         },
         select: {
-            tokensBNB: chainId == BNBid,
-            tokensETH: chainId == ETHid
+            tokensETH: true,
+            tokensBNB: true
         }
 
     });
