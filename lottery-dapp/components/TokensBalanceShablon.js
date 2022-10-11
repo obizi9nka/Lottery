@@ -58,6 +58,8 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
             setbalance(_balance)
         } catch (err) {
             console.log("checkBalance", err)
+            setbalance(0)
+            element.balance = "0"
         }
     }
 

@@ -173,7 +173,7 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
     }
 
     return (
-        <div className="depositAndWitdrow">
+        <div className="depositAndWitdrow" style={{ marginBottom: rokens.length == 0 ? "10px" : null }}>
             {!needApprove && <button onClick={addTokensToBalance} className="mybutton dinamic">Deposit</button>}
             {needApprove && <button onClick={approve} className="mybutton dinamic">Enable</button>}
 

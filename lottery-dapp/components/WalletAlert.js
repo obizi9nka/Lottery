@@ -134,7 +134,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
             })
                 .then(async (data) => {
                     const temp = await data.json()
-                    let set, In, Auto, f = []
+                    let set, In, Auto
                     if (chainId === ETHid) {
                         set = temp.PromSetETH
                         In = temp.PromInputETH
@@ -157,7 +157,11 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                         }
                         setshouldrevard(tyy)
                     } catch (err) {
-
+                        console.log(err)
+                        setshouldrevard({
+                            count: 0,
+                            isEnteredOnce: undefined
+                        })
                     }
 
 
@@ -177,48 +181,47 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                         Auto.forEach(async element => {
                             if (element < id) {
                                 temp.push(element)
-                                Auto.splice(Auto.indexOf(element), 1)
                             }
                         })
                         temp.forEach(async element => {
                             const body = { address, chainId, tokenId: element }
+                            Auto.splice(Auto.indexOf(element), 1)
                             await fetch('/api/deleteFromAutoEnter', {
                                 method: "POST",
                                 body: JSON.stringify(body)
                             })
                         })
                     }
-                    //
-                    try {
-                        const body = { address, chainId }
-                        await fetch('/api/getUserTokens', {
-                            method: "POST",
-                            body: JSON.stringify(body)
-                        }).then(async (data) => {
-                            const temp = await data.json()
-                            console.log(temp)
-
-                            const objects = []
-                            temp.forEach((element) => {
-                                objects.push({
-                                    address: element.address,
-                                    symbol: element.symbol,
-                                    decimals: element.decimals,
-                                    balance: undefined
-                                })
-                            })
-                            setTokens(objects)
-                            console.log("tokensCount")
-                            localStorage.setItem("tokensCount", objects.length)
-                        })
-                    } catch (err) {
-                        console.log("getUserTokens", err)
-                    }
                     setPromSet(set)
                     setPromInput(In)
                     setAutoEnter(Auto)
 
                 })
+            try {
+                const body = { address, chainId }
+                await fetch('/api/getUserTokens', {
+                    method: "POST",
+                    body: JSON.stringify(body)
+                }).then(async (data) => {
+                    const temp = await data.json()
+                    console.log(temp)
+
+                    const objects = []
+                    temp.forEach((element) => {
+                        objects.push({
+                            address: element.address,
+                            symbol: element.symbol,
+                            decimals: element.decimals,
+                            balance: undefined
+                        })
+                    })
+                    setTokens(objects)
+                    console.log("tokensCount")
+                    localStorage.setItem("tokensCount", objects.length)
+                })
+            } catch (err) {
+                console.log("getUserTokens", err)
+            }
         } catch (err) {
             console.log(err)
         }
@@ -384,7 +387,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                                     </div>
                                 </div>
                                 <div className="buttonAutoEnter">
-                                    <button className="mybutton" onClick={() => addToAutoEnter()}>Pay entrance to selected {`${AutoEnter.length * 5} USDT`}</button>
+                                    <button className="mybutton" onClick={() => addToAutoEnter()}>Pay {`${AutoEnter.length * 5} USDT`}</button>
                                 </div>
                             </div> :
                             <div className="AutoEnter" />}

@@ -26,11 +26,11 @@ footer {
 
 select {
   text-indent: 4px;
-  border: 3px solid rgb(74, 69, 69);
+  border: 1px solid white;
   border-radius: 12px;
-  background-color: #110e0ef1;
+  background-color: #111010;
   color: white;
-  height: 40px;
+  height: 44px;
   /* -webkit-appearance: none; */
 }
 
@@ -74,12 +74,10 @@ select {
 
 .mybutton {
   color: white;
-  border: 1px;
-  border-style: solid;
+  border: 1px solid white;
   width: fit-content;
   padding: 10px;
   border-radius: 12px;
-  border-color: white;
   background-color: rgb(17, 16, 16);
 }
 
@@ -96,10 +94,8 @@ select {
 .input {
   color: azure;
   background-color: rgb(17, 16, 16);
-  border: 1px;
-  border-style: solid;
   border-radius: 12px;
-  border-color: white;
+  border: 1px solid white;
   padding: 10px;
 }
 

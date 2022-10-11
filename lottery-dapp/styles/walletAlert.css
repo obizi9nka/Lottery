@@ -46,7 +46,6 @@
     .walletalert {
         min-width: 320px;
         width: 80vw;
-        margin-bottom: 50px;
     }
 
 }
@@ -227,16 +226,20 @@
 
 
 @media (max-width: 608px) {
-    .AutoEnter {}
+    .AutoEnter {
+        /* height: 250px;
+        width: 250px; */
+    }
 
     .PDF {
-        /* width: 30vw;
+        /* justify-self: flex-start;
+        width: 80%;
         height: 12vh; */
     }
 
     .MudebzInfo {
-        /* width: 30vw;
-        height: 17vh; */
+        /* width: 80%;
+        height: 150px; */
     }
 
     .addToken {

@@ -115,6 +115,8 @@ function MyApp({ Component, pageProps }) {
   const [LOTTERY_ADDRESS, setlotteryAddress] = useState("")
   const [NFT_ADDRESS, setnftAddress] = useState("")
 
+  const [isWalletAlert, setisWalletAlert] = useState(false)
+
   const { chain } = useNetwork()
 
   const [txData, settxData] = useState({
@@ -201,7 +203,7 @@ function MyApp({ Component, pageProps }) {
                 <Image src={logo} width="280px" height="75px" />
               </div>
             </div>
-            <Wallet chains={chains} LOTTERY_ADDRESS={LOTTERY_ADDRESS} BNBChain={BNBChain} txData={txData} NFT_ADDRESS={NFT_ADDRESS} setdaloynavigationSmartfon={setdaloynavigationSmartfon} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} settxData={settxData} needWallet={needWallet} setchainId={setchainId} tymblerNaNetwork={tymblerNaNetwork} />
+            <Wallet isWalletAlert={isWalletAlert} setisWalletAlert={setisWalletAlert} chains={chains} LOTTERY_ADDRESS={LOTTERY_ADDRESS} BNBChain={BNBChain} txData={txData} NFT_ADDRESS={NFT_ADDRESS} setdaloynavigationSmartfon={setdaloynavigationSmartfon} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} settxData={settxData} needWallet={needWallet} setchainId={setchainId} tymblerNaNetwork={tymblerNaNetwork} />
           </div>
         </div >
         <Component {...pageProps} LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} isSession={isSession} setIsSession={setIsSession} chainId={chainId} />
@@ -210,7 +212,7 @@ function MyApp({ Component, pageProps }) {
         </footer>
       </WagmiConfig>
       <div className='prenavigationSmartfon' />
-      <div className='navigationSmartfon' style={{ opacity: daloynavigationSmartfon ? "0" : "1" }} onClick={() => { setIsSession(true); setdaloyNFTbutton(true) }}>
+      <div className='navigationSmartfon' style={{ opacity: daloynavigationSmartfon || isWalletAlert ? "0" : "1", pointerEvents: daloynavigationSmartfon || isWalletAlert ? "none" : "all" }} onClick={() => { setIsSession(true); setdaloyNFTbutton(true) }}>
         <Link href="/" >
           <a className='menuSmartfon'> Lottery </a>
         </Link>
