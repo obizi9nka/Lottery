@@ -71,7 +71,8 @@ export default function Wallet({ chains, LOTTERY_ADDRESS, isWalletAlert, setisWa
             localStorage.removeItem("WalletConnect")
             setchainId(0)
         }
-    }, [isConnected])
+    }, [isConnected, chain])
+
 
     async function setNewUSer() {
         try {

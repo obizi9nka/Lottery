@@ -88,7 +88,7 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
                     <div className={TokenSelected == element.address ? "shablonbalanceClicked" : 'shablonbalance'} onClick={(e) => { if (element.address != TokenSelected) { setTokenSelected(element.address) } else { setTokenSelected(null) } }} >
                         <div className="tokenImage">
                             {isfaund && <Image className="tokenpng" src={`/tokens/${element.address}.png`} width={32} height={32} />}
-                            {!isfaund && <Image className="tokenpng" src="/question_mark.png" width={32} height={32} />}
+                            {!isfaund && <Image className="tokenpng" src="/questionMark.png" width={32} height={32} />}
 
                         </div>
 

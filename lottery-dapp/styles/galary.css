@@ -116,7 +116,7 @@ input:checked+.sliderRED:before {
     border-radius: 50%;
 }
 
-.reddot {
+.dot {
     width: 14px;
     height: 14px;
     background-color: rgb(255, 0, 0);
@@ -124,20 +124,9 @@ input:checked+.sliderRED:before {
 
 }
 
-.greendot {
-    width: 14px;
-    height: 14px;
-    background-color: #4fff00;
-    border-radius: 10px;
-}
-
-.reddot:hover .nftinfo {
+.dot:hover .nftinfo {
     display: block;
 
-}
-
-.greendot:hover .nftinfo {
-    display: block;
 }
 
 .nftinfo {

@@ -261,7 +261,7 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, Data, chainI
                             </div>
                     }
 
-                    <div className={Data.ismints ? "greendot absolute" : "reddot absolute "} >
+                    <div className={Data.ismints ? "dot absolute" : "dot absolute "} style={{ backgroundColor: Data.ismints ? "rgb(255, 0, 0)" : "" }}>
                         <div className='nftinfo'>
                             <div className='nftinfo2'>
                                 <div>

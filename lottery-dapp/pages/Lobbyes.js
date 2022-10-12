@@ -286,6 +286,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
 
     const EnterLobby = async (lobby) => {
         try {
+            console.log(lobby)
             settxData({
                 isPending: true,
                 result: null
@@ -309,7 +310,8 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
 
             const loby = await contract.getLobby(creator, id)
             let flag = false
-            for (let i = 0; i < lobbyes.length; i++) {
+            const stop = lobbyes.length
+            for (let i = 0; i < stop; i++) {
                 if (id == lobbyes[i].id && lobbyes[i].creator === creator) {
                     if (parseInt(BigInt(loby.nowInLobby)) != 0) {
                         lobbyes[i].nowInLobby = parseInt(BigInt(loby.nowInLobby))
@@ -328,6 +330,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
             })
             if (flag)
                 setlobbyes([...lobbyes])
+            console.log(userlobbyActive)
             setuserlobbyActive([...userlobbyActive, true])
         } catch (err) {
             settxData({

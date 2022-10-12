@@ -45,13 +45,22 @@ export default async function handler(req, res) {
                     }
                 }
             })
-            let provider
-            if (chainId != BNBid)
-                provider = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
-            else
-                provider = new ethers.providers.JsonRpcProvider
-            const contract = new ethers.Contract(chainId === ETHid ? LotteryAddressETH : chainId === BNBid ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
-            const lobyWithWinner = await contract.getLobby(creator, id)
+            let lobyWithWinner
+            try {
+                let provider
+                if (chainId != BNBid)
+                    provider = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
+                else
+                    provider = new ethers.providers.JsonRpcProvider
+                const contract = new ethers.Contract(chainId === ETHid ? LotteryAddressETH : LotteryAddressBNB, Lottery.abi, provider)
+                lobyWithWinner = await contract.getLobby(creator, id)
+            } catch (err) {
+                lobyWithWinner = {
+                    winer: "error",
+                    players: ["error"]
+                }
+            }
+
             await prisma.lobbyHistoryETH.create({
                 data: {
                     id,
