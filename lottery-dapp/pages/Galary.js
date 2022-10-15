@@ -43,6 +43,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
     const [ALL_OR_MINTS, setALL_OR_MINTS] = useState(1)
 
     const provider = useProvider()
+    const { data } = useSigner()
     const PROVIDER = provider
     const { address, isConnected } = useAccount()
 
@@ -198,8 +199,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
         // какими владеет поьзователь 
         if (isConnected) {
             try {
-                const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-                const contract = new ethers.Contract(NFT_ADDRESS, MudebzNFT.abi, chainId != LocalhostId ? provider : providerLocal)
+                const contract = new ethers.Contract(NFT_ADDRESS, MudebzNFT.abi, provider)
                 const tx = await contract.getTokensForAddress(address)
                 usertokens = tx.ids.map(element => {
                     return (parseInt(element))
@@ -211,7 +211,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
 
                 //Autoenter
                 if (chainId === 31337) {
-                    const contractLottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, chainId != LocalhostId ? provider : providerLocal)
+                    const contractLottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
                     const id = await contractLottery.getLotteryCount()
                     const data = await contractLottery.getAutoEnter(address)
                     let temp = data.map((element) => {
@@ -409,6 +409,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
             setNFTS(temp)
         }
     }
+
 
     return (
         <div className='areaNfts'>

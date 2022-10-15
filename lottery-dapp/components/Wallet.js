@@ -76,10 +76,6 @@ export default function Wallet({ chains, LOTTERY_ADDRESS, isWalletAlert, setisWa
 
     async function setNewUSer() {
         try {
-            // const provider = new ethers.providers.Web3Provider(window.ethereum)
-            // const signer = provider.getSigner()
-            // const address = await signer.getAddress()
-            // const net = await provider.getNetwork()
             const body = { address, chainId: chain.id }
 
             await fetch('/api/user', {
@@ -98,11 +94,8 @@ export default function Wallet({ chains, LOTTERY_ADDRESS, isWalletAlert, setisWa
 
     const checkNftButton = async () => {
         try {
-            const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-            const lottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, chain.id != 31337 ? provider : providerLocal)
-            const nft = new ethers.Contract(NFT_ADDRESS, MudebzNFT.abi, chain.id != 31337 ? provider : providerLocal)
-            // const lottery = new ethers.Contract(chain.id === 4 ? LotteryAddressETH : chain.id === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, chain.id != 31337 ? provider : providerLocal)
-            // const nft = new ethers.Contract(chain.id === 4 ? MudeBzNFTETH : chain.id === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, chain.id != 31337 ? provider : providerLocal)
+            const lottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
+            const nft = new ethers.Contract(NFT_ADDRESS, MudebzNFT.abi, provider)
             const wins = await lottery._allowToNFT(address)
             let flag = false
             for (let i = 0; i < parseInt(wins.lotteryes.length, 10); i++) {

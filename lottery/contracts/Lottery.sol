@@ -61,9 +61,10 @@ contract Lottery is Lobby, Ownable {
         uint256 stop = _lotteryes.length;
         require(
             balanceInTokenForAccount[tokenForLottery][msg.sender] >=
-                (stop * deposit)
+                (stop * deposit),
+            "not enougth money"
         );
-        for (uint256 i = 0; i < stop; i++) {
+        for (uint256 i = 0; i < stop - 1; i++) {
             require(_lotteryes[i] > LotteryCount);
         }
 
@@ -72,7 +73,7 @@ contract Lottery is Lobby, Ownable {
         }
         AUTOENTER storage pointer = autoEnter[msg.sender];
 
-        for (uint256 i = 0; i < stop; i++) {
+        for (uint256 i = 0; i < stop - 1; i++) {
             if (!findAddressInPlayers(msg.sender, _lotteryes[i])) {
                 balanceInTokenForAccount[tokenForLottery][
                     msg.sender
@@ -161,10 +162,10 @@ contract Lottery is Lobby, Ownable {
 
     function setPromInput(string memory a) public {
         bytes32 t = keccak256(abi.encodePacked(a));
-        require(PromSetReverse[t] != msg.sender);
-        require(Prom[msg.sender].PromInput == bytes32(0));
-        require(PromSetReverse[t] != address(0));
-        require(getcountOfLotteryEnter(msg.sender) == 0);
+        require(PromSetReverse[t] != msg.sender, "tvoy");
+        require(Prom[msg.sender].PromInput == bytes32(0), "yje");
+        require(PromSetReverse[t] != address(0), "ne chei");
+        require(countOfLotteryEnter[msg.sender] == 0);
         Prom[msg.sender].PromInput = t;
     }
 
@@ -175,9 +176,7 @@ contract Lottery is Lobby, Ownable {
     function checkRef() private {
         bytes32 prom = Prom[msg.sender].PromInput;
         if (bytes32(0) != prom) {
-            // shouldRevardMas.push(msg.sender);
             address setter = PromSetReverse[prom];
-            // if (shouldRevard[setter] == 0) shouldRevardMas.push(setter);
             REVARD_REF_ALLOW -= 200;
             shouldRevard[msg.sender] += 100;
             shouldRevard[setter] += 100;
@@ -187,7 +186,8 @@ contract Lottery is Lobby, Ownable {
     function Enter() external {
         require(
             (getBalance(tokenForLottery, msg.sender)) >= deposit &&
-                !findAddressInPlayers(msg.sender, LotteryCount)
+                !findAddressInPlayers(msg.sender, LotteryCount),
+            "no allow"
         );
 
         if (countOfLotteryEnter[msg.sender] == 0 && REVARD_REF_ALLOW >= 200) {
@@ -198,8 +198,6 @@ contract Lottery is Lobby, Ownable {
 
         Lotteries[LotteryCount].players.push(msg.sender);
         Lotteries[LotteryCount].playersCount++;
-
-        emit enter(msg.sender);
     }
 
     function _findAddressInfirst1000Winers(address a, uint256 TokenId)
@@ -323,8 +321,11 @@ contract Lottery is Lobby, Ownable {
     }
 
     function REF() public {
-        require(shouldRevard[msg.sender] > 0);
-        MUDaddress._mintFromLottery(msg.sender,shouldRevard[msg.sender] * 10**18);
+        require(shouldRevard[msg.sender] > 0 && LotteryCount > 1051);
+        MUDaddress._mintFromLottery(
+            msg.sender,
+            shouldRevard[msg.sender] * 10**18
+        );
         shouldRevard[msg.sender] = 0;
     }
 

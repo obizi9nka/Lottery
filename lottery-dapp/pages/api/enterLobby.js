@@ -9,9 +9,12 @@ import prisma from './prisma.js';
 
 export default async function handler(req, res) {
 
-    const { creator, id, newPlayer, chainId } = JSON.parse(req.body)
+    const { creator, id, newPlayer, chainId, winer } = JSON.parse(req.body)
+
 
     let result
+
+    let players
 
     if (chainId == ETHid) {
         const loby = await prisma.lobbyETH.findUnique({
@@ -22,6 +25,10 @@ export default async function handler(req, res) {
                 }
             }
         })
+
+        players = loby.players.split("_")
+        players.pop()
+        players.push(newPlayer)
 
         result = await prisma.lobbyETH.update({
             where: {
@@ -45,21 +52,6 @@ export default async function handler(req, res) {
                     }
                 }
             })
-            let lobyWithWinner
-            try {
-                let provider
-                if (chainId != BNBid)
-                    provider = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
-                else
-                    provider = new ethers.providers.JsonRpcProvider
-                const contract = new ethers.Contract(chainId === ETHid ? LotteryAddressETH : LotteryAddressBNB, Lottery.abi, provider)
-                lobyWithWinner = await contract.getLobby(creator, id)
-            } catch (err) {
-                lobyWithWinner = {
-                    winer: "error",
-                    players: ["error"]
-                }
-            }
 
             await prisma.lobbyHistoryETH.create({
                 data: {
@@ -67,12 +59,11 @@ export default async function handler(req, res) {
                     creator,
                     countOfPlayers: loby.countOfPlayers,
                     IERC20: loby.IERC20,
-                    winner: lobyWithWinner.winer,
+                    winner: winer,
                     deposit: loby.deposit,
-                    players: loby.players + lobyWithWinner.players[loby.countOfPlayers - 1] + "_"
+                    players: loby.players + newPlayer + "_"
                 }
             })
-            const players = lobyWithWinner.players
             const newNews = creator + "_" + id + "_" + loby.IERC20 + "_" + `${loby.deposit}` + "_" + `${loby.countOfPlayers}`;
             for (let i = 0; i < players.length; i++) {
                 let AlredyNews = await prisma.user.findUnique({
@@ -85,7 +76,7 @@ export default async function handler(req, res) {
                 })
 
                 let news = ((AlredyNews.newsETH && AlredyNews.newsETH.length > 0) ? AlredyNews.newsETH : "") + newNews;
-                if (lobyWithWinner.winer == players[i]) { news += "_1&" }
+                if (winer == players[i]) { news += "_1&" }
                 else { news += "_0&" };
 
                 await prisma.user.update({
@@ -109,6 +100,10 @@ export default async function handler(req, res) {
             }
         })
 
+        players = loby.players.split("_")
+        players.pop()
+        players.push(newPlayer)
+
         result = await prisma.lobbyBNB.update({
             where: {
                 creator_id: {
@@ -131,25 +126,17 @@ export default async function handler(req, res) {
                     }
                 }
             })
-            let provider
-            if (chainId != BNBid)
-                provider = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
-            else
-                provider = new ethers.providers.JsonRpcProvider
-            const contract = new ethers.Contract(chainId === ETHid ? LotteryAddressETH : chainId === BNBid ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, provider)
-            const lobyWithWinner = await contract.getLobby(creator, id)
             await prisma.lobbyHistoryBNB.create({
                 data: {
                     id,
                     creator,
                     countOfPlayers: loby.countOfPlayers,
                     IERC20: loby.IERC20,
-                    winner: lobyWithWinner.winer,
+                    winner: winer,
                     deposit: loby.deposit,
-                    players: loby.players + lobyWithWinner.players[loby.countOfPlayers - 1] + "_"
+                    players: loby.players + newPlayer + "_"
                 }
             })
-            const players = lobyWithWinner.players
             const newNews = creator + "_" + id + "_" + loby.IERC20 + "_" + `${loby.deposit}` + "_" + `${loby.countOfPlayers}`;
             for (let i = 0; i < players.length; i++) {
                 let AlredyNews = await prisma.user.findUnique({
@@ -162,7 +149,7 @@ export default async function handler(req, res) {
                 })
 
                 let news = ((AlredyNews.newsBNB && AlredyNews.newsBNB.length > 0) ? AlredyNews.newsBNB : "") + newNews;
-                if (lobyWithWinner.winer == players[i]) { news += "_1&" }
+                if (winer == players[i]) { news += "_1&" }
                 else { news += "_0&" };
 
                 await prisma.user.update({

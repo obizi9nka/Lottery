@@ -101,8 +101,7 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
             body: JSON.stringify(body)
         }).then(async (data) => {
             const temp = await data.json()
-            const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-            const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, chainId != 31337 ? provider : providerLocal)
+            const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
             const yourRevard = await contract.getshouldRevard(address)
             const position = 1
             const gg = temp.map(async element => {

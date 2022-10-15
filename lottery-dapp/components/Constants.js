@@ -7,13 +7,12 @@ export const MudeBzNFTETH = "0xA91E19C675B3448102282D4E896092Fa45B80b1D"
 
 //BNBtestNet
 
-export const LotteryAddressBNB = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
-export const MudeBzNFTBNB = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
+export const LotteryAddressBNB = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
+export const MudeBzNFTBNB = '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9'
 
 
 export const ETHid = 11155111
 export const BNBid = 31337
-// export const LocalhostId = 31337
 
 
 // sup = EerBgAQSP1Vebi4z

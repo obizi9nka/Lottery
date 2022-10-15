@@ -2,10 +2,9 @@ import Head from 'next/head'
 import Image from 'next/image'
 const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
+import { ETHid, BNBid, LocalhostId, PRODACTION } from '/components/Constants.js';
+// import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
 import Lottery from "/blockchain/Lottery.json"
-import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from '/components/Constants.js';
-import notForYourEyesBitch from "../notForYourEyesBitch.json"
-
 
 import {
   chain,
@@ -27,14 +26,16 @@ import { ConstructorFragment } from 'ethers/lib/utils';
 
 export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaNetwork, settxData }) {
 
+  const Default = `/blackFon.png`
 
-
-
-  const [lotteryIdPLUSPLUS, setlotteryIdPLUSPLUS] = useState(`/blackFon.png`)
-  const [lotteryIdMINUSMINUS, setlotteryIdMINUSMINUS] = useState(`/blackFon.png`)
-  const [lotteryIdPLUS, setlotteryIdPLUS] = useState(`/blackFon.png`)
-  const [lotteryIdMINUS, setlotteryIdMINUS] = useState(`/blackFon.png`)
-  const [lotteryId, setlotteryId] = useState(`/blackFon.png`)
+  const [Images, setImages] = useState({
+    id: undefined,
+    lotteryId: Default,
+    lotteryIdPLUS: Default,
+    lotteryIdPLUSPLUS: Default,
+    lotteryIdMINUS: Default,
+    lotteryIdMINUSMINUS: Default
+  })
 
   const { data } = useSigner()
   const provider = useProvider()
@@ -42,20 +43,23 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
   const { address, isConnected } = useAccount()
 
   useEffect(() => {
-    if (chainId > 0)
-      checkAmIn()
+    checkAmIn()
   }, [chainId, address])
 
   useEffect(() => {
-    checkChain()
+    const images = sessionStorage.getItem("index")
+    if (images != undefined)
+      setImages(JSON.parse(images))
+    changeImages(false)
   }, [])
 
   useEffect(() => {
-    checkChain()
-  }, [chainId, LOTTERY_ADDRESS])
+    changeImages(true)
+  }, [chainId, LOTTERY_ADDRESS, tymblerNaNetwork])
 
 
-  const checkChain = async () => {
+
+  const changeImages = async (flag) => {
     // try {
     //   await fetch('/api/add1000', {
     //     method: "POST",
@@ -72,21 +76,30 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
       // provider = new ethers.providers.InfuraProvider("sepolia", notForYourEyesBitch.infuraKey)
       else
         provider = new ethers.providers.JsonRpcProvider
-      console.log(provider)
       try {
         const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
         _id = parseInt(await contract.getLotteryCount())
+        console.log("_id", _id)
       } catch (err) {
         _id = 1
       }
+      console.log(Images.id, _id)
+      if (Images.id != _id || flag) {
+        const papka = `${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}`
+        const images = {
+          id: _id,
+          lotteryId: `/${papka}/${_id}.png`,
+          lotteryIdPLUS: `/${papka}/${_id + 1 < 1001 ? _id + 1 : 0}.png`,
+          lotteryIdPLUSPLUS: `/${papka}/${_id + 2 < 1001 ? _id + 2 : 0}.png`,
+          lotteryIdMINUS: `/${papka}/${_id - 1 > 0 ? _id - 1 : 0}.png`,
+          lotteryIdMINUSMINUS: `/${papka}/${_id - 2 > 0 ? _id - 2 : 0}.png`
+        }
+        setImages(images)
+
+        sessionStorage.setItem("index", JSON.stringify(images))
+      }
 
 
-
-      setlotteryId(`/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${_id}.png`)
-      setlotteryIdPLUSPLUS(`/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${_id + 2 < 1001 ? _id + 2 : 0}.png`)
-      setlotteryIdMINUSMINUS(`/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${_id - 2 > 0 ? _id - 2 : 0}.png`)
-      setlotteryIdPLUS(`/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${_id + 1 < 1001 ? _id + 1 : 0}.png`)
-      setlotteryIdMINUS(`/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${_id - 1 > 0 ? _id - 1 : 0}.png`)
     } catch (err) {
       console.log(err)
     }
@@ -99,25 +112,25 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
   const [amIn, setamIn] = useState(false)
 
   const checkAmIn = async () => {
-    try {
-      const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-      const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, chainId != LocalhostId ? provider : providerLocal)
-      const players = (await contract.getLotteryShablonByIndex(await contract.getLotteryCount())).players
-      const length = players.length
+    if (isConnected)
+      try {
+        const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
+        let players = (await contract.getLotteryShablonByIndex(await contract.getLotteryCount())).players
+        const length = players.length
 
-      console.log(players)
+        console.log(players)
 
-      let flag = false
-      for (let i = 0; i < length; i++) {
-        if (players[i] == address) {
-          flag = true
-          break
+        let flag = false
+        for (let i = 0; i < length; i++) {
+          if (players[i] == address) {
+            flag = true
+            break
+          }
         }
+        setamIn(flag)
+      } catch (err) {
+        console.log(err)
       }
-      setamIn(flag)
-    } catch (err) {
-      console.log(err)
-    }
   }
 
   const Enter = async () => {
@@ -159,23 +172,23 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
       <div className=''>
         <div className='index'>
           <div className='MINUSMINUS'>
-            <Image src={lotteryIdMINUSMINUS} className="tttt" width={150} height={150} />
+            <Image src={Images.lotteryIdMINUSMINUS} className="tttt" width={150} height={150} />
           </div>
           <div className='PLUS'>
-            <Image src={lotteryIdMINUS} className="tttt" width={225} height={225} />
+            <Image src={Images.lotteryIdMINUS} className="tttt" width={225} height={225} />
           </div>
           <div className='newnft'>
-            <Image src={lotteryId} className="tttt" width={300} height={300} />
+            <Image src={Images.lotteryId} className="tttt" width={300} height={300} />
             <div className='enterNftPlay'>
               {!amIn && <button onClick={Enter} className="mybutton tobottom">Am In!</button>}
               {amIn && <button className="nftmintbuttonactive">Your In!</button>}
             </div>
           </div>
           <div className='PLUS'>
-            <Image src={lotteryIdPLUS} className="tttt" width={225} height={225} />
+            <Image src={Images.lotteryIdPLUS} className="tttt" width={225} height={225} />
           </div>
           <div className='PLUSPLUS'>
-            <Image src={lotteryIdPLUSPLUS} className="tttt" width={150} height={150} />
+            <Image src={Images.lotteryIdPLUSPLUS} className="tttt" width={150} height={150} />
           </div>
         </div>
       </div>

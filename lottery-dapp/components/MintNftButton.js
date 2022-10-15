@@ -37,11 +37,8 @@ export default function MintNftButton({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, a
 
     const getAllows = async () => {
         try {
-            const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-            const lottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, chainId != 31337 ? provider : providerLocal)
-            const nft = new ethers.Contract(NFT_ADDRESS, MudebzNFT.abi, chainId != 31337 ? provider : providerLocal)
-            // const lottery = new ethers.Contract(chainId === 4 ? LotteryAddressETH : chainId === 31337 ? LotteryAddressLocalhost : LotteryAddressBNB, Lottery.abi, chainId != 31337 ? provider : providerLocal)
-            // const nft = new ethers.Contract(chainId === 4 ? MudeBzNFTETH : chainId === 31337 ? MudeBzNFTLocalhost : MudeBzNFTBNB, MudebzNFT.abi, chainId != 31337 ? provider : providerLocal)
+            const lottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
+            const nft = new ethers.Contract(NFT_ADDRESS, MudebzNFT.abi, provider)
             const wins = await lottery._allowToNFT(address)
             console.log(wins.lotteryes)
             const array = []

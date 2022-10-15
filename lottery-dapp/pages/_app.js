@@ -72,7 +72,7 @@ const BNBChain = {
 
 
 const { chains, provider } = configureChains(
-  [chain.sepolia, chain.localhost, BNBChain, chain.mainnet],
+  [chain.sepolia, chain.hardhat, BNBChain, chain.mainnet],
   [
 
     jsonRpcProvider({
@@ -131,12 +131,8 @@ function MyApp({ Component, pageProps }) {
     settymblerNaNetwork(chain == undefined ? tymblerNaNetwork : (chain.id == ETHid ? true : false))
   }, [chain])
 
-
-
   useEffect(() => {
     setchainId(chain != undefined ? chain.id : 0)
-
-    // checkChain()
     if (chain != undefined) {
       setlotteryAddress(chain.id === ETHid ? LotteryAddressETH : LotteryAddressBNB)
       setnftAddress(chain.id === ETHid ? MudeBzNFTETH : MudeBzNFTBNB)

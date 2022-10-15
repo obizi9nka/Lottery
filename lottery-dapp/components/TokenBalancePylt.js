@@ -84,9 +84,8 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
                 isPending: true,
                 result: null
             })
-            const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
             const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
-            const tokenContract = new ethers.Contract(TokenSelected, A.abi, chainId != 31337 ? provider : providerLocal)
+            const tokenContract = new ethers.Contract(TokenSelected, A.abi, provider)
             const decimals = await tokenContract.decimals()
             const tx = await contract.addTokensToBalance(TokenSelected, BigInt(deposit * 10 ** decimals))
             settryed(false)
@@ -120,19 +119,18 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
     }, [deposit])
 
     const checkApprove = async () => {
-
-        try {
-            const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-            const tokenContract = new ethers.Contract(TokenSelected, A.abi, chainId != 31337 ? provider : providerLocal)
-            console.log(BigInt(await tokenContract.allowance(user, LOTTERY_ADDRESS)), BigInt(deposit * 10 ** Decimals))
-            if (BigInt(await tokenContract.allowance(user, LOTTERY_ADDRESS)) < BigInt(deposit * 10 ** Decimals)) {
-                setneedAprove(true)
-            } else {
-                setneedAprove(false)
+        if (TokenSelected != null)
+            try {
+                const tokenContract = new ethers.Contract(TokenSelected, A.abi, provider)
+                console.log(BigInt(await tokenContract.allowance(user, LOTTERY_ADDRESS)), BigInt(deposit * 10 ** Decimals))
+                if (BigInt(await tokenContract.allowance(user, LOTTERY_ADDRESS)) < BigInt(deposit * 10 ** Decimals)) {
+                    setneedAprove(true)
+                } else {
+                    setneedAprove(false)
+                }
+            } catch (err) {
+                console.log(err)
             }
-        } catch (err) {
-            console.log(err)
-        }
 
     }
 

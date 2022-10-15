@@ -46,7 +46,7 @@ contract Lobby is Balance {
     );
 
     mapping(address => uint256) lobbyCountForAddress; // количество активных лобби пользователя
-    mapping(address => uint256) lobbyCountForAddressHistory; //количество когда-либо созданных лобби
+    mapping(address => uint256) lobbyCountForAddressALL; //количество когда-либо созданных лобби
 
     mapping(address => mapping(uint256 => lobbyShablon)) lobby;
 
@@ -85,7 +85,7 @@ contract Lobby is Balance {
         view
         returns (uint256)
     {
-        return lobbyCountForAddressHistory[_address];
+        return lobbyCountForAddressALL[_address];
     }
 
     function createNewLobby(
@@ -104,7 +104,7 @@ contract Lobby is Balance {
         balanceInTokenForAccount[tokenAddress][msgsender] -= deposit;
 
         lobbyCountForAddress[msgsender]++;
-        uint256 lobbyId = ++lobbyCountForAddressHistory[msgsender];
+        uint256 lobbyId = ++lobbyCountForAddressALL[msgsender];
         while (true) {
             if (lobby[msgsender][lobbyId].nowInLobby != 0) {
                 lobbyId++;
@@ -141,30 +141,11 @@ contract Lobby is Balance {
         temp.players.push(msgsender);
         uint256 nowInLobby = ++temp.nowInLobby;
 
-        emit enterLobby(
-            lobbyCreator,
-            lobbyId,
-            msg.sender,
-            temp.players,
-            temp.deposit,
-            temp.countOfPlayers,
-            temp.token
-        );
-
         if (nowInLobby == temp.countOfPlayers) {
             address winer = LobbyPlay(temp);
             temp.winer = winer;
             lobby[lobbyCreator][lobbyId].nowInLobby = 0;
             lobbyCountForAddress[lobbyCreator]--;
-            emit playLobby(
-                lobbyCreator,
-                lobbyId,
-                temp.players,
-                temp.deposit,
-                temp.countOfPlayers,
-                temp.token,
-                winer
-            );
         }
     }
 
@@ -176,10 +157,10 @@ contract Lobby is Balance {
 
         uint256 length = _lobby.players.length;
         if (
+            LotteryCount >= 1051 &&
             address(_lobby.token) == address(MUDaddress) &&
             HEEP >= length * 10 &&
-            _lobby.deposit >= 10**19 &&
-            LotteryCount >= 31 // >=1051 >= 31
+            _lobby.deposit >= 10**19
         ) {
             for (uint256 i = 0; i < length; i++) {
                 MUDaddress._mintFromLottery(_lobby.players[i], 10 * 10**18);

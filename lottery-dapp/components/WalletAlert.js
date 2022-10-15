@@ -18,7 +18,10 @@ import {
     useContractWrite,
     usePrepareContractWritde,
     useConnect,
-    useNetwork, useProvider
+    useDisconnect,
+    useSigner,
+    useNetwork,
+    useProvider
 } from 'wagmi';
 import TokensBalancePylt from "./TokenBalancePylt";
 
@@ -51,6 +54,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
     const [isReliably, setisReliably] = useState(true)
 
     const provider = useProvider()
+    const { data } = useSigner()
 
     const [Mode, setMode] = useState(true)
 
@@ -64,7 +68,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
     const [ImageInAutoEnter, setImageInAutoEnter] = useState(0)
 
     const [shouldrevard, setshouldrevard] = useState({})
-
+    const { disconnect } = useDisconnect()
 
 
     useEffect(() => {
@@ -87,9 +91,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
         let sup, dec, symb
         if (flag) {
             try {
-                const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-                const contract = new ethers.Contract(addTokenAddress, A.abi, chainId != 31337 ? provider : providerLocal)
-                console.log(contract, addTokenAddress, provider)
+                const contract = new ethers.Contract(addTokenAddress, A.abi, provider)
                 sup = await contract.totalSupply()//проверка на валидность
                 try {
                     dec = await contract.decimals()
@@ -133,8 +135,6 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                 body: JSON.stringify(body)
             }).then(async (data) => {
                 const temp = await data.json()
-                console.log(temp)
-
                 const objects = []
                 temp.forEach((element) => {
                     objects.push({
@@ -152,6 +152,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
         } catch (err) {
             console.log("getUserTokens", err)
         }
+        ////////////////////////////////////////////////
         try {
             const body = { user: address, chainId }
             await fetch('/api/getUserData', {
@@ -171,8 +172,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                         In = temp.PromInputBNB
                         Auto = temp.AutoEnterBNB
                     }
-                    const providerLocal = new ethers.providers.Web3Provider(window.ethereum)
-                    const contractLottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, chainId != 31337 ? provider : providerLocal)
+                    const contractLottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
 
                     try {
                         const temp = parseInt(await contractLottery.getshouldRevard(address))
@@ -183,7 +183,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                         }
                         setshouldrevard(tyy)
                     } catch (err) {
-                        console.log(err)
+                        console.log("dich", err)
                         setshouldrevard({
                             count: 0,
                             isEnteredOnce: undefined
@@ -239,6 +239,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
     const addToAutoEnter = async () => {
         try {
             const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, data)
+            console.log(AutoEnter)
             const tx = await contract.addToAutoEnter(AutoEnter)
             await tx.wait()
             setclicked(false)
@@ -356,14 +357,20 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
 
                 <div className="dopInfo" onClick={() => setMode(!Mode)} />
 
-                {Mode && <div className="" style={{ padding: "10px 10px 0px 10px" }}>
+                {Mode && <div className="" style={{ padding: "10px" }}>
                     <TokensBalancePylt LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} rokens={rokens} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} chainId={chainId} setisReliably={setisReliably} settokenTransfered={settokenTransfered} />
-                    {rokens && rokens.map((element) =>
-                        <TokensBalanceShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} txData={txData} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} rokens={rokens} tymblerNaNetwork={tymblerNaNetwork} tokenTransfered={tokenTransfered} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} element={element} chainId={chainId} settokenTransfered={settokenTransfered} setisReliably={setisReliably} deleteTokenFromFronend={deleteTokenFromFronend} />
-                    )}
+
+                    <div className="areashablonbalance">
+                        {rokens && rokens.map((element, index) =>
+                            <TokensBalanceShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} txData={txData} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} rokens={rokens} tymblerNaNetwork={tymblerNaNetwork} tokenTransfered={tokenTransfered} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} element={element} chainId={chainId} settokenTransfered={settokenTransfered} index={{ index, last: rokens.length - 1 }} deleteTokenFromFronend={deleteTokenFromFronend} />
+                        )}
+                    </div>
+                    <button className="disconnect" onClick={() => { disconnect(); setActive(false) }}>
+                        Disconnect
+                    </button>
                 </div>}
 
-                {!Mode && <div className="" style={{ padding: "10px 10px 10px 10px" }}>
+                {!Mode && <div className="" style={{ padding: "10px" }}>
                     <div className="areaProm">
                         <Prom LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} shouldrevard={shouldrevard} settxData={settxData} address={address} PromSet={PromSet} PromInput={PromInput} setPromInput={setPromInput} setPromSet={setPromSet} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} />
                     </div>

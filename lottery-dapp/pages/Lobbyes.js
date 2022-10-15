@@ -174,7 +174,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                 }).then(async (data) => {
                     const temp = await data.json()
                     console.log(temp)
-
+                    settoken(temp[0])
                     const objects = []
                     temp.forEach((element) => {
                         objects.push({
@@ -198,60 +198,61 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
 
 
     const createNewLobby = async () => {
+
         try {
             settxData({
                 isPending: true,
                 result: null
             })
 
+            if (token.decimals >= 0) {
+                const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
+                const Deposit = BigInt(deposit * 10 ** token.decimals)
+                const body = { user: address, token: token.address, countOfPlayers, deposit, chainId }
+                console.log(body, token, Deposit, chainId)
+                const tx = await contract.createNewLobby(token.address, Deposit, countOfPlayers)
+                await tx.wait()
+                await fetch('/api/createNewLobby', {
+                    method: "PUT",
+                    body: JSON.stringify(body)
+                })
 
-            const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
-            const tokenContract = new ethers.Contract(token, A.abi, provider)
-            let decimals = 18
-            try {
-                decimals = await tokenContract.decimals()
-            } catch (err) {
-                console.log("net f decimals", err)
+                const newy = { user: address, chainId }
+                await fetch('/api/getNewLobby', {
+                    method: "POST",
+                    body: JSON.stringify(newy)
+                }).then(async (data) => {
+                    const element = await data.json()
+                    const _data = {
+                        deposit: element.deposit,
+                        nowInLobby: element.nowInLobby,
+                        players: element.players,
+                        countOfPlayers: element.countOfPlayers,
+                        IERC20: element.IERC20,
+                        creator: element.creator,
+                        id: element.id,
+                        percent: parseInt(`${element.nowInLobby / element.countOfPlayers * 100}`.substring(0, 2))
+                    }
+                    setlobbyes([...lobbyes, _data])
+                    setlobbyesActive([...lobbyesActive, _data])
+                    setuserlobbyActive([...userlobbyActive, true])
+                    ALL_LOBBYES.chainId == ETHid ? lobbyETH : lobbyBNB.push(_data)
+                })
+                settxData({
+                    isPending: true,
+                    result: true
+                })
             }
-            console.log(deposit, deposit * (10 ** decimals), 10 ** decimals)
-            const Deposit = BigInt(deposit * 10 ** decimals)
-            const body = { user: address, token, countOfPlayers, deposit, chainId }
-            console.log(body, token, Deposit, chainId)
-            const tx = await contract.createNewLobby(token, Deposit, countOfPlayers)
-            await tx.wait()
-            await fetch('/api/createNewLobby', {
-                method: "PUT",
-                body: JSON.stringify(body)
-            })
-
-            const newy = { user: address, chainId }
-            await fetch('/api/getNewLobby', {
-                method: "POST",
-                body: JSON.stringify(newy)
-            }).then(async (data) => {
-                const element = await data.json()
-                const _data = {
-                    deposit: element.deposit,
-                    nowInLobby: element.nowInLobby,
-                    players: element.players,
-                    countOfPlayers: element.countOfPlayers,
-                    IERC20: element.IERC20,
-                    creator: element.creator,
-                    id: element.id,
-                    percent: parseInt(`${element.nowInLobby / element.countOfPlayers * 100}`.substring(0, 2))
-
-                }
-                setlobbyes([...lobbyes, _data])
-                setlobbyesActive([...lobbyesActive, _data])
-            })
-            settxData({
-                isPending: true,
-                result: true
-            })
+            else {
+                settxData({
+                    isPending: false,
+                    result: false
+                })
+            }
         } catch (err) {
             console.log(err)
             settxData({
-                isPending: true,
+                isPending: false,
                 result: false
             })
         }
@@ -284,7 +285,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
 
     const [isfaund, setisfaund] = useState(true)
 
-    const EnterLobby = async (lobby) => {
+    const EnterLobby = async (lobby, index) => {
         try {
             console.log(lobby)
             settxData({
@@ -295,9 +296,11 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
             const tx = await contract.EnterLobby(lobby.creator, lobby.id)
             await tx.wait()
 
+            const _lobby = await contract.getLobby(lobby.creator, lobby.id)
+
             const creator = lobby.creator
             const id = parseInt(lobby.id)
-            const body = { creator, id, newPlayer: address, chainId }
+            const body = { creator, id, newPlayer: address, chainId, winer: _lobby.winer }
 
             try {
                 fetch("/api/enterLobby", {
@@ -315,6 +318,15 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                 if (id == lobbyes[i].id && lobbyes[i].creator === creator) {
                     if (parseInt(BigInt(loby.nowInLobby)) != 0) {
                         lobbyes[i].nowInLobby = parseInt(BigInt(loby.nowInLobby))
+                        if (chainId == ETHid) {
+                            ALL_LOBBYES.lobbyETH[i].nowInLobby = parseInt(BigInt(loby.nowInLobby))
+                            ALL_LOBBYES.lobbyETH[i].players = loby.players
+                        }
+                        else {
+                            ALL_LOBBYES.lobbyBNB[i].nowInLobby = parseInt(BigInt(loby.nowInLobby))
+                            ALL_LOBBYES.lobbyBNB[i].players = loby.players
+                        }
+
                         setlobbyesActive([...lobbyesActive, lobbyes[i]])
                     }
                     else {
@@ -328,10 +340,15 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                 isPending: true,
                 result: true
             })
-            if (flag)
+            if (flag) {
                 setlobbyes([...lobbyes])
-            console.log(userlobbyActive)
-            setuserlobbyActive([...userlobbyActive, true])
+            }
+            else {
+                userlobbyActive[index] = true
+                setuserlobbyActive([...userlobbyActive])
+            }
+
+
         } catch (err) {
             settxData({
                 isPending: true,
@@ -339,7 +356,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
             })
         }
     }
-
     const [startIndex, setstartIndex] = useState(1)
     const [countOfRenderNfts, setcountOfRenderNfts] = useState(25)
 
@@ -393,7 +409,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
 
                         rokens.forEach((element) => {
                             if (e.target.value === element.symbol)
-                                settoken(element.address)
+                                settoken(element)
                         });
                     }} className="choosetoken">
                         {rokens && rokens.map((element) =>
@@ -492,7 +508,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                 <div className='alllobbyes'>
                     {lobbyes && lobbyes.map((element, index) => isEnogth(index + 1) &&
                         <div className='areaAraund'>
-                            <div className='LobbyShablon' onClick={() => { if (!userlobbyActive[index]) { EnterLobby(element) } }} style={!userlobbyActive[index] ? {} : { margin: "0px 30px", borderColor: "antiquewhite", cursor: "default" }}>
+                            <div className='LobbyShablon' onClick={() => { if (!userlobbyActive[index]) { EnterLobby(element, index) } }} style={!userlobbyActive[index] ? {} : { margin: "0px 30px", borderColor: "antiquewhite", cursor: "default" }}>
                                 <div className='tokenAnd'>
                                     <div className="tokeninlobbyshablon gridcenter">
                                         {isfaund && <Image className="tokenpng" alt='?' src={`/tokens/${element.IERC20}.png`} width={45} height={45} />}
@@ -505,7 +521,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                                 <div className='predepositlobby'>
                                     <div className='depositlobby'>
                                         <div>Deposit: <strong style={{ color: needLigth && filterModeScreen == 1 ? "rgb(0 16 255)" : null }}>{element.deposit}</strong></div>
-                                        <div>Pot: <strong>{`${(element.deposit * element.countOfPlayers)}`.substring(0, element.deposit.length)}</strong></div>
+                                        <div>Pot: <strong>{`${(element.deposit * element.countOfPlayers)}`.substring(0, 10)}</strong></div>
                                         <div>Players: <strong style={{ color: needLigth && filterModeScreen == 3 ? "rgb(0 16 255)" : null }}>{element.nowInLobby}/{element.countOfPlayers}</strong></div>
                                     </div>
                                 </div>
