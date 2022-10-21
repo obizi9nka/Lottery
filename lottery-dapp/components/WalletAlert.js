@@ -305,42 +305,24 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
     const makePDF = async () => {
         let data
         try {
-            body = { user: address, chainId }
+            const body = { user: address, chainId }
             await fetch("/api/pdf", {
                 method: "POST",
                 body: JSON.stringify(body)
             }).then(async (_data) => {
                 data = await _data.json()
                 console.log(data)
+
+
+
+                pdfMake.createPdf(data).open();
             })
         } catch (err) {
             console.log(err)
         }
 
 
-        const pdf = {
-            pageOrientation: "landscape",
-            content: [
-                {
-                    style: 'tableExample',
-                    table: {
-                        dontBreakRows: true,
-                        widths: [17, 170, 170, 100, 170, 35, 35],
-                        headerRows: 1,
-                        body: data.body,
-                    },
-                    // layout: {
-                    //     fillColor: function (rowIndex, node, columnIndex) {
-                    //         return (rowIndex % 2 === 0) ? '#CCCCCC' : '#ffffff';
-                    //     }
-                    // }
-                }
-            ],
-            styles: data.styles,
-        }
 
-
-        pdfMake.createPdf(pdf).open();
     }
 
 
@@ -400,8 +382,26 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                             <div className="AutoEnter" />}
                         <div className="yaxz">
                             <div className="PDF">
+                                <div>
+                                    <button className="mybutton" onClick={() => makePDF()}>Lobby history</button>
+                                </div>
                             </div>
                             <div className="MudebzInfo">
+                                <div className="MudebzInfoElement">
+                                    <Image src={"/discord.png"} width={40} height={40} />
+                                </div>
+                                <div className="MudebzInfoElement">
+                                    <Image src={"/vk.png"} width={35} height={35} />
+                                </div>
+                                <div className="MudebzInfoElement">
+                                    <Image src={"/instagram.png"} width={35} height={35} />
+                                </div>
+                                <div className="MudebzInfoElement">
+                                    <Image src={"/twitter.png"} width={35} height={35} />
+                                </div>
+                                <div className="MudebzInfoElement">
+                                    <Image src={"/github.png"} width={35} height={35} />
+                                </div>
                             </div>
                         </div>
                     </div>

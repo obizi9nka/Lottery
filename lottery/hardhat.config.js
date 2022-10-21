@@ -31,13 +31,19 @@ module.exports = {
       chainId: 31337
     },
     sepolia: {
-      url: secret.url,
+      url: secret.sepoliaURL,
+      accounts: [secret.key]
+    },
+    goerli: {
+      url: secret.goerliURL,
+      accounts: [secret.key]
+    },
+    TBNB: {
+      url: secret.bnbTestNetURL,
       accounts: [secret.key]
     }
   },
   etherscan: {
-    apiKey: {
-      sepolia: "YQADQIC7H32XZ5KA99PDAJPXGBGAGCYWSQ"
-    }
+    apiKey: "YQADQIC7H32XZ5KA99PDAJPXGBGAGCYWSQ"
   }
 };

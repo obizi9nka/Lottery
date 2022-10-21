@@ -7,48 +7,81 @@ export default async function pdf(req, res) {
 
     let Header = [
         { text: "№", style: "tableHeader" },
-        { text: "creator", style: "tableHeader" },
-        { text: "token", style: "tableHeader" },
-        { text: "players", style: "tableHeader" },
-        { text: "winner", style: "tableHeader" },
-        { text: "deposit", style: "tableHeader" },
-        { text: "countOfPlayers", style: "tableHeader" },
+        { text: "Creator", style: "tableHeader" },
+        { text: "Token", style: "tableHeader" },
+        { text: "Winner", style: "tableHeader" },
+        { text: "Deposit", style: "tableHeader" },
+        { text: "Players", style: "tableHeader" },
     ]
 
-    let body = []
+    let HeaderTokens = [
+        { text: "№", style: "tableHeader" },
+        { text: "Token", style: "tableHeader" },
+        { text: "Result", style: "tableHeader" },
+    ]
 
-    body.push(Header)
     let allLobbyes
     if (chainId == ETHid)
         allLobbyes = await prisma.lobbyHistoryETH.findMany()
     else
         allLobbyes = await prisma.lobbyHistoryBNB.findMany()
+
     let i = 0
-    allLobbyes.map((element) => {
+    const tokens = await prisma.tokens.findMany(
+        {
+            select: {
+                symbol: true,
+                address: true
+            }
+        }
+    )
+    const allLength = tokens.length
+    const gigadata = {
+        LobbyCount: 0,
+        userTokens: [],
+        wins: 0,
+        forPDF: []
+    }
+
+    const body = allLobbyes.map((element) => {
         if (element.players.indexOf(user) !== -1) {
-            i++
-            let cutPlayers = ''
-            let players = element.players.split("_")
-            players.pop()
-            players = players.map((element) => {
-                return (`${element.substr(37, 5)}`)
-            })
-            players.forEach((element, index) => {
-                cutPlayers += element + ((index !== players.length - 1) ? ", " : " ")
-            })
-            const color = (element.winner === user) ? "#8fbe6b" : null
+            const fillColor = (element.winner === user) ? "#8fbe6b" : null
+            let length = gigadata.userTokens.length
+            let Symbol
+            for (let j = 0; j < length; j++) {
+                if (element.IERC20 == gigadata.userTokens[j].tokendata.address) {
+                    gigadata.userTokens[j].count++
+                    gigadata.userTokens[j].result += fillColor == null ? -1 * parseFloat(element.deposit) : parseFloat(element.deposit)
+                    Symbol = gigadata.userTokens[j].tokendata.symbol
+                    break
+                }
+            }
+            if (Symbol == undefined) {
+                for (let j = 0; j < allLength; j++) {
+                    if (element.IERC20 == tokens[j].address) {
+                        Symbol = tokens[j].symbol
+                        gigadata.userTokens.push({ tokendata: tokens[j], count: 1, result: fillColor == null ? -1 * parseFloat(element.deposit) : parseFloat(element.deposit) })
+                        break
+                    }
+                }
+            }
+            if (fillColor != null)
+                gigadata.wins++
+
+
             const temp = [
-                { text: `${i}`, fillColor: color },
-                { text: element.creator, fillColor: color },
-                { text: element.IERC20, fillColor: color },
-                { text: cutPlayers, fillColor: color },
-                { text: element.winner, fillColor: color },
-                { text: element.deposit, fillColor: color },
-                { text: `${element.countOfPlayers}`, fillColor: color },
+                { text: `${++i}`, fillColor },
+                { text: element.creator, fillColor },
+                { text: element.IERC20, fillColor },
+                { text: element.winner, fillColor },
+                { text: element.deposit.toString() + (` (${Symbol})`), fillColor },
+                { text: `${element.countOfPlayers}`, fillColor },
             ]
-            body.push(temp)
+            return temp
         }
     })
+
+    gigadata.LobbyCount = i
     const styles = {
         header: {
             fontSize: 18,
@@ -56,21 +89,58 @@ export default async function pdf(req, res) {
             margin: [0, 0, 0, 0]
         },
         subheader: {
-            fontSize: 16,
-            bold: true,
-            margin: [0, 0, 0, 0]
+            alignment: 'center',
+            fontSize: 10,
+            margin: [0, 0, 0, 30]
         },
         tableExample: {
-            fontSize: 7
+            fontSize: 8,
+            alignment: 'center',
+            margin: [0, 0, 0, 30]
         },
         tableHeader: {
             bold: true,
             fontSize: 10,
             fillColor: '#403e3f',
             color: 'white',
-            alignment: 'center'
         }
     }
-    const data = { body, styles }
-    res.json(data)
+    gigadata.userTokens.forEach((element, index) => {
+        const bodytoken = [
+            { text: `${++index}` },
+            { text: element.tokendata.symbol },
+            { text: element.result }
+        ]
+        gigadata.forPDF.push(bodytoken)
+    })
+
+
+
+    pdf = {
+        pageOrientation: "landscape",
+        content: [
+            {
+                style: 'tableExample',
+                table: {
+                    dontBreakRows: true,
+                    widths: [25, 200, 200, 200, 40, 40],
+                    headerRows: 1,
+                    body: [Header, ...body],
+                },
+            },
+            {
+                style: 'subheader',
+                table: {
+                    dontBreakRows: true,
+                    widths: [25, 60, 60],
+                    headerRows: 1,
+                    body: [HeaderTokens, ...gigadata.forPDF],
+                },
+            }
+        ],
+        styles: styles,
+    }
+
+    console.log(gigadata)
+    res.json(pdf)
 }

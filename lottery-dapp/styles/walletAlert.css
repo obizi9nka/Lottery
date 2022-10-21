@@ -215,24 +215,34 @@
 }
 
 .PDF {
-    align-self: start;
-    justify-self: end;
+
     width: 180px;
     height: 100px;
     background-color: rgb(19 20 20);
     border-radius: 12px;
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 8px;
 }
 
 .MudebzInfo {
-    align-self: start;
-    justify-self: end;
     width: 180px;
     height: 190px;
+    padding: 10px 15px;
     background-color: rgb(19 20 20);
     border-radius: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.MudebzInfoElement {
+    justify-self: center;
+    align-self: center;
+}
+
+.MudebzInfoElement:hover {
+    cursor: pointer;
 }
 
 .addToken {
