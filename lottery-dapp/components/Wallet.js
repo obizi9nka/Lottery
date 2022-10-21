@@ -6,7 +6,7 @@ import MintNftButton from '../components/MintNftButton';
 import Lottery from "/blockchain/Lottery.json"
 import MudebzNFT from "/blockchain/MudebzNFT.json"
 import WalletAlert from './WalletAlert';
-import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from './Constants';
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid } from './Constants';
 import News from './News';
 
 import {
@@ -125,9 +125,8 @@ export default function Wallet({ chains, LOTTERY_ADDRESS, isWalletAlert, setisWa
             })
                 .then(async (data) => {
                     const tr = await data.json()
-
                     let temp
-                    if (chain.id == 4)
+                    if (chain.id == ETHid)
                         temp = tr.newsETH
                     else
                         temp = tr.newsBNB
