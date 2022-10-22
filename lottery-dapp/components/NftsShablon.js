@@ -183,24 +183,24 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, Data, chainI
     }
 
     const addToAutoEnter = async () => {
+        setisAutoEnterPined(true)
         const body = { address, chainId, tokenId: Data.edition }
         await fetch('/api/addToAutoEnter', {
             method: "POST",
             body: JSON.stringify(body)
         }).then(() => {
             Data.autoEnterBD = true
-            setisAutoEnterPined(true)
         })
     }
 
     const deleteFromAutoEnter = async () => {
+        setisAutoEnterPined(false)
         const body = { address, chainId, tokenId: Data.edition }
         await fetch('/api/deleteFromAutoEnter', {
             method: "POST",
             body: JSON.stringify(body)
         }).then(() => {
             Data.autoEnterBD = false
-            setisAutoEnterPined(false)
         })
     }
 

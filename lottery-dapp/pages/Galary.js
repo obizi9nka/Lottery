@@ -104,13 +104,13 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
         // autoenter
         if (isConnected) {
             try {
-                const body = { user: address, chainId: chainId != 0 ? chainId : (tymblerNaNetwork ? ETHid : PRODACTION ? BNBid : LocalhostId) }
+                const body = { user: address, chainId: tymblerNaNetwork ? ETHid : BNBid }
                 await fetch('/api/getUserData', {
                     method: "POST",
                     body: JSON.stringify(body)
                 }).then(async (data) => {
                     const temp = await data.json()
-                    if (chainId == 4) {
+                    if (chainId == ETHid) {
                         if (temp.AutoEnterETH != null) {
                             AutoEnterFromDB = temp.AutoEnterETH.split("_")
                         }
@@ -210,18 +210,16 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
                 })
 
                 //Autoenter
-                if (chainId === 31337) {
-                    const contractLottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
-                    const id = await contractLottery.getLotteryCount()
-                    const data = await contractLottery.getAutoEnter(address)
-                    let temp = data.map((element) => {
-                        if (element > id)
-                            return parseInt(element)
-                    })
-                    autoenter = temp.sort((a, b) => {
-                        return a - b
-                    })
-                }
+                const contractLottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
+                const id = await contractLottery.getLotteryCount()
+                const data = await contractLottery.getAutoEnter(address)
+                let temp = data.map((element) => {
+                    if (element > id)
+                        return parseInt(element)
+                })
+                autoenter = temp.sort((a, b) => {
+                    return a - b
+                })
 
             } catch (err) {
                 console.log(err)

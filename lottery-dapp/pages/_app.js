@@ -16,15 +16,11 @@ import '@rainbow-me/rainbowkit/styles.css';
 
 import Image from 'next/image'
 import Link from 'next/link'
-const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
 import Wallet from '../components/Wallet';
 import Head from 'next/head';
-import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from '/components/Constants.js';
-
-
-
-
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, } from '/components/Constants.js';
+import notForYourEyesBitch from "../notForYourEyesBitch.json"
 
 import {
   getDefaultWallets,
@@ -44,11 +40,12 @@ import {
 } from 'wagmi';
 
 
+import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { infuraProvider } from 'wagmi/providers/infura'
-import { ConnectButton, connectorsForWallets, wallet } from '@rainbow-me/rainbowkit';
 import { publicProvider } from 'wagmi/providers/public';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import InfoPopUp from '../components/InfoPopUp';
+
 
 const BNBChain = {
   id: 56,
@@ -72,9 +69,10 @@ const BNBChain = {
 
 
 const { chains, provider } = configureChains(
-  [chain.sepolia, chain.hardhat, BNBChain, chain.mainnet],
+  [chain.goerli, chain.sepolia, chain.hardhat, BNBChain, chain.mainnet],
   [
-
+    alchemyProvider({ apiKey: notForYourEyesBitch.alchemykey }),
+    infuraProvider({ apiKey: notForYourEyesBitch.infuraKey }),
     jsonRpcProvider({
       rpc: (chain) => {
         if (chain.id !== BNBChain.id) return null
@@ -98,6 +96,7 @@ const wagmiClient = createClient({
 
 
 function MyApp({ Component, pageProps }) {
+
 
 
   const [logo, setlogo] = useState('/Logos/purple.png')
@@ -178,10 +177,10 @@ function MyApp({ Component, pageProps }) {
                 <a className='menu'> Lottery </a>
               </Link>
               <Link href="/Lobbyes">
-                <a className='menu'> Lobbys </a>
+                <a className='menu'> Lobby </a>
               </Link>
               <Link href="/Galary">
-                <a className='menu'> Galary </a>
+                <a className='menu'> Gallery </a>
               </Link>
               <Link href="/About">
                 <a className='menu'> About </a>
@@ -213,10 +212,10 @@ function MyApp({ Component, pageProps }) {
           <a className='menuSmartfon'> Lottery </a>
         </Link>
         <Link href="/Lobbyes">
-          <a className='menuSmartfon'> Lobbys </a>
+          <a className='menuSmartfon'> Lobby </a>
         </Link>
         <Link href="/Galary">
-          <a className='menuSmartfon'> Galary </a>
+          <a className='menuSmartfon'> Gallery </a>
         </Link>
         <Link href="/About">
           <a className='menuSmartfon'> About </a>

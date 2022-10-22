@@ -1,18 +1,17 @@
 export const PRODACTION = false
 
-//Rinkeby
+export const LotteryAddressETH = "0x995675c4b629D1AB0e4590B3Ef25c7D18af7B6d7"
+export const MudeBzNFTETH = "0xb0a44f5cfc3562644655A150af451aFe3EFAa5Bc"
 
-export const LotteryAddressETH = "0xB6a0aD33308196269b9ABb9Ed08fB353cD9DA2Bd"
-export const MudeBzNFTETH = "0xA91E19C675B3448102282D4E896092Fa45B80b1D"
+export const LotteryAddressBNB = "0xB6a0aD33308196269b9ABb9Ed08fB353cD9DA2Bd"
+export const MudeBzNFTBNB = '0xA91E19C675B3448102282D4E896092Fa45B80b1D'
 
-//BNBtestNet
-
-export const LotteryAddressBNB = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
-export const MudeBzNFTBNB = '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9'
+export const ETHid = 5
+export const BNBid = 11155111
 
 
-export const ETHid = 11155111
-export const BNBid = 31337
+export const defaultTokenETH = "0x07a7f429A59F12ab2d3F176d1dA4420181a03Af0"
+export const defaultTokenBNB = "0xA4b8316c87143311e6E9f538C36f231949e107cE"
 
 
 // sup = EerBgAQSP1Vebi4z
@@ -26,6 +25,7 @@ export const BNBid = 31337
 // MudebzNFT deployed to: 0xA91E19C675B3448102282D4E896092Fa45B80b1D
 // MUD deployed to: 0xAEBc1e9B602Ec8F6e926717D3f7990eb34c8f85a
 
+
 ///// BNB testnet
 
 // A deployed to: 0x1FF1dd34bB7079C4eE3EBEc2AeCd0B1200424d68
@@ -35,6 +35,11 @@ export const BNBid = 31337
 
 
 ///// Goerli
-//A deployed to: 0x07a7f429A59F12ab2d3F176d1dA4420181a03Af0
+
+// A deployed to: 0x07a7f429A59F12ab2d3F176d1dA4420181a03Af0
+// B deployed to: 0x1FF1dd34bB7079C4eE3EBEc2AeCd0B1200424d68
+// Lottery deployed to: 0x995675c4b629D1AB0e4590B3Ef25c7D18af7B6d7
+// MudebzNFT deployed to: 0xb0a44f5cfc3562644655A150af451aFe3EFAa5Bc
+// MUD deployed to: 0xd751d9672d55F67BE90044aecec063C80C9D95a4
 
 //https://medium.com/spartanprotocol/how-to-connect-metamask-to-bsc-testnet-7d89c111ab2

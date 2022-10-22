@@ -60,15 +60,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
 
 
   const changeImages = async (flag) => {
-    // try {
-    //   await fetch('/api/add1000', {
-    //     method: "POST",
-    //     body: JSON.stringify(5)
-    //   })
-    // }
-    // catch (err) {
-    //   console.log(err)
-    // }
     try {
       let provider, _id
       if (tymblerNaNetwork)
@@ -112,10 +103,14 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
   const [amIn, setamIn] = useState(false)
 
   const checkAmIn = async () => {
-    if (isConnected)
+    if (isConnected) {
+      // const checkAmIn = localStorage.getItem("checkAmIn")
+      // if (checkAmIn != undefined && checkAmIn.lotteryId)
       try {
+
         const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
-        let players = (await contract.getLotteryShablonByIndex(await contract.getLotteryCount())).players
+        const id = await contract.getLotteryCount()
+        let players = (await contract.getLotteryShablonByIndex(id)).players
         const length = players.length
 
         console.log(players)
@@ -128,12 +123,29 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
           }
         }
         setamIn(flag)
+        const d = {
+          lotteryId: id,
+          isEntered: falg
+        }
+        localStorage.setItem("checkAmIn", JSON.stringify(d))
       } catch (err) {
         console.log(err)
       }
+    }
+
   }
 
   const Enter = async () => {
+    // try {
+    //   await fetch('/api/add1000', {
+    //     method: "POST",
+    //     body: JSON.stringify(5)
+    //   })
+    // }
+    // catch (err) {
+    //   console.log(err)
+    // }
+    // return
     try {
       settxData({
         isPending: true,
@@ -159,9 +171,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
     }
   }
 
-  //console.log(ethers.utils.keccak256(ethers.utils.toUtf8Bytes("")))
-
-
   return (
     <div>
       <Head>
@@ -181,7 +190,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
             <Image src={Images.lotteryId} className="tttt" width={300} height={300} />
             <div className='enterNftPlay'>
               {!amIn && <button onClick={Enter} className="mybutton tobottom">Am In!</button>}
-              {amIn && <button className="nftmintbuttonactive">Your In!</button>}
+              {amIn && <button className="nftmintbuttonactive">You're In!</button>}
             </div>
           </div>
           <div className='PLUS'>

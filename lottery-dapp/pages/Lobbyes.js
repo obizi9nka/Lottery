@@ -470,7 +470,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                         </label>
                     </div>
                     <div>
-                        <select className="choosetoken" onClick={(e) => { e.target.value == "Deposit" ? filterMode = 1 : e.target.value == "Percent" ? filterMode = 2 : filterMode = 3 }}>
+                        <select className="choosetoken" style={{ minWidth: "85px" }} onClick={(e) => { e.target.value == "Deposit" ? filterMode = 1 : e.target.value == "Percent" ? filterMode = 2 : filterMode = 3 }}>
                             <option>
                                 Deposit
                             </option>
@@ -495,7 +495,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
             <div className='Loby'>
                 <button className='mybutton' onClick={() => changeState(false)}>Back</button>
                 <select className="choosetoken mm" style={{ width: "65px" }} id="enougth" onClick={(e) => { localStorage.setItem("LobbyENOUGTH", e.target.value); setcountOfRenderNfts(e.target.value) }}>
-                    <option>5</option>
                     <option>20</option>
                     <option>100</option>
                     <option>250</option>

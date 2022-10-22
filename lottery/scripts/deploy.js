@@ -8,10 +8,10 @@ async function main() {
   await A.deployed();
   console.log("A deployed to:", A.address);
 
-  // const b = await hre.ethers.getContractFactory("A");
-  // const B = await b.deploy("B", "B");
-  // await B.deployed();
-  // console.log("B deployed to:", B.address);
+  const b = await hre.ethers.getContractFactory("A");
+  const B = await b.deploy("B", "B");
+  await B.deployed();
+  console.log("B deployed to:", B.address);
 
   const lottery = await hre.ethers.getContractFactory("Lottery");
   const Lottery = await lottery.deploy();

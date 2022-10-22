@@ -237,16 +237,26 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
     }
 
     const addToAutoEnter = async () => {
+        settxData({
+            isPending: true,
+            result: null
+        })
         try {
             const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, data)
             console.log(AutoEnter)
             const tx = await contract.addToAutoEnter(AutoEnter)
             await tx.wait()
-            setclicked(false)
             setAutoEnter([])
-            document.getElementById("AutoEnter").value = "";
+            settxData({
+                isPending: false,
+                result: true
+            })
         } catch (err) {
             console.log(err)
+            settxData({
+                isPending: false,
+                result: false
+            })
         }
     }
 
@@ -324,7 +334,6 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
 
 
     }
-
 
 
     return (

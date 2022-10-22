@@ -190,13 +190,3 @@
         min-width: 200px;
     }
 }
-
-.nftmintbuttonactive {
-    color: white;
-    border: 1px;
-    border-style: solid;
-    padding: 10px;
-    border-radius: 12px;
-    border-color: white;
-    background-color: rgb(180, 173, 37);
-}

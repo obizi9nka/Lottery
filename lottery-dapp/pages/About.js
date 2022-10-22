@@ -42,29 +42,9 @@ export default function Home({ tymblerNaNetwork }) {
                             </div>
                         </div>
 
-
-
                         <div className='colorWHITE'>
                             <h2 >
-                                2. Galary
-                            </h2>
-                            <div className='obzach'>
-                                In the gallery you can see the entire nft collection<br />
-                                and find out which nft has already been minted<div className='Agreendot' ></div>
-                                and which has not yet <div className='Areddot' ></div>.
-                            </div>
-                            <div className='obzach'>
-                                Also, the gallery is a marketplace. The owner of NFT can put it up for sale,<br /> and anyone can buy* it for the price indicated by the seller.
-                            </div>
-                            <div className='PS'>
-                                * For the purchase, the necessary funds must be in<strong className="colorPURPLE"> your personal wallet</strong>, and not on the internal one.
-                            </div>
-                        </div>
-
-
-                        <div className='colorWHITE'>
-                            <h2 >
-                                3. Lobby
+                                2. Lobby
                             </h2>
                             <div className='obzach'>
                                 Lobby is a game of <strong className="colorPURPLE"> heads and tails</strong>  with extensive customization.
@@ -81,7 +61,8 @@ export default function Home({ tymblerNaNetwork }) {
                                 </li>
                                 <div className='obzach'>
                                     That's it - you've created a lobby. Now anyone can join your lobby.<br />
-                                    As soon as the required number of players is reached, the collected coins will be drawn instantly.
+                                    As soon as the required number of players is reached, the collected coins will be drawn instantly.<br />
+                                    Once a lobby has been created, it cannot be deleted by the creator.
                                 </div>
                                 <div className='obzach'>
                                     The only limitation is that you can't have more than 10 active lobbies per wallet.<br />
@@ -91,8 +72,28 @@ export default function Home({ tymblerNaNetwork }) {
                         </div>
 
                         <div className='colorWHITE'>
+                            <h2 >
+                                3. Galary
+                            </h2>
+                            <div className='obzach'>
+                                In the gallery you can see the entire nft collection<br />
+                                and find out which nft has already been minted<div className='Agreendot' ></div>
+                                and which has not yet <div className='Areddot' ></div>.
+                            </div>
+                            <div className='obzach'>
+                                Also, the gallery is a marketplace. The owner of NFT can put it up for sale,<br /> and anyone can buy* it for the price indicated by the seller.
+                            </div>
+                            <div className='PS'>
+                                * For the purchase, the necessary funds must be in<strong className="colorPURPLE"> your personal wallet</strong>, and not on the internal one.
+                            </div>
+                        </div>
+
+
+
+
+                        <div className='colorWHITE'>
                             <h2>
-                                4. NFTS
+                                4. Mubebz NFT
                             </h2>
                             <div className='obzach'>
                                 So, what is included with NFT?
@@ -116,7 +117,7 @@ export default function Home({ tymblerNaNetwork }) {
 
                         <div className='colorWHITE'>
                             <h2>
-                                5. MUD
+                                5. MUD token
                             </h2>
                             <div className='obzach'>
                                 So, mudebz token airdrop. It will happen <strong className="colorPURPLE">on 1050 lottery</strong>.

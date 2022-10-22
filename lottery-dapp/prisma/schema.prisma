@@ -27,7 +27,6 @@ model user {
   PromSetETH       String?
   PromInputETH     String?
   AutoEnterETH     String?
-  messageETH       String?
 
   countOfLobbysBNB Int     @default(0)
   tokensBNB        String?
@@ -35,7 +34,6 @@ model user {
   PromSetBNB       String?
   PromInputBNB     String?
   AutoEnterBNB     String?
-  messageBNB       String?
 
   userLobbyesBNB        lobbyBNB[]
   userLobbyesETH        lobbyETH[]
