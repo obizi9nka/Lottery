@@ -38,6 +38,7 @@ select {
 
 * {
   /* font-size: 16px; */
+  font-weight: 100;
   box-sizing: border-box;
 }
 
@@ -73,6 +74,7 @@ select {
 
 
 .mybutton {
+
   color: white;
   border: 1px solid white;
   width: fit-content;

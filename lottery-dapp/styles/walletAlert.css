@@ -416,6 +416,27 @@
     align-self: center;
     justify-self: end;
     padding-right: 10px;
+    cursor: pointer;
+}
+
+.YourPosition {
+    animation: pos;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes pos {
+    0% {
+        color: rgb(255, 255, 255);
+    }
+
+    50% {
+        color: rgb(255, 0, 0);
+    }
+
+    100% {
+        color: rgb(255, 255, 255);
+    }
 }
 
 .PromButtons {

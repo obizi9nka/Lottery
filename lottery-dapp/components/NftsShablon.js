@@ -204,7 +204,7 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, Data, chainI
         })
     }
 
-    let image = `/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${Data.edition % 300}.png`
+    let image = `/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${Data.edition % 500}.png`
 
 
     return (
@@ -264,26 +264,23 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, Data, chainI
                     <div className={Data.ismints ? "dot absolute" : "dot absolute "} style={{ backgroundColor: Data.ismints ? "rgb(255, 0, 0)" : "" }}>
                         <div className='nftinfo'>
                             <div className='nftinfo2'>
-                                <div>
+                                <div style={{ fontWeight: "500", color: "black" }}>
                                     Token number: {Data.edition}
                                 </div>
-                                <div>
+                                <div style={{ fontWeight: "500", color: "black" }}>
                                     Data: 30.01.2023
                                 </div>
-                                <div>
+                                <div style={{ fontWeight: "500", color: "black" }}>
                                     Bank: {Data.players != null ? `${Data.players * 5}` : '—'}
-
                                 </div>
-                                <div>
+                                <div style={{ fontWeight: "500", color: "black" }}>
                                     Price: {istokenOnSell ? `${cost}` : 'Not on sale'}
                                 </div>
-                                <div>
+                                <div style={{ fontWeight: "500", color: "black" }}>
                                     Players: {Data.players != null ? `${Data.players}` : '—'}
-
                                 </div>
-                                <div>
+                                <div style={{ fontWeight: "500", color: "black" }}>
                                     Transfer count: {Data.TransferCount}
-
                                 </div>
                             </div>
                         </div>

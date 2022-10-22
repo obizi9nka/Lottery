@@ -26,6 +26,8 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
     const signer = data
 
     const [Position, setPosition] = useState({})
+    const [isPositionReq, setisPositionReq] = useState(false)
+    const [infinity, setinfinity] = useState(false)
 
     const setProm = async () => {
         try {
@@ -95,6 +97,7 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
     }, [address, chainId])
 
     const checkPosition = async () => {
+        setinfinity(true)
         const body = { chainId }
         await fetch('/api/getAllusers', {
             method: "POST",
@@ -126,6 +129,8 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
                     all
                 }
                 setPosition(tem)
+                setinfinity(false)
+                setisPositionReq(true)
             })
         })
     }
@@ -166,7 +171,7 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
 
             <div className="shouldRevard">
                 <div className='recive'>
-                    Your will recive:
+                    Your will recive
                 </div>
                 <div className='chifra'>
                     <div className='rilchifra' style={{ color: "purple" }}>
@@ -175,8 +180,10 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
 
                 </div>
                 <div className='position' onClick={() => checkPosition()}>
-                    Your Position:  {Position.you != null ? `${Position.you}/${Position.all}` : "???/???"}
-
+                    <div className={infinity ? 'YourPosition' : null}>
+                        {!isPositionReq && <strong>Your Position: ???/???</strong>}
+                        {isPositionReq && <strong>{`Your Position: ${Position.you}/${Position.all}`}</strong>}
+                    </div>
                 </div>
             </div>
 

@@ -62,7 +62,7 @@ export default function Home({ tymblerNaNetwork }) {
                                 <div className='obzach'>
                                     That's it - you've created a lobby. Now anyone can join your lobby.<br />
                                     As soon as the required number of players is reached, the collected coins will be drawn instantly.<br />
-                                    Once a lobby has been created, it cannot be deleted by the creator.
+                                    Once a lobby has been created, it <strong className="colorPURPLE">cannot be deleted</strong>.
                                 </div>
                                 <div className='obzach'>
                                     The only limitation is that you can't have more than 10 active lobbies per wallet.<br />

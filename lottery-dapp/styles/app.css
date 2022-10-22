@@ -142,7 +142,7 @@
 }
 
 .menu:hover {
-    color: rgb(180, 173, 37);
+    color: purple;
 }
 
 @media (min-width: 1700px) {
