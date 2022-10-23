@@ -26,7 +26,7 @@ import {
 import TokensBalancePylt from "./TokenBalancePylt";
 
 
-export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, active, setActive, chainId, address, tymblerNaNetwork, txData }) {
+export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, settxData, active, setActive, chainId, address, tymblerNaNetwork, txData }) {
 
 
     const [addTokenAddress, setaddTokenAddress] = useState('')
@@ -200,22 +200,20 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
                         let id = 1001
                         try {
                             id = parseInt(await contractLottery.getLotteryCount())
+
                         } catch (err) {
                             console.log(err)
                         }
-                        const temp = []
+
                         Auto.forEach(async element => {
                             if (element < id) {
-                                temp.push(element)
+                                const body = { address, chainId, tokenId: element }
+                                Auto.splice(Auto.indexOf(element), 1)
+                                await fetch('/api/deleteFromAutoEnter', {
+                                    method: "POST",
+                                    body: JSON.stringify(body)
+                                })
                             }
-                        })
-                        temp.forEach(async element => {
-                            const body = { address, chainId, tokenId: element }
-                            Auto.splice(Auto.indexOf(element), 1)
-                            await fetch('/api/deleteFromAutoEnter', {
-                                method: "POST",
-                                body: JSON.stringify(body)
-                            })
                         })
                     }
                     setPromSet(set)
@@ -246,11 +244,18 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
             console.log(AutoEnter)
             const tx = await contract.addToAutoEnter(AutoEnter)
             await tx.wait()
+            const body = { address, chainId, tokenId: -1 }
+            await fetch('/api/deleteFromAutoEnter', {
+                method: "POST",
+                body: JSON.stringify(body)
+            })
             setAutoEnter([])
             settxData({
                 isPending: false,
                 result: true
             })
+            setENTERED(true)
+            setTokens()
         } catch (err) {
             console.log(err)
             settxData({
@@ -259,7 +264,6 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, settxData, a
             })
         }
     }
-
 
     const addToken = async () => {
         const n = new Promise((res) => {

@@ -29,7 +29,7 @@ import { listenerCount } from 'process';
 
 
 
-export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaNetwork, setIsSession, isSession, settxData }) {
+export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, setENTERED, tymblerNaNetwork, setIsSession, isSession, settxData }) {
 
 
     const kek = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
@@ -56,6 +56,10 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
     const [search, setsearch] = useState("")
     const [costil, setcostil] = useState(false)
 
+    useEffect(() => {
+        if (ENTERED)
+            setNFT()
+    }, [ENTERED])
 
 
     useEffect(() => {
@@ -307,6 +311,8 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
 
         console.log(minted, notMinted)
         setIsKek(false)
+        if (ENTERED)
+            setENTERED(false)
     }
 
     const shuffledArr = (arr) => {

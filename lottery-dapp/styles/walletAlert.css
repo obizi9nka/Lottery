@@ -176,6 +176,13 @@
     border-radius: 12px;
 }
 
+.PromButtons {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+
+
 .NoButtons {
     display: grid;
 }
@@ -439,11 +446,6 @@
     }
 }
 
-.PromButtons {
-    display: grid;
-    align-items: center;
-    justify-content: center;
-}
 
 
 

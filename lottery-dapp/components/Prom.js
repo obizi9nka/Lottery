@@ -149,7 +149,7 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
     return (
         <div className="PROM">
             <div style={{ display: "grid" }}>
-                {IsVisible && <div className={(PromInput == null && shouldrevard.isEnteredOnce == 0) || PromSet == null ? 'PromButtons' : "NoButtons"} style={{ gridTemplateRows: "1fr 1fr 1fr" }}>
+                {IsVisible && <div className={(PromInput == null && shouldrevard.isEnteredOnce == 0) || PromSet == null ? 'PromButtons' : "NoButtons"} >
                     <div >
                         {PromSet == null &&
                             <button onClick={() => { if (prom.length > 0) setProm() }} className="setProm mybutton droch" >Set your code</button>}

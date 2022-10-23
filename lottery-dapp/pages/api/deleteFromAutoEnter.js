@@ -23,12 +23,16 @@ export default async function handler(req, res) {
         return a - b
     })
     let aut = ''
-    let flag = true
-    mas.map((element) => {
-        if (parseInt(element) != tokenId) {
-            aut += element + "_"
-        }
-    })
+
+    if (tokenId != -1)
+        mas.map((element) => {
+            if (parseInt(element) != tokenId) {
+                aut += element + "_"
+            }
+        })
+    else {
+        aut = null
+    }
 
     let result
     if (chainId == ETHid) {
