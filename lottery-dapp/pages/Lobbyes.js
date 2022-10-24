@@ -105,13 +105,20 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
     useEffect(() => {
         if (chain == undefined) {
             if (tymblerNaNetwork) {
-                setlobbyes([...lobbyETH, ...lobbyETH, ...lobbyETH, ...lobbyETH, ...lobbyETH, ...lobbyETH, ...lobbyETH, ...lobbyETH, ...lobbyETH])
+                setlobbyes(lobbyETH)
             }
             else {
-                setlobbyes([...lobbyBNB])
+                setlobbyes(lobbyBNB)
+            }
+        } else {
+            if (chainId == ETHid) {
+                setlobbyes(lobbyETH)
+            }
+            else {
+                setlobbyes(lobbyBNB)
             }
         }
-    }, [tymblerNaNetwork])
+    }, [tymblerNaNetwork, chainId])
 
 
 
@@ -143,13 +150,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
         getTokens()
     }, [address, chainId])
 
-    useEffect(() => {
-        if (chainId == ETHid) {
-            setlobbyes(lobbyETH)
-        }
-        else
-            setlobbyes(lobbyBNB)
-    }, [chainId])
 
     useEffect(() => {
         if (isConnected) {
