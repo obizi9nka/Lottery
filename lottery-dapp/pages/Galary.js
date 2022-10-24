@@ -169,8 +169,10 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
             try {
                 let providerr
                 if (tymblerNaNetwork)
-                    providerr = new ethers.providers.InfuraProvider("rinkeby", notForYourEyesBitch.infuraKey)
+                    providerr = new ethers.providers.InfuraProvider("goerli", notForYourEyesBitch.infuraKey)
                 else
+                    providerr = new ethers.providers.InfuraProvider("sepolia", notForYourEyesBitch.infuraKey)
+                if (chainId == 31337)
                     providerr = new ethers.providers.JsonRpcProvider
                 const contract = new ethers.Contract(NFT_ADDRESS, MudebzNFT.abi, providerr)
                 const promises = list.map(async (item) => {
@@ -184,13 +186,14 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
                             }
                             resolve(body)
                         } catch (err) {
+                            console.log(err)
                             resolve(0)
                         }
                     });
                 }
                 );
                 await Promise.all(promises).then((data) => {
-                    listTransferCount = data
+                    listTransferCount = [...data, 0]
                 })
             } catch (err) {
                 console.log(err)
@@ -233,6 +236,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
         // minted
         let minted = []
         let notMinted = []
+        console.log(listTransferCount)
         for (let i = 1, j = 0, x = 0, y = 0, mes = 0, autoEnterbd = 0, Tcount = 0; i < 1001; i++) {
             if (list[j] === i) {
                 const ismints = true
@@ -243,7 +247,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
                 const message = messages[mes]?.id == i ? messages[mes].message : null
                 if (message)
                     mes++
-                const TransferCount = listTransferCount[Tcount++].transfers
+                const TransferCount = listTransferCount[Tcount++]
                 const body = { ismints, isowner, edition, message, TransferCount, price: Prices[i - 1], players: Players[i - 1] }
                 minted.push(body)
                 j++
@@ -295,7 +299,8 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
         setNotShuffle(noshuffled)
         setNFTS(shuffled)
         setDATA(shuffled)
-
+        setsearch("")
+        document.getElementById("search").value = ""
         settokensMints(minted)
         settokensNotMints(notMinted)
 
@@ -426,7 +431,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
             <div className='fiter'>
                 <div className='anotherShit'>
                     <button className='mybutton butound' onClick={() => changeState(false, false)}>Back</button>
-                    <input className='input' style={{ width: 70 }} placeholder='Search' onChange={e => {
+                    <input className='input' id='search' style={{ width: 70 }} placeholder='Search' onChange={e => {
                         setcostil(true)
                         setTimeout(() => {
                             setsearch(e.target.value)

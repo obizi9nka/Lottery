@@ -118,22 +118,22 @@ export default function MintNftButton({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, a
             <div className={isMintMartenActive ? "modallMINT active" : "modallMINT"} onClick={() => setisMintMartenActive(false)}>
                 <div className="areaMINT" onClick={e => e.stopPropagation()}>
                     <div className='imageWithArrow'>
-                        <div className="arow DEG180" style={{ margin: "0px 30px" }} onClick={() => { if (index != 0) { setindex(parseInt(index) - 1) } }}>
+                        {arrayAllowToMint.length > 1 && < div className="arow DEG180" style={{ margin: "0px 30px" }} onClick={() => { if (index != 0) { setindex(parseInt(index) - 1) } }}>
                             <Image src={"/rigth.png"} width={30} height={30} />
-                        </div>
+                        </div>}
                         <div className='MINT'>
                             <Image src={`/imagesETH/${arrayAllowToMint[index]}.png`} style={{ "border-radius": 12 }} width={350} height={350} /><br />
                         </div>
-                        <div className="arow" style={{ margin: "0px 30px" }} onClick={() => { if (index != arrayAllowToMint.length - 1) { setindex(parseInt(index) + 1) } }}>
+                        {arrayAllowToMint.length > 1 && <div className="arow" style={{ margin: "0px 30px" }} onClick={() => { if (index != arrayAllowToMint.length - 1) { setindex(parseInt(index) + 1) } }}>
                             <Image src={"/rigth.png"} width={30} height={30} />
-                        </div>
+                        </div>}
                     </div>
                     <div className='MINT'>
-                        <button className='mybutton Mint' style={{ margin: "20px" }} onClick={() => { MintMarten(arrayAllowToMint[index]) }}>Mint</button>
+                        <button className='mybutton Mint' style={{ margin: "20px", width: "150px" }} onClick={() => { MintMarten(arrayAllowToMint[index]) }}>Mint</button>
                     </div>
                 </div>
             </div>
 
-        </div>
+        </div >
     )
 }

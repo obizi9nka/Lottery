@@ -72,6 +72,9 @@ select {
   --wigth: 0px;
 }
 
+strong {
+  font-weight: 500;
+}
 
 .mybutton {
 

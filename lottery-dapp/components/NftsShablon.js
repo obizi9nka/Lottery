@@ -160,25 +160,11 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, Data, chainI
     }
 
     const setMessage = async () => {
-        settxData({
-            isPending: true,
-            result: null
-        })
         setIsMessage(false)
         const body = { address, message: enteredMessage, chainId, tokenId: Data.edition }
         await fetch('/api/setMessage', {
             method: "POST",
             body: JSON.stringify(body)
-        }).then(() => {
-            settxData({
-                isPending: false,
-                result: true
-            })
-        }).catch(() => {
-            settxData({
-                isPending: false,
-                result: false
-            })
         })
     }
 
@@ -204,7 +190,7 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, Data, chainI
         })
     }
 
-    let image = `/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${Data.edition % 300}.png`
+    let image = `/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${Data.edition % 299}.png`
 
 
     return (

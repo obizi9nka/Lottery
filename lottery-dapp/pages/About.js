@@ -50,7 +50,7 @@ export default function Home({ tymblerNaNetwork }) {
                                 Lobby is a game of <strong className="colorPURPLE"> heads and tails</strong>  with extensive customization.
                             </div>
                             <div className='obzach'>
-                                <div className='grid' style={{ paddingLeft: "160px" }}>
+                                <div className='grid' style={{ paddingLeft: "200px" }}>
                                     <li className='Dot'>
                                         Choose any erc20 standard <strong className="colorPURPLE"> coin</strong>.
                                     </li>
@@ -81,10 +81,13 @@ export default function Home({ tymblerNaNetwork }) {
                             <div className='obzach'>
                                 In the gallery you can see the entire nft collection<br />
                                 and find out which nft has already been minted<div className='Agreendot' ></div>
-                                and which has not yet <div className='Areddot' ></div>.
+                                and which has not yet <div className='Areddot' ></div>
                             </div>
                             <div className='obzach'>
-                                Also, the gallery is a marketplace. The owner of NFT can put it up for sale,<br /> and anyone can buy* it for the price indicated by the seller.
+                                The gallery is a <strong className="colorPURPLE">marketplace</strong>. The owner of NFT can put it up for sale,<br /> and anyone can buy* it for the price indicated by the seller.
+                            </div>
+                            <div className='obzach'>
+                                Also, the owner can leave a <strong className="colorPURPLE">message</strong> under the picture, which will be visible to all users.
                             </div>
                             <div className='PS'>
                                 * For the purchase, the necessary funds must be in<strong className="colorPURPLE"> your personal wallet</strong>, and not on the internal one.
@@ -101,7 +104,7 @@ export default function Home({ tymblerNaNetwork }) {
                             <div className='obzach'>
                                 So, what is included with NFT?
                             </div>
-                            <div className='grid' style={{ paddingLeft: "160px" }}>
+                            <div className='grid' style={{ paddingLeft: "200px" }}>
                                 <li className='Dot'>
                                     <strong className="colorPURPLE">Day</strong>. Well, yes, it's your day, congratulations, clap clap.
                                 </li>
@@ -117,7 +120,7 @@ export default function Home({ tymblerNaNetwork }) {
                             </div>
 
                             <div className='obzach'>
-                                The collection includes about 5% of unique NFTs that are timed to coincide with holidays and important events in history. You can see their in the gallery.
+                                The collection includes about <strong className="colorPURPLE">5% of unique NFTs</strong> that are timed to coincide with holidays and important events in history. You can see their in the gallery.
                             </div>
                         </div>
 
@@ -131,7 +134,7 @@ export default function Home({ tymblerNaNetwork }) {
                             <div className='obzach'>
                                 Who will receive the tokens?
                             </div>
-                            <div className='grid' style={{ paddingLeft: "160px" }}>
+                            <div className='grid' style={{ paddingLeft: "200px" }}>
                                 <li className='Dot'>
                                     <strong className="colorPURPLE">Holders nft</strong>.
                                 </li>
@@ -146,7 +149,7 @@ export default function Home({ tymblerNaNetwork }) {
                             <div className='obzach'>
                                 Emission of tokens: <strong className="colorPURPLE">1,000,000,000</strong> each blockchain.
                             </div>
-                            <div className='grid' style={{ paddingLeft: "160px" }}>
+                            <div className='grid' style={{ paddingLeft: "200px" }}>
                                 <li className='Dot'>
                                     NFT holders will share <strong className="colorPURPLE">8%</strong>.
                                 </li>
@@ -197,7 +200,7 @@ export default function Home({ tymblerNaNetwork }) {
                             <div className='obzach'>
                                 1. In order <strong className="colorPURPLE">to receive tokens in the lobby</strong>, you need to:
                             </div>
-                            <div className='grid' style={{ paddingLeft: "160px" }}>
+                            <div className='grid' style={{ paddingLeft: "240px" }}>
                                 <li className='Dot'>
                                     Play with a <strong className="colorPURPLE">MUD token</strong>.
                                 </li>

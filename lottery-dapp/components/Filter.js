@@ -3,6 +3,8 @@ export default function Filter(lobbyes, settings) {
 
     let filtered = lobbyes
 
+    console.log(lobbyes, settings)
+
     if (settings.token !== undefined) {
         console.log("token")
         filtered = filtered.filter((element) => {

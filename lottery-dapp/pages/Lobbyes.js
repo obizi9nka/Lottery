@@ -22,7 +22,6 @@ import {
     useConnect,
     useNetwork, useProvider, useSigner
 } from 'wagmi';
-
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const prisma = new PrismaClient();
@@ -179,7 +178,8 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                     temp.forEach((element) => {
                         objects.push({
                             address: element.address,
-                            symbol: element.symbol
+                            symbol: element.symbol,
+                            decimals: element.decimals
                         })
                     })
                     setTokens(objects)
@@ -196,7 +196,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
         }
     }
 
-
     const createNewLobby = async () => {
 
         try {
@@ -204,8 +203,9 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                 isPending: true,
                 result: null
             })
-
+            console.log("ssw", token)
             if (token.decimals >= 0) {
+                console.log("ss", token)
                 const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
                 const Deposit = BigInt(deposit * 10 ** token.decimals)
                 const body = { user: address, token: token.address, countOfPlayers, deposit, chainId }
@@ -236,7 +236,10 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                     setlobbyes([...lobbyes, _data])
                     setlobbyesActive([...lobbyesActive, _data])
                     setuserlobbyActive([...userlobbyActive, true])
-                    ALL_LOBBYES.chainId == ETHid ? lobbyETH : lobbyBNB.push(_data)
+
+                    const temp = ALL_LOBBYES
+                    chainId == ETHid ? temp.lobbyETH.push(_data) : temp.lobbyBNB.push(_data)
+                    setAll_LOBBYES(temp)
                 })
                 settxData({
                     isPending: true,
@@ -435,7 +438,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                             <div className='predepositlobby'>
                                 <div className='depositlobby'>
                                     <div>Deposit: {element.deposit}</div>
-                                    <div>Pot: {`${(element.deposit * element.countOfPlayers)}`.substring(0, element.deposit.length)}</div>
+                                    <div>Pot: {`${(element.deposit * element.countOfPlayers)}`}</div>
                                     <div>Players: {element.nowInLobby}/{element.countOfPlayers}</div>
                                 </div>
                             </div>
@@ -514,14 +517,14 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                                         {!isfaund && <Image className="tokenpng" src="/question_mark.png" width={45} height={45} />}
                                     </div>
                                     <div className='countofplayers gridcenter'>
-                                        <strong style={{ color: needLigth && filterModeScreen == 2 ? "rgb(0 16 255)" : null }}>{`${element.percent}%`}</strong>
+                                        <strong style={{ color: needLigth && filterModeScreen == 2 ? "rgb(42 255 0)" : null }}>{`${element.percent}%`}</strong>
                                     </div>
                                 </div>
                                 <div className='predepositlobby'>
                                     <div className='depositlobby'>
-                                        <div>Deposit: <strong style={{ color: needLigth && filterModeScreen == 1 ? "rgb(0 16 255)" : null }}>{element.deposit}</strong></div>
+                                        <div>Deposit: <strong style={{ color: needLigth && filterModeScreen == 1 ? "rgb(42 255 0)" : null }}>{element.deposit}</strong></div>
                                         <div>Pot: <strong>{`${(element.deposit * element.countOfPlayers)}`.substring(0, 10)}</strong></div>
-                                        <div>Players: <strong style={{ color: needLigth && filterModeScreen == 3 ? "rgb(0 16 255)" : null }}>{element.nowInLobby}/{element.countOfPlayers}</strong></div>
+                                        <div>Players: <strong style={{ color: needLigth && filterModeScreen == 3 ? "rgb(42 255 0)" : null }}>{element.nowInLobby}/{element.countOfPlayers}</strong></div>
                                     </div>
                                 </div>
                             </div>
