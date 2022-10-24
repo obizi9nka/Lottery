@@ -94,6 +94,8 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
 
     useEffect(() => {
         setPosition({})
+        setisPositionReq(false)
+        setinfinity(false)
     }, [address, chainId])
 
     const checkPosition = async () => {
@@ -143,8 +145,6 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
         }, 0);
 
     }, [])
-
-
 
     return (
         <div className="PROM">

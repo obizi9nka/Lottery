@@ -256,7 +256,7 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, Data, chainI
                                             {isAutoEnterPined && < button className='mybutton' style={{ backgroundColor: 'purple' }} onClick={deleteFromAutoEnter}>Delete from autoenter</button>}
                                         </div>
                                             : LotteryId == Data.edition ? <div >Only once.</div>
-                                                : <div >Data: 30.01.2023</div>
+                                                : <div style={{ color: "whitesmoke" }}>Data: 30.01.2023</div>
                                 }
                             </div>
                     }

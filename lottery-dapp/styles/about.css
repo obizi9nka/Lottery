@@ -66,3 +66,11 @@
 .obzach {
     margin: 10px 0px;
 }
+
+.grid {
+    display: grid;
+}
+
+.Dot {
+    justify-self: start;
+}

@@ -360,7 +360,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
                             <TokensBalanceShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} txData={txData} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} rokens={rokens} tymblerNaNetwork={tymblerNaNetwork} tokenTransfered={tokenTransfered} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} element={element} chainId={chainId} settokenTransfered={settokenTransfered} index={{ index, last: rokens.length - 1 }} deleteTokenFromFronend={deleteTokenFromFronend} />
                         )}
                     </div>
-                    <button className="disconnect" onClick={() => { disconnect(); setActive(false) }}>
+                    <button className="disconnect" onClick={() => { disconnect(); setActive(false); document.body.style.overflow = ('overflow', 'auto'); }}>
                         Disconnect
                     </button>
                 </div>}
@@ -414,6 +414,9 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
                                 </div>
                                 <div className="MudebzInfoElement">
                                     <Image src={"/github.png"} width={35} height={35} />
+                                </div>
+                                <div className="MudebzInfoElement">
+                                    <Image src={"/Guide.png"} width={45} height={45} />
                                 </div>
                             </div>
                         </div>

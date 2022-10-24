@@ -44,7 +44,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
 
     const provider = useProvider()
     const { data } = useSigner()
-    const PROVIDER = provider
     const { address, isConnected } = useAccount()
 
     const [iskek, setIsKek] = useState(true)
@@ -70,9 +69,10 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
         try {
             let provider
             if (tymblerNaNetwork)
-                provider = PROVIDER
-            // provider = new ethers.providers.InfuraProvider("sepolia", notForYourEyesBitch.infuraKey)
+                provider = new ethers.providers.InfuraProvider("goerli", notForYourEyesBitch.infuraKey)
             else
+                provider = new ethers.providers.InfuraProvider("sepolia", notForYourEyesBitch.infuraKey)
+            if (chainId == 31337)
                 provider = new ethers.providers.JsonRpcProvider
             const contractLottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
             const id = parseInt(await contractLottery.getLotteryCount())
@@ -86,7 +86,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
             })
         } catch (err) {
             console.log(err)
-            setLotteryId(1)
         }
     }
 
@@ -402,7 +401,8 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
         }
         else if (search === '') {
             setNFTS(DATA)
-        } else {
+        }
+        else {
             setstartIndex(1)
             const temp = []
             NotShuffle.map((element) => {
@@ -413,6 +413,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
             setNFTS(temp)
         }
     }
+
 
 
     return (

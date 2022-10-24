@@ -3,7 +3,7 @@ import Image from 'next/image'
 const { ethers } = require("ethers");
 import { useState, useEffect } from 'react'
 import { ETHid, BNBid, LocalhostId, PRODACTION } from '/components/Constants.js';
-// import Lottery from "C:/Lottery/lottery/artifacts/contracts/Lottery.sol/Lottery.json"
+import notForYourEyesBitch from "../notForYourEyesBitch.json"
 import Lottery from "/blockchain/Lottery.json"
 
 import {
@@ -63,16 +63,17 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
     try {
       let provider, _id
       if (tymblerNaNetwork)
-        provider = PROVIDRER
-      // provider = new ethers.providers.InfuraProvider("sepolia", notForYourEyesBitch.infuraKey)
+        provider = new ethers.providers.InfuraProvider("goerli", notForYourEyesBitch.infuraKey)
       else
+        provider = new ethers.providers.InfuraProvider("sepolia", notForYourEyesBitch.infuraKey)
+      if (chainId == 31337)
         provider = new ethers.providers.JsonRpcProvider
       try {
         const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
         _id = parseInt(await contract.getLotteryCount())
         console.log("_id", _id)
       } catch (err) {
-        _id = 1
+        _id = 0
       }
       console.log(Images.id, _id)
       if (Images.id != _id || flag) {

@@ -50,15 +50,18 @@ export default function Home({ tymblerNaNetwork }) {
                                 Lobby is a game of <strong className="colorPURPLE"> heads and tails</strong>  with extensive customization.
                             </div>
                             <div className='obzach'>
-                                <li>
-                                    Choose any erc20 standard <strong className="colorPURPLE"> coin</strong>.
-                                </li>
-                                <li>
-                                    Select the <strong className="colorPURPLE"> number of players</strong> between 2 and 1000.
-                                </li>
-                                <li>
-                                    And specify any <strong className="colorPURPLE"> deposit</strong>.
-                                </li>
+                                <div className='grid' style={{ paddingLeft: "160px" }}>
+                                    <li className='Dot'>
+                                        Choose any erc20 standard <strong className="colorPURPLE"> coin</strong>.
+                                    </li>
+                                    <li className='Dot'>
+                                        Select the <strong className="colorPURPLE"> number of players</strong> between 2 and 1000.
+                                    </li>
+                                    <li className='Dot'>
+                                        And specify any <strong className="colorPURPLE"> deposit</strong>.
+                                    </li>
+                                </div>
+
                                 <div className='obzach'>
                                     That's it - you've created a lobby. Now anyone can join your lobby.<br />
                                     As soon as the required number of players is reached, the collected coins will be drawn instantly.<br />
@@ -98,20 +101,23 @@ export default function Home({ tymblerNaNetwork }) {
                             <div className='obzach'>
                                 So, what is included with NFT?
                             </div>
-                            <li>
-                                <strong className="colorPURPLE">Day</strong>. Well, yes, it's your day, congratulations, clap clap.
-                            </li>
-                            <li>
-                                The ability to join a <strong className="colorPURPLE">discord channel</strong> and communicate directly with the creator.
-                            </li>
-                            <li>
-                                <strong className="colorPURPLE">Merch</strong>.
-                            </li>
-                            <li>
-                                Mudebz token <strong className="colorPURPLE">airdrop</strong>.
-                            </li>
+                            <div className='grid' style={{ paddingLeft: "160px" }}>
+                                <li className='Dot'>
+                                    <strong className="colorPURPLE">Day</strong>. Well, yes, it's your day, congratulations, clap clap.
+                                </li>
+                                <li className='Dot'>
+                                    The ability to join a <strong className="colorPURPLE">discord channel</strong>.
+                                </li>
+                                <li className='Dot'>
+                                    <strong className="colorPURPLE">Merch</strong>.
+                                </li>
+                                <li className='Dot'>
+                                    Mudebz token <strong className="colorPURPLE">airdrop</strong>.
+                                </li>
+                            </div>
+
                             <div className='obzach'>
-                                Then you can come up with something else.
+                                The collection includes about 5% of unique NFTs that are timed to coincide with holidays and important events in history. You can see their in the gallery.
                             </div>
                         </div>
 
@@ -125,27 +131,33 @@ export default function Home({ tymblerNaNetwork }) {
                             <div className='obzach'>
                                 Who will receive the tokens?
                             </div>
-                            <li>
-                                <strong className="colorPURPLE">Holders nft</strong>.
-                            </li>
-                            <li>
-                                <strong className="colorPURPLE">Wallets that have ever owned any NFT</strong>.
-                            </li>
-                            <li>
-                                <strong className="colorPURPLE">Members of the referral program</strong>.
-                            </li>
-                            <div className='obzach'>
-                                Emission of tokens: <strong className="colorPURPLE">1,000,000,000</strong>.
+                            <div className='grid' style={{ paddingLeft: "160px" }}>
+                                <li className='Dot'>
+                                    <strong className="colorPURPLE">Holders nft</strong>.
+                                </li>
+                                <li className='Dot'>
+                                    <strong className="colorPURPLE">Wallets that have ever owned any NFT</strong>.
+                                </li>
+                                <li className='Dot'>
+                                    <strong className="colorPURPLE">Members of the referral program</strong>.
+                                </li>
+
                             </div>
-                            <li>
-                                NFT holders will share <strong className="colorPURPLE">8%</strong>.
-                            </li>
-                            <li>
-                                Wallets ever owning NFTs will share <strong className="colorPURPLE">19%</strong>.
-                            </li>
-                            <li>
-                                <strong className="colorPURPLE">21%</strong> of tokens allocated for the referral program.
-                            </li>
+                            <div className='obzach'>
+                                Emission of tokens: <strong className="colorPURPLE">1,000,000,000</strong> each blockchain.
+                            </div>
+                            <div className='grid' style={{ paddingLeft: "160px" }}>
+                                <li className='Dot'>
+                                    NFT holders will share <strong className="colorPURPLE">8%</strong>.
+                                </li>
+                                <li className='Dot'>
+                                    Wallets ever owning NFTs will share <strong className="colorPURPLE">19%</strong>.
+                                </li>
+                                <li className='Dot'>
+                                    <strong className="colorPURPLE">21%</strong> of tokens allocated for the referral program.
+                                </li>
+                            </div>
+
                             <div className='obzach'>
                                 Further, <strong className="colorPURPLE">from 1051 to 2050 lottery</strong>, the remaining tokens will be drawn.
                             </div>
@@ -176,9 +188,6 @@ export default function Home({ tymblerNaNetwork }) {
                             <div className='obzach'>
                                 You can create your promo code at <strong className="colorPURPLE">any time</strong>.
                             </div>
-                            <div className='obzach'>
-                                You can create and enter a promotional code <strong className="colorPURPLE">only once!</strong>
-                            </div>
                         </div>
 
                         <div className='colorWHITE'>
@@ -188,12 +197,16 @@ export default function Home({ tymblerNaNetwork }) {
                             <div className='obzach'>
                                 1. In order <strong className="colorPURPLE">to receive tokens in the lobby</strong>, you need to:
                             </div>
-                            <li>
-                                Play with a <strong className="colorPURPLE">MUD token</strong>.
-                            </li>
-                            <li>
-                                Deposit must be at least <strong className="colorPURPLE">10 </strong>.
-                            </li>
+                            <div className='grid' style={{ paddingLeft: "160px" }}>
+                                <li className='Dot'>
+                                    Play with a <strong className="colorPURPLE">MUD token</strong>.
+                                </li>
+                                <li className='Dot'>
+                                    Deposit must be at least <strong className="colorPURPLE">10 </strong>.
+                                </li>
+
+                            </div>
+
                             <div className='obzach'>
                                 After the lobby draw, <strong className="colorPURPLE">all</strong> participants will receive <strong className="colorPURPLE">10 MUD</strong>.
                             </div>
