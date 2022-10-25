@@ -69,7 +69,7 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
             })
             const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
             console.log(prom, tymblerNaNetwork ? LotteryAddressETH : LotteryAddressBNB)
-            const tx = await contract.setPromInput(prom);
+            const tx = await contract.setPromInput(prom.toString());
             await tx.wait()
             const body = { address: address, PromInput: prom, chainId }
             await fetch("/api/promInput", {

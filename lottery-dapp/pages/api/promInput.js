@@ -1,12 +1,12 @@
 import prisma from './prisma.js';
-
+import { ETHid, BNBid, PRODACTION } from '../../components/Constants.js';
 
 export default async function handler(req, res) {
 
     const { address, PromInput, chainId } = JSON.parse(req.body)
     let result
 
-    if (chainId === 4) {
+    if (chainId === ETHid) {
         result = await prisma.user.update({
             where: {
                 address,

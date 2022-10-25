@@ -196,7 +196,7 @@ function MyApp({ Component, pageProps }) {
                 console.log("sended")
               }
             }} >
-              <div>
+              <div >
                 <Image src={logo} width="280px" height="75px" />
               </div>
             </div>

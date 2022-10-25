@@ -77,13 +77,12 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
             const contractLottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
             const id = parseInt(await contractLottery.getLotteryCount())
             setLotteryId(id)
-            const dita = await contractLottery.getLotteryShablonByIndex(id - 1)
-            console.log("dddddd", dita, id)
-            const body = { tokenId: id - 1, chainId, players: parseInt(dita.playersCount) }
-            await fetch('/api/update1000', {
-                method: "POST",
-                body: JSON.stringify(body)
-            })
+            //  const dita = await contractLottery.getLotteryShablonByIndex(id - 1)
+            // const body = { tokenId: id - 1, chainId, players: parseInt(dita.playersCount) }
+            // await fetch('/api/update1000', {
+            //     method: "POST",
+            //     body: JSON.stringify(body)
+            // })
         } catch (err) {
             console.log(err)
         }
@@ -141,9 +140,12 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
         try {
             await fetch('/api/get1000', {
                 method: "POST",
-                body: chainId != 0 ? chainId : (tymblerNaNetwork ? ETHid : PRODACTION ? BNBid : LocalhostId)
+                body: chainId != 0 ? chainId : (tymblerNaNetwork ? ETHid : BNBid)
             }).then(async (data) => {
                 const temp = await data.json()
+                temp.sort((a, b) => {
+                    return a.id - b.id
+                })
                 console.log(temp)
                 temp.forEach(element => {
                     if (element.isMinted)
@@ -236,7 +238,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
         // minted
         let minted = []
         let notMinted = []
-        console.log(listTransferCount)
         for (let i = 1, j = 0, x = 0, y = 0, mes = 0, autoEnterbd = 0, Tcount = 0; i < 1001; i++) {
             if (list[j] === i) {
                 const ismints = true
@@ -248,7 +249,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
                 if (message)
                     mes++
                 const TransferCount = listTransferCount[Tcount++]
-                const body = { ismints, isowner, edition, message, TransferCount, price: Prices[i - 1], players: Players[i - 1] }
+                const body = { ismints, isowner, edition, message, TransferCount, price: Prices[i - 1], players: Players[i - 1], date: metadataETH[i - 1].date }
                 minted.push(body)
                 j++
             }
@@ -260,7 +261,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
                 const autoEnterBD = AutoEnterFromDB[autoEnterbd] == i
                 if (autoEnterBD && AutoEnterFromDB.length != autoEnterbd + 1)
                     autoEnterbd++
-                const body = { edition, isAutoEnter, autoEnterBD, TransferCount: 0, price: Prices[i - 1], players: Players[i - 1] }
+                const body = { edition, isAutoEnter, autoEnterBD, TransferCount: 0, price: Prices[i - 1], players: Players[i - 1], date: metadataETH[i - 1].date }
                 notMinted.push(body)
             }
         }
@@ -287,7 +288,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
             const TransferCount = listTransferCount[Tcount]?.tokenId == i ? listTransferCount[Tcount].transfers : 0
             if (TransferCount > 0 && listTransferCount.length > Tcount + 1)
                 Tcount++
-            const body = { ismints, isowner, edition: i, isAutoEnter, autoEnterBD, message, TransferCount, price: Prices[i - 1], players: Players[i - 1] }
+            const body = { ismints, isowner, edition: i, isAutoEnter, autoEnterBD, message, TransferCount, price: Prices[i - 1], players: Players[i - 1], date: metadataETH[i - 1].date }
             all.push(body)
             noshuffled.push(body)
             if (j !== list.length - 1)
@@ -326,6 +327,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
         });
     }
 
+    // console.log(NFTS, tokensMints, tokensNotMints)
 
     useEffect(() => {
         // setNFT()

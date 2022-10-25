@@ -96,10 +96,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
       console.log(err)
     }
   }
-  // console.log(AutoEnter)
-
-
-
 
   const [amIn, setamIn] = useState(false)
 

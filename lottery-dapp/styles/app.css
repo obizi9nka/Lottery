@@ -169,6 +169,10 @@
     align-self: center;
 }
 
+.image:hover {
+    cursor: pointer;
+}
+
 .wallet {
     display: flex;
     align-items: center;

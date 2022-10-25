@@ -24,6 +24,7 @@ import {
 
 export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, Data, chainId, tymblerNaNetwork, LotteryId, settxData, setNFTS }) {
 
+    // console.log(Data)
 
     const [ISowner, setisowner] = useState()
     const [cost, setcost] = useState()
@@ -190,7 +191,7 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, Data, chainI
         })
     }
 
-    let image = `/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${Data.edition % 299}.png`
+    let image = `/${tymblerNaNetwork ? "imagesETH" : "imagesBNB"}/${Data.edition}.png`
 
 
     return (
@@ -241,20 +242,20 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, Data, chainI
                                             {!isAutoEnterPined && < button className='mybutton' onClick={addToAutoEnter}>Add to autoenter</button>}
                                             {isAutoEnterPined && < button className='mybutton' style={{ backgroundColor: 'purple' }} onClick={deleteFromAutoEnter}>Delete from autoenter</button>}
                                         </div>
-                                            : LotteryId == Data.edition ? <div >Only once.</div>
-                                                : <div style={{ color: "whitesmoke" }}>Data: 30.01.2023</div>
+                                            : LotteryId == Data.edition ? <div >Only once</div>
+                                                : <div style={{ color: "whitesmoke" }}>{Data.date}</div>
                                 }
                             </div>
                     }
 
-                    <div className={Data.ismints ? "dot absolute" : "dot absolute "} style={{ backgroundColor: Data.ismints ? "rgb(255, 0, 0)" : "" }}>
+                    <div className={Data.ismints ? "dot absolute" : "dot absolute "} style={{ backgroundColor: Data.ismints ? "#00ff08" : "rgb(255, 0, 0)" }}>
                         <div className='nftinfo'>
                             <div className='nftinfo2'>
                                 <div style={{ fontWeight: "500", color: "black" }}>
                                     Token number: {Data.edition}
                                 </div>
                                 <div style={{ fontWeight: "500", color: "black" }}>
-                                    Data: 30.01.2023
+                                    Data: {Data.date}
                                 </div>
                                 <div style={{ fontWeight: "500", color: "black" }}>
                                     Bank: {Data.players != null ? `${Data.players * 5}` : '—'}
