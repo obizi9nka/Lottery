@@ -63,18 +63,19 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
 
     useEffect(() => {
         checkLotteryId()
-    }, [chainId, tymblerNaNetwork])
+    }, [LOTTERY_ADDRESS])
 
     const checkLotteryId = async () => {
         try {
-            let provider
+            let providerr
             if (tymblerNaNetwork)
-                provider = new ethers.providers.InfuraProvider("goerli", notForYourEyesBitch.infuraKey)
+                providerr = new ethers.providers.InfuraProvider("goerli", notForYourEyesBitch.infuraKey)
             else
-                provider = new ethers.providers.InfuraProvider("sepolia", notForYourEyesBitch.infuraKey)
+                providerr = new ethers.providers.InfuraProvider("sepolia", notForYourEyesBitch.infuraKey)
             if (chainId == 31337)
-                provider = new ethers.providers.JsonRpcProvider
-            const contractLottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
+                providerr = new ethers.providers.JsonRpcProvider
+            console.log(providerr)
+            const contractLottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, providerr)
             const id = parseInt(await contractLottery.getLotteryCount())
             setLotteryId(id)
             //  const dita = await contractLottery.getLotteryShablonByIndex(id - 1)
@@ -87,7 +88,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
             console.log(err)
         }
     }
-
 
     const setNFT = async () => {
         let list = []
