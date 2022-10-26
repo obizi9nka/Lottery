@@ -1,10 +1,10 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Home({ tymblerNaNetwork }) {
 
-    const [language, setLanguage] = useState(localStorage.getItem("language") != undefined ? localStorage.getItem("language") : "English")
+    const [language, setLanguage] = useState("English")
 
     return (
         <div>
@@ -433,7 +433,7 @@ export default function Home({ tymblerNaNetwork }) {
                 </div>
 
                 <div className='language' >
-                    <select style={{ minWidth: "90px" }} onClick={e => setLanguage(e.target.value)}>
+                    <select style={{ minWidth: "90px", height: "38px" }} onClick={e => setLanguage(e.target.value)}>
                         <option>English</option>
                         <option>Русский</option>
                     </select>
