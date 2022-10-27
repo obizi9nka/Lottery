@@ -238,7 +238,7 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, setneedWalle
                             :
                             <div className='i'>
                                 {istokenOnSell ? <div>
-                                    <button onClick={() => buy()} className='mybutton'>Buy</button>
+                                    <button onClick={() => buy()} className='mybutton'>Buy {Data.price} ETH</button>
                                 </div> : Data.ismints ? <div style={{ color: "white" }}>{MessageFromData}</div>
                                     : Data.isAutoEnter ? < div className='' style={{ color: "white" }}>ENTERED</div>
                                         : LotteryId < Data.edition && chainId > 0 ? < div >
@@ -264,7 +264,7 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, setneedWalle
                                     Bank: {Data.players != null ? `${Data.players * 5}` : '—'}
                                 </div>
                                 <div style={{ fontWeight: "500", color: "black" }}>
-                                    Price: {istokenOnSell ? `${cost}` : 'Not on sale'}
+                                    Price: {istokenOnSell ? `${cost} ETH` : 'Not on sale'}
                                 </div>
                                 <div style={{ fontWeight: "500", color: "black" }}>
                                     Players: {Data.players != null ? `${Data.players}` : '—'}

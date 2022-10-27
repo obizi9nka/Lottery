@@ -231,7 +231,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
             if (element.address != address)
                 temp.push(element)
         });
-        setTokens(temp != [] ? temp : [])
+        setTokens(temp)
     }
 
     const addToAutoEnter = async () => {
@@ -241,7 +241,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
         })
         try {
             const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, data)
-            console.log(AutoEnter)
+            console.log("AutoEnter", AutoEnter)
             const tx = await contract.addToAutoEnter(AutoEnter)
             await tx.wait()
             const body = { address, chainId, tokenId: -1 }

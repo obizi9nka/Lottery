@@ -78,12 +78,12 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
             const contractLottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, providerr)
             const id = parseInt(await contractLottery.getLotteryCount())
             setLotteryId(id)
-            //  const dita = await contractLottery.getLotteryShablonByIndex(id - 1)
-            // const body = { tokenId: id - 1, chainId, players: parseInt(dita.playersCount) }
-            // await fetch('/api/update1000', {
-            //     method: "POST",
-            //     body: JSON.stringify(body)
-            // })
+            const dita = await contractLottery.getLotteryShablonByIndex(id - 1)
+            const body = { tokenId: id - 1, chainId, players: parseInt(dita.playersCount) }
+            await fetch('/api/update1000', {
+                method: "POST",
+                body: JSON.stringify(body)
+            })
         } catch (err) {
             console.log(err)
         }
@@ -222,13 +222,12 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
                 const id = await contractLottery.getLotteryCount()
                 const data = await contractLottery.getAutoEnter(address)
                 let temp = data.map((element) => {
-                    if (element > id)
+                    if (parseInt(element) > id)
                         return parseInt(element)
                 })
                 autoenter = temp.sort((a, b) => {
                     return a - b
                 })
-
             } catch (err) {
                 console.log(err)
                 usertokens = [-1]
@@ -248,7 +247,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
                 const message = messages[mes]?.id == i ? messages[mes].message : null
                 if (message)
                     mes++
-                const TransferCount = listTransferCount[Tcount++]
+                const TransferCount = listTransferCount[Tcount++].transfers
                 const body = { ismints, isowner, edition, message, TransferCount, price: Prices[i - 1], players: Players[i - 1], date: metadataETH[i - 1].date }
                 minted.push(body)
                 j++
@@ -390,7 +389,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
             filter()
     }, [search])
 
-
+    // console.log(NFTS, tokensMints, tokensNotMints, ALL_OR_MINTS)
 
     const filter = () => {
         const temp = []
@@ -409,9 +408,9 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
         else if (search === '') {
             setNFTS(DATA)
         }
-        else if (search == "a") {
+        else if (search == "a" || search == "а") {
             NotShuffle.map((element) => {
-                if (element.autoEnterBD) {
+                if (element.autoEnterBD || element.isAutoEnter) {
                     temp.push(element)
                 }
             })
@@ -491,7 +490,9 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
             </div>
 
             <div className='data'>
-                {(ALL_OR_MINTS == 1 ? NFTS : ALL_OR_MINTS == 2 ? tokensMints : tokensNotMints).map((element, index) => isEnogth(index + 1) && < NftsShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} setNFTS={setNFTS} settxData={settxData} Data={element} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} LotteryId={LotteryId} />)}
+                {ALL_OR_MINTS == 1 && NFTS.map((element, index) => isEnogth(index + 1) && < NftsShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} setNFTS={setNFTS} settxData={settxData} Data={element} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} LotteryId={LotteryId} />)}
+                {ALL_OR_MINTS == 2 && tokensMints.map((element, index) => isEnogth(index + 1) && < NftsShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} setNFTS={setNFTS} settxData={settxData} Data={element} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} LotteryId={LotteryId} />)}
+                {ALL_OR_MINTS == 3 && tokensNotMints.map((element, index) => isEnogth(index + 1) && < NftsShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} setNFTS={setNFTS} settxData={settxData} Data={element} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} LotteryId={LotteryId} />)}
                 {iskek && kek.map(() =>
                     <div className='nftsShablon'>
                         <div className='pad'>

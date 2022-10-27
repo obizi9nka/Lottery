@@ -73,7 +73,8 @@ contract Lottery is Lobby, Ownable {
         }
         AUTOENTER storage pointer = autoEnter[msg.sender];
 
-        for (uint256 i = 0; i < stop - 1; i++) {
+        for (uint256 i = 0; i < stop; i++) {
+            //(stop - 1) не нужно!
             if (!findAddressInPlayers(msg.sender, _lotteryes[i])) {
                 balanceInTokenForAccount[tokenForLottery][
                     msg.sender
