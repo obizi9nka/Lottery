@@ -326,9 +326,6 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
             }).then(async (_data) => {
                 data = await _data.json()
                 console.log(data)
-
-
-
                 pdfMake.createPdf(data).open();
             })
         } catch (err) {

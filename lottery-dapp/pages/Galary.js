@@ -394,10 +394,10 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
 
     const filter = () => {
         const temp = []
-        if (search == ".") {
+        if (search == "s") {
             setNFTS(NotShuffle)
         }
-        else if (search[0] == ".") {
+        else if (search[0] == "s") {
             setstartIndex(1)
             NotShuffle.map((element) => {
                 if (`.${element.edition}` == search) {
@@ -409,9 +409,17 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
         else if (search === '') {
             setNFTS(DATA)
         }
-        else if (search == "!") {
+        else if (search == "a") {
             NotShuffle.map((element) => {
                 if (element.autoEnterBD) {
+                    temp.push(element)
+                }
+            })
+            setNFTS(temp)
+        }
+        else if (search == "m") {
+            NotShuffle.map((element) => {
+                if (element.isowner) {
                     temp.push(element)
                 }
             })
@@ -440,15 +448,37 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
             <div className='fiter'>
                 <div className='anotherShit'>
                     <button className='mybutton butound' onClick={() => changeState(false, false)}>Back</button>
-                    <input className='input' id='search' style={{ width: 70 }} placeholder='Search' onChange={e => {
-                        setcostil(true)
-                        setTimeout(() => {
-                            setsearch(e.target.value)
-                        }, 300);
-                    }} />
+                    <div style={{ position: "relative" }}>
+                        <input className='input' id='search' style={{ width: 70 }} placeholder='Search' onChange={e => {
+                            setcostil(true)
+                            setTimeout(() => {
+                                setsearch(e.target.value)
+                            }, 300);
+                        }} />
+                        <div className='searchI'>
+                            <Image src={"/i.png"} width={"16px"} height="20px" />
+                            <div className='searchIINFO'>
+                                <div style={{ display: 'grid' }}>
+                                    <div className='ttete'>
+                                        s - sort
+                                    </div>
+                                    <div className='ttete'>
+                                        a - autoenter
+                                    </div >
+                                    <div className='ttete'>
+                                        m - my NFT
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
                     <label className="switch zx">
                         <input type="checkbox" onChange={() => setALL_OR_MINTS(ALL_OR_MINTS == 1 ? 2 : (ALL_OR_MINTS == 2 ? 3 : 1))} />
                         <span className={ALL_OR_MINTS == 1 ? "slider round" : ALL_OR_MINTS == 2 ? "sliderGREEN round" : "sliderRED round"} style={{ minWidth: "60px" }}></span>
+
+
                     </label>
                     <select className="choosetoken" style={{ minWidth: "40px" }} id="enougth" onClick={(e) => { localStorage.setItem("ENOUGTH", e.target.value); setcountOfRenderNfts(parseInt(e.target.value)) }}>
                         <option>25</option>

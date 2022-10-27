@@ -361,7 +361,7 @@ export default function Home({ tymblerNaNetwork }) {
 
                             {/* </div> */}
                             <div className='obzach'>
-                                Эмиссия токена: <strong className="colorPURPLE">1 000 000 000</strong> на каждом блокчейн.
+                                Эмиссия токена: <strong className="colorPURPLE">1 000 000 000</strong> на каждом блокчейне.
                             </div>
                             {/* <div className='grid' style={{ paddingLeft: "200px" }}> */}
                             <li className='Точка'>
@@ -394,7 +394,7 @@ export default function Home({ tymblerNaNetwork }) {
 
                             <div className='obzach'>
                                 Создайте свой промокод и поделитесь им.<br />
-                                Если кто-то введет ваш промокод <strong className="colorPURPLE">до своего первого участия в лоттерее</strong>,<br /> вы оба получите по 100 MUD.
+                                Если кто-то введет ваш промокод <strong className="colorPURPLE">до своего первого участия в лотерее</strong>,<br /> вы оба получите по 100 MUD.
                             </div>
 
                             <div className='obzach'>
@@ -422,7 +422,7 @@ export default function Home({ tymblerNaNetwork }) {
                                 Играть на токен <strong className="colorPURPLE">MUD</strong>.
                             </li>
                             <li className='Точка'>
-                                Депозит лобби должен быть не менее <strong className="colorPURPLE">10 </strong> MUD.
+                                Депозит лобби должен быть не менее <strong className="colorPURPLE">10 MUD</strong>.
                             </li>
                             <li className='Точка'>
                                 Номер лотереи должен превышать <strong className="colorPURPLE">1050</strong>.
@@ -438,7 +438,7 @@ export default function Home({ tymblerNaNetwork }) {
                                 То есть, только уникальные кошельки из первых 100 переводов NFT.
                             </div>
                             <div className='obzach'>
-                                4. MuDeBz работает на двух блокчейнах <strong className="colorPURPLE">Ethereum mainnet и Binance smart chain</strong>.
+                                4. MuDeBz работает на двух блокчейнах: <strong className="colorPURPLE">Ethereum mainnet</strong> и <strong className="colorPURPLE">Binance smart chain</strong>.
                             </div>
                         </div>
 
