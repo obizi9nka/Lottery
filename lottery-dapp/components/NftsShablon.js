@@ -22,7 +22,7 @@ import {
 } from 'wagmi';
 
 
-export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, Data, chainId, tymblerNaNetwork, LotteryId, settxData, setNFTS }) {
+export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, setneedWallet, Data, chainId, tymblerNaNetwork, LotteryId, settxData, setNFTS }) {
 
     // console.log(Data)
 
@@ -157,6 +157,9 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, Data, chainI
                 isPending: true,
                 result: false
             })
+            if (!isConnected) {
+                setneedWallet(true)
+            }
         }
     }
 

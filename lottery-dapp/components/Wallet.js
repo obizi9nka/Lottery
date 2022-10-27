@@ -236,8 +236,8 @@ export default function Wallet({ chains, LOTTERY_ADDRESS, setENTERED, isWalletAl
                                         if (!connected) {
                                             return (
                                                 <div>
-                                                    <div className='ConnectWallet'>
-                                                        <button onClick={openConnectModal} className={"mybutton"}>
+                                                    <div className={needWallet ? "ConnectWallet" : ""}>
+                                                        <button onClick={openConnectModal} className={needWallet ? "needWallet" : "mybutton"}>
                                                             Connect Wallet
                                                         </button>
                                                     </div>

@@ -22,7 +22,11 @@
     min-width: 25px;
 }
 
-.ConnectWallet {}
+.ConnectWallet {
+    display: flex;
+    justify-content: center;
+    width: 220px;
+}
 
 .noConnectWallet {
     display: none;
@@ -43,6 +47,39 @@
 
 }
 
+.needWallet {
+    color: white;
+    width: fit-content;
+    padding: 10px;
+    border-radius: 12px;
+    background-color: rgb(17, 16, 16);
+    animation-name: wallet;
+    animation-iteration-count: infinite;
+    animation-duration: 5s;
+}
+
+.needWallet:hover {
+    cursor: pointer;
+}
+
+@keyframes wallet {
+    0% {
+        width: 220px;
+        color: white;
+    }
+
+    50% {
+        background-color: antiquewhite;
+        color: black;
+        width: 140px;
+    }
+
+    100% {
+        width: 220px;
+        color: white;
+    }
+
+}
 
 
 

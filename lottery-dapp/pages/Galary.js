@@ -29,7 +29,7 @@ import { listenerCount } from 'process';
 
 
 
-export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, setENTERED, tymblerNaNetwork, setIsSession, isSession, settxData }) {
+export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, setENTERED, tymblerNaNetwork, setIsSession, isSession, settxData, setneedWallet }) {
 
 
     const kek = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
@@ -393,12 +393,12 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
 
 
     const filter = () => {
+        const temp = []
         if (search == ".") {
             setNFTS(NotShuffle)
         }
         else if (search[0] == ".") {
             setstartIndex(1)
-            const temp = []
             NotShuffle.map((element) => {
                 if (`.${element.edition}` == search) {
                     temp.push(element)
@@ -409,9 +409,16 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
         else if (search === '') {
             setNFTS(DATA)
         }
+        else if (search == "!") {
+            NotShuffle.map((element) => {
+                if (element.autoEnterBD) {
+                    temp.push(element)
+                }
+            })
+            setNFTS(temp)
+        }
         else {
             setstartIndex(1)
-            const temp = []
             NotShuffle.map((element) => {
                 if (`${element.edition}`.indexOf(search) !== -1) {
                     temp.push(element)
@@ -454,7 +461,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
             </div>
 
             <div className='data'>
-                {(ALL_OR_MINTS == 1 ? NFTS : ALL_OR_MINTS == 2 ? tokensMints : tokensNotMints).map((element, index) => isEnogth(index + 1) && < NftsShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setNFTS={setNFTS} settxData={settxData} Data={element} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} LotteryId={LotteryId} />)}
+                {(ALL_OR_MINTS == 1 ? NFTS : ALL_OR_MINTS == 2 ? tokensMints : tokensNotMints).map((element, index) => isEnogth(index + 1) && < NftsShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} setNFTS={setNFTS} settxData={settxData} Data={element} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} LotteryId={LotteryId} />)}
                 {iskek && kek.map(() =>
                     <div className='nftsShablon'>
                         <div className='pad'>

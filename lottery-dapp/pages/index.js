@@ -24,7 +24,7 @@ import { ConstructorFragment } from 'ethers/lib/utils';
 
 
 
-export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaNetwork, settxData }) {
+export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaNetwork, settxData, setneedWallet }) {
 
   const Default = `/blackFon.png`
 
@@ -165,6 +165,9 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
         isPending: false,
         result: false
       })
+      if (!isConnected) {
+        setneedWallet(true)
+      }
     }
   }
 

@@ -171,7 +171,7 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
 
             <div className="shouldRevard">
                 <div className='recive'>
-                    Your will recive
+                    Your will receive
                 </div>
                 <div className='chifra'>
                     <div className='rilchifra' style={{ color: "purple" }}>

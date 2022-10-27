@@ -66,7 +66,7 @@ export async function getServerSideProps() {
     }
 }
 
-export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, lobbyETH, tymblerNaNetwork, settxData }) {
+export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, lobbyETH, tymblerNaNetwork, settxData, setneedWallet }) {
 
 
 
@@ -258,6 +258,9 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                 isPending: false,
                 result: false
             })
+            if (!isConnected) {
+                setneedWallet(true)
+            }
         }
         document.getElementById("deposit").value = "";
         document.getElementById("countofplayers").value = "";
@@ -357,6 +360,9 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                 isPending: true,
                 result: false
             })
+            if (!isConnected) {
+                setneedWallet(true)
+            }
         }
     }
     const [startIndex, setstartIndex] = useState(1)

@@ -377,7 +377,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
                                         <Image src={"/rigth.png"} width={30} height={30} />
                                     </div>
                                     <div className="imageINAutoEnter">
-                                        <Image src={`/${chainId == ETHid ? "imagesETH" : "imagesBNB"}/${AutoEnter[ImageInAutoEnter] % 300}.png`} width={160} height={160} className="ff" />
+                                        <Image src={`/${chainId == ETHid ? "imagesETH" : "imagesBNB"}/${AutoEnter[ImageInAutoEnter]}.png`} width={160} height={160} className="ff" />
                                     </div>
                                     <div className="arow" onClick={() => { if (ImageInAutoEnter != AutoEnter.length - 1) { setImageInAutoEnter(ImageInAutoEnter + 1) } }}>
                                         <Image src={"/rigth.png"} width={30} height={30} />
