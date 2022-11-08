@@ -185,7 +185,7 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
             {needApprove && <button onClick={approve} disabled={!isvalid} className="mybutton dinamic">Enable</button>}
 
             <div className='depositvalue'>
-                <input className="input dinamic" style={{ minWidth: "110px", color: deposit == "" ? "white" : isvalid ? "green" : "red" }} disabled={TokenSelected == null} id={TokenSelected} placeholder={placeholder} onChange={e => { setDeposit(e.target.value) }} />
+                <input className="input dinamic" style={{ minWidth: "110px", color: deposit == "" ? "white" : isvalid ? "white" : "red" }} disabled={TokenSelected == null} id={TokenSelected} placeholder={placeholder} onChange={e => { setDeposit(e.target.value) }} />
                 {/* {(!isvalid && tryed) && <div className="invalidvalue">Invalid value</div>} */}
             </div>
 

@@ -8,7 +8,7 @@
 
 @media (max-width: 720px) {
     .about {
-        margin: 0% 10%;
+        margin: 0% 0%;
     }
 }
 
@@ -16,8 +16,13 @@
     margin: 0px 50px;
 }
 
+.Userguide {
+    position: absolute;
+}
 
-
+.Userguide:hover {
+    cursor: pointer;
+}
 
 .colorWHITE {
     color: white;
@@ -75,6 +80,6 @@
 
 .language {
     position: absolute;
-    top: 120px;
+    top: 110px;
     right: 10%;
 }

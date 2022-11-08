@@ -4,27 +4,12 @@ import Image from 'next/image';
 import Loader from "react-spinners/HashLoader";
 
 
-import {
-    chain,
-    configureChains,
-    createClient,
-    WagmiConfig,
-    defaultChains,
-    useAccount,
-    useContractWrite,
-    usePrepareContractWrite,
-    useContractRead,
-    useProvider,
-    useSigner,
-    useConnect,
-    useNetwork
-} from 'wagmi';
-
 
 export default function InfoPopUp({ data, settxData }) {
 
-    const [mode, setMode] = useState()
+    const [needInfo, setNeedInfo] = useState(false)
     const [active, setActive] = useState(false)
+    const [costil, setcostil] = useState(false)
 
     useEffect(() => {
         if (data.isPending != null || data.result != null) {
@@ -41,44 +26,43 @@ export default function InfoPopUp({ data, settxData }) {
                 })
             }, 7000);
         }
+        if (data.isPending == true && data.result == null)
+            setNeedInfo(false)
 
     }, [data])
 
     const info = () => {
-        setActive(false)
-        setTimeout(() => {
-            settxData({
-                isPending: null,
-                result: null
-            })
-        }, 1000);
+        if (data.result || needInfo) {
+            setNeedInfo(false)
+            setActive(false)
+            setcostil(true)
+            setTimeout(() => {
+                settxData({
+                    isPending: null,
+                    result: null
+                })
+            }, 1000);
+        }
+        else if (!data.result) {
+            setNeedInfo(true)
+        }
+
     }
 
-    // const data = {
-    //     isPending: true,
-    //     result: null
-    // }
-
-    // if (data.isPending != null || data.result != null) {
     return (
-        <div className={active ? 'InfoPopUp active' : "InfoPopUp"} onClick={() => {
-            if (data.result != null) { info() }
-        }}>
-            <div className={'LOADER active'}>
-                {data.isPending && data.result == null ? <Loader loading={true} color={"white"} size={35} /> : data.result ? <Image src="/succses.png" width={35} height={35} /> : data.result == false ? <Image src="/wrong.png" width={35} height={35} /> : <div />}
-                {/* {mode == 1 && <Loader loading={true} color={"white"} size={35} />}
-                {mode == 2 && <Image src="/succses.png" width={35} height={35} />}
-                {mode == 3 && <Image src="/wrong.png" width={35} height={35} />} */}
+        <div>
+            <div className={active ? 'InfoPopUp active' : "InfoPopUp"} onClick={() => {
+                if (data.result != null) { info() }
+            }}>
+                <div className={'LOADER active'}>
+                    {data.isPending && data.result == null ? <Loader loading={true} color={"white"} size={35} /> : data.result ? <Image src="/succses.png" width={35} height={35} /> : data.result == false ? <Image src="/wrong.png" width={35} height={35} /> : <div />}
+                </div>
             </div>
-        </div>
-    )
-    // }
+            <div className={needInfo ? 'InfoPopUpinfo active' : "InfoPopUpinfo"} style={{ width: costil ? "220px" : null, color: costil ? "white" : null }}>
+                <div className='dataInInfo'>{data.issue}</div>
+            </div>
+        </div >
 
+    )
 }
 
-{/* <div className='status'>
-                <div className='TracsactionStatus'>
-                    {data.isPending ? "Pending" : data.result ? "Complite" : "Canceled"}
-                </div>
-
-            </div> */}

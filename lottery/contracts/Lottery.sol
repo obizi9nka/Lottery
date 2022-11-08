@@ -4,10 +4,10 @@ pragma solidity ^0.8.0;
 //1100000000000000000
 
 import "./Lobby.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+
 import "./ERC721with.sol";
 
-contract Lottery is Lobby, Ownable {
+contract Lottery is Lobby {
     struct LotteryShablon {
         address winer;
         address[] players;
@@ -30,7 +30,7 @@ contract Lottery is Lobby, Ownable {
     }
 
     event enter(address user);
-    event play(address winer);
+    event play(uint id, address winer);
 
     mapping(uint256 => LotteryShablon) Lotteries;
 
@@ -46,45 +46,19 @@ contract Lottery is Lobby, Ownable {
 
     mapping(bytes32 => address) PromSetReverse;
 
-    mapping(address => uint256) shouldRevard;
+    bytes32 immutable Mistery;
 
     uint256 deposit;
     IERC20 tokenForLottery;
     address autotask;
     uint256 REVARD_REF_ALLOW = REVARD_REF;
 
-    function getAutoEnter(address a) public view returns (uint256[] memory) {
-        return autoEnter[a].lotteryes;
+    constructor(bytes32 Hash) {
+        Mistery = Hash;
     }
 
-    function addToAutoEnter(uint256[] memory _lotteryes) public {
-        uint256 stop = _lotteryes.length;
-        require(
-            balanceInTokenForAccount[tokenForLottery][msg.sender] >=
-                (stop * deposit),
-            "not enougth money"
-        );
-        for (uint256 i = 0; i < stop - 1; i++) {
-            require(_lotteryes[i] > LotteryCount);
-        }
-
-        if (countOfLotteryEnter[msg.sender] == 0 && REVARD_REF_ALLOW >= 200) {
-            checkRef();
-        }
-        AUTOENTER storage pointer = autoEnter[msg.sender];
-
-        for (uint256 i = 0; i < stop; i++) {
-            //(stop - 1) не нужно!
-            if (!findAddressInPlayers(msg.sender, _lotteryes[i])) {
-                balanceInTokenForAccount[tokenForLottery][
-                    msg.sender
-                ] -= deposit;
-                Lotteries[_lotteryes[i]].players.push(msg.sender);
-                Lotteries[_lotteryes[i]].playersCount++;
-                countOfLotteryEnter[msg.sender]++;
-                pointer.lotteryes.push(_lotteryes[i]);
-            }
-        }
+    function getAutoEnter(address a) public view returns (uint256[] memory) {
+        return autoEnter[a].lotteryes;
     }
 
     function getLotteryCount() public view returns (uint256) {
@@ -97,6 +71,31 @@ contract Lottery is Lobby, Ownable {
 
     function getAdrressNFT() public view returns (address) {
         return address(NFT);
+    }
+
+    function getLotteryShablonByIndex(uint256 lotteryId)
+        external
+        view
+        returns (LotteryShablon memory)
+    {
+        return Lotteries[lotteryId];
+    }
+
+    function getREVARD_REF_ALLOW() public view returns (uint256) {
+        return REVARD_REF_ALLOW;
+    }
+
+    function getshouldRevard(address a) public view returns (uint256) {
+        return shouldRevard[a];
+    }
+
+    function getcountOfLotteryEnter(address a) public view returns (uint256) {
+        return countOfLotteryEnter[a];
+    }
+
+    function getPromSetReverse(string memory a) public view returns (address) {
+        bytes32 Hash = keccak256(abi.encodePacked(a));
+        return PromSetReverse[Hash];
     }
 
     function checkFor50() private {
@@ -132,31 +131,10 @@ contract Lottery is Lobby, Ownable {
         return _first1000Winers[addres];
     }
 
-    function changeAllowToMint(address newAddress, uint256 TokenId)
-        public
-        onlyOwner
-    {
-        require(first1000Winers[TokenId] == msg.sender);
-        first1000Winers[TokenId] = newAddress;
-    }
-
-    function getshouldRevard(address a) public view returns (uint256) {
-        return shouldRevard[a];
-    }
-
-    function getcountOfLotteryEnter(address a) public view returns (uint256) {
-        return countOfLotteryEnter[a];
-    }
-
-    function getPromSetReverse(string memory a) public view returns (address) {
-        bytes32 Hash = keccak256(abi.encodePacked(a));
-        return PromSetReverse[Hash];
-    }
-
     function setPromSet(string memory a) public {
         bytes32 t = keccak256(abi.encodePacked(a));
         require(Prom[msg.sender].PromSet == bytes32(0));
-        require(PromSetReverse[t] == address(0));
+        require(PromSetReverse[t] == address(0), "exist");
         Prom[msg.sender].PromSet = t;
         PromSetReverse[t] = msg.sender;
     }
@@ -170,35 +148,14 @@ contract Lottery is Lobby, Ownable {
         Prom[msg.sender].PromInput = t;
     }
 
-    function getREVARD_REF_ALLOW() public view returns (uint256) {
-        return REVARD_REF_ALLOW;
-    }
-
     function checkRef() private {
         bytes32 prom = Prom[msg.sender].PromInput;
         if (bytes32(0) != prom) {
             address setter = PromSetReverse[prom];
-            REVARD_REF_ALLOW -= 200;
-            shouldRevard[msg.sender] += 100;
-            shouldRevard[setter] += 100;
+            REVARD_REF_ALLOW -= 2000;
+            shouldRevard[msg.sender] += 1000;
+            shouldRevard[setter] += 1000;
         }
-    }
-
-    function Enter() external {
-        require(
-            (getBalance(tokenForLottery, msg.sender)) >= deposit &&
-                !findAddressInPlayers(msg.sender, LotteryCount),
-            "no allow"
-        );
-
-        if (countOfLotteryEnter[msg.sender] == 0 && REVARD_REF_ALLOW >= 200) {
-            checkRef();
-        }
-        countOfLotteryEnter[msg.sender]++;
-        balanceInTokenForAccount[tokenForLottery][msg.sender] -= deposit;
-
-        Lotteries[LotteryCount].players.push(msg.sender);
-        Lotteries[LotteryCount].playersCount++;
     }
 
     function _findAddressInfirst1000Winers(address a, uint256 TokenId)
@@ -221,6 +178,54 @@ contract Lottery is Lobby, Ownable {
             if (temp.players[i] == _a) return true;
         }
         return false;
+    }
+
+    function addToAutoEnter(uint256[] memory _lotteryes) public {
+        uint256 stop = _lotteryes.length;
+        require(
+            balanceInTokenForAccount[tokenForLottery][msg.sender] >=
+                (stop * deposit),
+            "not enougth money"
+        );
+        uint _LotteryCount = LotteryCount;
+        for (uint256 i = 0; i < stop; i++) {
+            require(_lotteryes[i] > _LotteryCount);
+        }
+
+        if (countOfLotteryEnter[msg.sender] == 0 && REVARD_REF_ALLOW >= 2000) {
+            checkRef();
+        }
+        AUTOENTER storage pointer = autoEnter[msg.sender];
+
+        for (uint256 i = 0; i < stop; i++) {
+            //(stop - 1) не нужно!
+            if (!findAddressInPlayers(msg.sender, _lotteryes[i])) {
+                balanceInTokenForAccount[tokenForLottery][
+                    msg.sender
+                ] -= deposit;
+                Lotteries[_lotteryes[i]].players.push(msg.sender);
+                Lotteries[_lotteryes[i]].playersCount++;
+                countOfLotteryEnter[msg.sender]++;
+                pointer.lotteryes.push(_lotteryes[i]);
+            }
+        }
+    }
+
+    function Enter() external {
+        require(
+            (getBalance(tokenForLottery, msg.sender)) >= deposit &&
+                !findAddressInPlayers(msg.sender, LotteryCount),
+            "no allow"
+        );
+
+        if (countOfLotteryEnter[msg.sender] == 0 && REVARD_REF_ALLOW >= 2000) {
+            checkRef();
+        }
+        countOfLotteryEnter[msg.sender]++;
+        balanceInTokenForAccount[tokenForLottery][msg.sender] -= deposit;
+
+        Lotteries[LotteryCount].players.push(msg.sender);
+        Lotteries[LotteryCount].playersCount++;
     }
 
     function Play() public {
@@ -259,17 +264,18 @@ contract Lottery is Lobby, Ownable {
             address[] memory players = Lotteries[LotteryCount].players;
             uint256 length = players.length;
             if (length > 0 && (FOR_ONE_LOTTERY * 10**18 > length)) {
-                uint256 forOne = ((FOR_ONE_LOTTERY * 10**18) / length);
+                uint256 forOne = (FOR_ONE_LOTTERY / length);
                 for (uint256 i = 0; i < length; i++) {
-                    MUDaddress._mintFromLottery(players[i], forOne);
-                    MUDaddress._transferFromLottery(
-                        players[i],
-                        address(this),
-                        forOne
-                    );
-                    balanceInTokenForAccount[IERC20(MUDaddress)][
-                        players[i]
-                    ] += forOne;
+                    shouldRevard[players[i]] += forOne;
+                    // MUDaddress._mintFromLottery(players[i], forOne);
+                    // MUDaddress._transferFromLottery(
+                    //     players[i],
+                    //     address(this),
+                    //     forOne
+                    // );
+                    // balanceInTokenForAccount[IERC20(MUDaddress)][
+                    //     players[i]
+                    // ] += forOne;
                 }
             }
             HEEP += FOR_ONE_DAY_LOBBY;
@@ -282,17 +288,8 @@ contract Lottery is Lobby, Ownable {
             tokenForLottery = MUDaddress;
         }
 
+        emit play(LotteryCount, winer);
         LotteryCount++;
-
-        emit play(winer);
-    }
-
-    function getLotteryShablonByIndex(uint256 lotteryId)
-        external
-        view
-        returns (LotteryShablon memory)
-    {
-        return Lotteries[lotteryId];
     }
 
     function HOLDERS() private {
@@ -301,7 +298,8 @@ contract Lottery is Lobby, Ownable {
         if (length > 0) {
             uint256 forOne = (REVARD_FOR_HOLDERS / length) * 10**18;
             for (uint256 i = 0; i < length; i++) {
-                MUDaddress._mintFromLottery(NFT.ownerOf(tokens[i]), forOne);
+                shouldRevard[NFT.ownerOf(tokens[i])] += forOne;
+                // MUDaddress._mintFromLottery(NFT.ownerOf(tokens[i]), forOne);
             }
         }
     }
@@ -312,7 +310,8 @@ contract Lottery is Lobby, Ownable {
         if (length > 0) {
             uint256 forOne = (REVARD_FOR_HOLDERS_EVER / length) * 10**18;
             for (uint256 i = 0; i < length; i++) {
-                MUDaddress._mintFromLottery(adressEver[i], forOne);
+                shouldRevard[adressEver[i]] += forOne;
+                // MUDaddress._mintFromLottery(adressEver[i], forOne);
             }
         }
     }
@@ -321,11 +320,13 @@ contract Lottery is Lobby, Ownable {
         MUDaddress._mintFromLottery(owner(), REVARD_OWNER * 10**18);
     }
 
-    function REF() public {
-        require(shouldRevard[msg.sender] > 0 && LotteryCount > 1051);
-        MUDaddress._mintFromLottery(
-            msg.sender,
-            shouldRevard[msg.sender] * 10**18
+    function receiveRevard() public {
+        require(shouldRevard[msg.sender] > 0 && LotteryCount > 1050);
+        require(
+            MUDaddress._mintFromLottery(
+                msg.sender,
+                shouldRevard[msg.sender] * 10**18
+            )
         );
         shouldRevard[msg.sender] = 0;
     }

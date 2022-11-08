@@ -5,7 +5,7 @@ import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLoca
 import MudebzNFT from "/blockchain/MudebzNFT.json"
 
 import PropagateLoader from "react-spinners/PropagateLoader";
-
+import IssueMaker from './IssueMaker.js';
 
 import {
     chain,
@@ -133,8 +133,8 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, setneedWalle
             })
             const contract = new ethers.Contract(NFT_ADDRESS, MudebzNFT.abi, data)
             const owner = await contract.ownerOf(Data.edition)
-            const _cost = await contract.getCost(owner, Data.edition)
-            const tx = await contract.trigerSell(owner, Data.edition, { value: BigInt(_cost) })
+            // const _cost = await contract.getCost(owner, Data.edition)
+            const tx = await contract.trigerSell(owner, Data.edition, { value: BigInt(Data.price * 10 ** 18) })
             await tx.wait()
             setIsTokenOnSell(false)
             setcost()
@@ -153,9 +153,13 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, setneedWalle
             Data.price = null
         } catch (err) {
             console.log(err)
+            let issue = IssueMaker({ data: err.code, from: "buy" })
+            if (!isConnected)
+                issue = "Connect Wallet"
             settxData({
-                isPending: true,
-                result: false
+                isPending: false,
+                result: false,
+                issue
             })
             if (!isConnected) {
                 setneedWallet(true)
@@ -170,6 +174,8 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, setneedWalle
             method: "POST",
             body: JSON.stringify(body)
         })
+        Data.message = enteredMessage
+        setMode(!Mode)
     }
 
     const addToAutoEnter = async () => {
@@ -245,7 +251,7 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, setneedWalle
                                             {!isAutoEnterPined && < button className='mybutton' onClick={addToAutoEnter}>Add to autoenter</button>}
                                             {isAutoEnterPined && < button className='mybutton' style={{ backgroundColor: 'purple' }} onClick={deleteFromAutoEnter}>Delete from autoenter</button>}
                                         </div>
-                                            : LotteryId == Data.edition ? <div >Only once</div>
+                                            : LotteryId == Data.edition ? <div style={{ fontSize: "23px", fontWeight: "600" }}>{Data.date}</div>
                                                 : <div style={{ color: "whitesmoke" }}>{Data.date}</div>
                                 }
                             </div>
@@ -264,10 +270,10 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, setneedWalle
                                     Bank: {Data.players != null ? `${Data.players * 5}` : '—'}
                                 </div>
                                 <div style={{ fontWeight: "500", color: "black" }}>
-                                    Price: {istokenOnSell ? `${cost} ETH` : 'Not on sale'}
+                                    Players: {Data.players != null ? `${Data.players}` : '—'}
                                 </div>
                                 <div style={{ fontWeight: "500", color: "black" }}>
-                                    Players: {Data.players != null ? `${Data.players}` : '—'}
+                                    Price: {istokenOnSell ? `${cost} ETH` : 'Not on sale'}
                                 </div>
                                 <div style={{ fontWeight: "500", color: "black" }}>
                                     Transfer count: {Data.TransferCount}

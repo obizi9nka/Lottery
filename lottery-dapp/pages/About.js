@@ -446,6 +446,9 @@ export default function Home({ tymblerNaNetwork }) {
                 </div>
 
                 <div className='language' >
+                    <div className='Userguide' style={{ position: "absolute", left: "-60px", top: "-8px", borderRadius: "12px", padding: "6px 5px 0px 5px" }} onClick={() => { window.open("https://vk.com/s/v1/doc/Jn3L9rKtWLJKCce1P5m8RuiAanE3M3YIP6NL3p4ldWlR02xBBhI") }}>
+                        <Image src={"/Guide.png"} width={45} height={45} style={{}} />
+                    </div>
                     <select style={{ minWidth: "90px", height: "38px" }} onClick={e => setLanguage(e.target.value)}>
                         <option>English</option>
                         <option>Русский</option>

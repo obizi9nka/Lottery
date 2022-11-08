@@ -15,7 +15,7 @@ import {
     useProvider,
     useSigner
 } from 'wagmi';
-import { resolve } from 'path';
+import IssueMaker from './IssueMaker';
 
 export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldrevard, PromSet, PromInput, setPromInput, setPromSet, chainId, tymblerNaNetwork, settxData }) {
 
@@ -54,9 +54,15 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
             })
         } catch (err) {
             console.log(err)
+            let issue
+            if (err.reason == "execution reverted: exist")
+                issue = "Promo code already taken"
+            else
+                issue = IssueMaker({ data: err.code, from: "inputProm" })
             settxData({
-                isPending: true,
-                result: false
+                isPending: false,
+                result: false,
+                issue
             })
         }
     }
@@ -68,7 +74,6 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
                 result: null
             })
             const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
-            console.log(prom, tymblerNaNetwork ? LotteryAddressETH : LotteryAddressBNB)
             const tx = await contract.setPromInput(prom.toString());
             await tx.wait()
             const body = { address: address, PromInput: prom, chainId }
@@ -84,10 +89,16 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
                 result: true
             })
         } catch (err) {
-            console.log(err)
+            console.log(err.reason)
+            let issue
+            if (err.reason == "execution reverted: ne chei")
+                issue = "Promo code does not belong to anyone"
+            else
+                issue = IssueMaker({ data: err.code, from: "inputProm" })
             settxData({
-                isPending: true,
-                result: false
+                isPending: false,
+                result: false,
+                issue
             })
         }
     }
@@ -175,7 +186,7 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
                 </div>
                 <div className='chifra'>
                     <div className='rilchifra' style={{ color: "purple" }}>
-                        {PromInput != null ? (shouldrevard.count - 100 > 0 ? shouldrevard.count - 100 : 0) : shouldrevard.count} <div style={{ color: "aqua" }}>{`${PromInput != null && shouldrevard.isEnteredOnce ? "(+100)" : ""}`}</div>
+                        {PromInput != null ? (shouldrevard.count - 100 > 0 ? shouldrevard.count - 100 : 0) : `${shouldrevard.count}`}<div style={{ color: "aqua", marginLeft: PromInput != null ? "10px" : "" }}>{`${PromInput != null && shouldrevard.isEnteredOnce ? " (+100)" : ""}`}</div>
                     </div>
 
                 </div>

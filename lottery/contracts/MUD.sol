@@ -16,19 +16,22 @@ contract MUD is ERC20 {
         admin = msg.sender;
     }
 
-    function _mintFromLottery(address a, uint256 value) public {
+    function _mintFromLottery(address a, uint256 value) public returns (bool) {
         require(msg.sender == Lottery);
+        uint balanceBefore = balanceOf(a);
         _mint(a, value);
+        uint balanceAfter = balanceOf(a);
+        return balanceBefore + value == balanceAfter;
     }
 
-    function _transferFromLottery(
-        address from,
-        address to,
-        uint256 value
-    ) public {
-        require(msg.sender == Lottery);
-        _transfer(from, to, value);
-    }
+    // function _transferFromLottery(
+    //     address from,
+    //     address to,
+    //     uint256 value
+    // ) public {
+    //     require(msg.sender == Lottery);
+    //     _transfer(from, to, value);
+    // }
 
     function getTokens(uint256 b) public {
         _mint(msg.sender, b);

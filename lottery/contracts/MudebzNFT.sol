@@ -22,8 +22,7 @@ contract MudebzNFT is ERC721with, Ownable {
             lottery._findAddressInfirst1000Winers(msgsender, TokenId),
             "Not yours token"
         );
-        if (msg.sender != owner())
-            require(msg.value >= nftPrice, "Wrong send value");
+        require(msg.value >= nftPrice, "Wrong send value");
         _safeMint(msgsender, TokenId);
         setTokenMints(TokenId);
         tokenTransfer[TokenId]++;
@@ -35,7 +34,6 @@ contract MudebzNFT is ERC721with, Ownable {
 
         TokensOwns[msgsender].ids.push(TokenId);
         tokensMints.push(TokenId);
-        //if (tokensMints.length >= 2) sort(TokenId);
 
         emit NewNFT(msg.sender, TokenId);
     }

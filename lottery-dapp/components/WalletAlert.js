@@ -242,7 +242,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
         try {
             const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, data)
             console.log("AutoEnter", AutoEnter)
-            const tx = await contract.addToAutoEnter(AutoEnter)
+            const tx = await contract.addToAutoEnter([...AutoEnter, 10000]) /// УБРАТЬ 10000 после редеплоя 
             await tx.wait()
             const body = { address, chainId, tokenId: -1 }
             await fetch('/api/deleteFromAutoEnter', {
@@ -370,15 +370,15 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
                         {AutoEnter && AutoEnter.length > 0 ?
                             <div className="AutoEnter">
                                 <div className="areaimageINAutoEnter">
-                                    <div className="arow DEG180" onClick={() => { if (ImageInAutoEnter != 0) { setImageInAutoEnter(ImageInAutoEnter - 1) } }}>
+                                    {AutoEnter.length > 1 ? <div className="arow DEG180" onClick={() => { if (ImageInAutoEnter != 0) { setImageInAutoEnter(ImageInAutoEnter - 1) } }}>
                                         <Image src={"/rigth.png"} width={30} height={30} />
-                                    </div>
+                                    </div> : <div></div>}
                                     <div className="imageINAutoEnter">
                                         <Image src={`/${chainId == ETHid ? "imagesETH" : "imagesBNB"}/${AutoEnter[ImageInAutoEnter]}.png`} width={160} height={160} className="ff" />
                                     </div>
-                                    <div className="arow" onClick={() => { if (ImageInAutoEnter != AutoEnter.length - 1) { setImageInAutoEnter(ImageInAutoEnter + 1) } }}>
+                                    {AutoEnter.length > 1 ? <div className="arow" onClick={() => { if (ImageInAutoEnter != AutoEnter.length - 1) { setImageInAutoEnter(ImageInAutoEnter + 1) } }}>
                                         <Image src={"/rigth.png"} width={30} height={30} />
-                                    </div>
+                                    </div> : <div></div>}
                                 </div>
                                 <div className="listAutoEnter">
                                     <div className="listAutoEnterA">
@@ -412,17 +412,14 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
                                 <div className="MudebzInfoElement">
                                     <Image src={"/github.png"} width={35} height={35} />
                                 </div>
-                                <div className="MudebzInfoElement">
-                                    <Image src={"/Guide.png"} width={45} height={45} />
-                                </div>
+
                             </div>
                         </div>
                     </div>
                     <div className="addToken">
                         <div>
-                            <input className="input bigdinamic" id="inputToken" placeholder="Token Address" onChange={e => setaddTokenAddress(e.target.value)} />
+                            <input className="input bigdinamic" id="inputToken" placeholder="Token Address" onChange={e => setaddTokenAddress(e.target.value)} style={{ color: isvalid ? "green" : "red" }} />
                         </div>
-                        {(!isvalid && tryed) && <div className="invalid">Invalid Address</div>}
                         <div>
                             <button onClick={() => addToken()} className="mybutton" >Add new token</button>
                         </div>

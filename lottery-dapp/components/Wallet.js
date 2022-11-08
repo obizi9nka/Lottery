@@ -185,7 +185,7 @@ export default function Wallet({ chains, LOTTERY_ADDRESS, setENTERED, isWalletAl
                     <Image src="/news.png" width={25} height={25} />
                     <News news={news} now={now} deleteNews={deleteNews} />
                 </div>
-                <div className='otstup'>{NftButton && <MintNftButton LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} tymblerNaNetwork={tymblerNaNetwork} chainId={chain != undefined ? chain.id : 0} address={address} />}</div>
+                <div className='otstup'>{NftButton && <MintNftButton LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} checkNftButton={checkNftButton} settxData={settxData} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} tymblerNaNetwork={tymblerNaNetwork} chainId={chain != undefined ? chain.id : 0} address={address} />}</div>
                 {address && <div className='otstup'><button onClick={() => {
                     if (!isWalletAlert)
                         document.body.style.overflow = ('overflow', 'hidden')
@@ -236,8 +236,8 @@ export default function Wallet({ chains, LOTTERY_ADDRESS, setENTERED, isWalletAl
                                         if (!connected) {
                                             return (
                                                 <div>
-                                                    <div className={needWallet ? "ConnectWallet" : ""}>
-                                                        <button onClick={openConnectModal} className={needWallet ? "needWallet" : "mybutton"}>
+                                                    <div className="ConnectWallet">
+                                                        <button onClick={openConnectModal} className={needWallet ? "mybutton" : "mybutton"}>
                                                             Connect Wallet
                                                         </button>
                                                     </div>

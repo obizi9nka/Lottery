@@ -300,7 +300,10 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
         setNFTS(shuffled)
         setDATA(shuffled)
         setsearch("")
-        document.getElementById("search").value = ""
+        try {
+            document.getElementById("search").value = "";
+        } catch (err) { }
+
         settokensMints(minted)
         settokensNotMints(notMinted)
 
@@ -327,6 +330,9 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
     }
 
     // console.log(NFTS, tokensMints, tokensNotMints)
+    useEffect(() => {
+        setNFT()
+    }, [address])
 
     useEffect(() => {
         // setNFT()
@@ -341,8 +347,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
             setNotShuffle(JSON.parse(sessionStorage.getItem("notShuffle")))
             setIsKek(false)
         }
-    }, [chainId, address, tymblerNaNetwork])
-
+    }, [chainId, tymblerNaNetwork])
 
 
     const [startIndex, setstartIndex] = useState(1)
@@ -448,13 +453,13 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
                 <div className='anotherShit'>
                     <button className='mybutton butound' onClick={() => changeState(false, false)}>Back</button>
                     <div style={{ position: "relative" }}>
-                        <input className='input' id='search' style={{ width: 70 }} placeholder='Search' onChange={e => {
+                        <input className='input' id="search" style={{ width: 70 }} placeholder='Search' onChange={e => {
                             setcostil(true)
                             setTimeout(() => {
                                 setsearch(e.target.value)
                             }, 300);
                         }} />
-                        <div className='searchI'>
+                        <div className='searchI' onClick={() => { const temp = (search == "" ? "s" : search == "s" ? "a" : search == "a" ? "m" : ""); setcostil(true); setsearch(temp); document.getElementById("search").value = `${temp}`; }}>
                             <Image src={"/i.png"} width={"16px"} height="20px" />
                             <div className='searchIINFO'>
                                 <div style={{ display: 'grid' }}>
@@ -490,9 +495,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
             </div>
 
             <div className='data'>
-                {ALL_OR_MINTS == 1 && NFTS.map((element, index) => isEnogth(index + 1) && < NftsShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} setNFTS={setNFTS} settxData={settxData} Data={element} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} LotteryId={LotteryId} />)}
-                {ALL_OR_MINTS == 2 && tokensMints.map((element, index) => isEnogth(index + 1) && < NftsShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} setNFTS={setNFTS} settxData={settxData} Data={element} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} LotteryId={LotteryId} />)}
-                {ALL_OR_MINTS == 3 && tokensNotMints.map((element, index) => isEnogth(index + 1) && < NftsShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} setNFTS={setNFTS} settxData={settxData} Data={element} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} LotteryId={LotteryId} />)}
+                {(ALL_OR_MINTS == 1 ? NFTS : ALL_OR_MINTS == 2 ? tokensMints : tokensNotMints).map((element, index) => isEnogth(index + 1) && < NftsShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} setNFTS={setNFTS} settxData={settxData} Data={element} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} LotteryId={LotteryId} />)}
                 {iskek && kek.map(() =>
                     <div className='nftsShablon'>
                         <div className='pad'>
@@ -500,12 +503,12 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
                 )}
 
             </div>
-            <div className='areaFiter'>
+            {(ALL_OR_MINTS == 1 ? NFTS : ALL_OR_MINTS == 2 ? tokensMints : tokensNotMints).length > countOfRenderNfts && <div className='areaFiter'>
                 <div className='BackNext' style={{ width: 300 }}>
                     <button className='mybutton' onClick={() => changeState(false, true)}>Back</button>
                     <button className='mybutton' onClick={() => changeState(true, true)}>Next</button>
                 </div>
-            </div>
+            </div>}
 
 
         </div >

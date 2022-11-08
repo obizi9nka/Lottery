@@ -1,6 +1,6 @@
 import prisma from './prisma.js';
 
-import { defaultTokenETH, defaultTokenBNB } from "../../components/Constants"
+import { USDT_BNB, USDT_ETH } from "../../components/Constants"
 
 export default async function handler(req, res) {
 
@@ -12,8 +12,8 @@ export default async function handler(req, res) {
   result = await prisma.user.create({
     data: {
       address,
-      tokensBNB: defaultTokenBNB + "_",
-      tokensETH: defaultTokenETH + "_"
+      tokensBNB: USDT_BNB + "_",
+      tokensETH: USDT_ETH + "_"
     }
   })
 

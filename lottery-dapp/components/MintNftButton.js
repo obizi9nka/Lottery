@@ -22,7 +22,7 @@ import {
 } from 'wagmi';
 
 
-export default function MintNftButton({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, address, settxData, daloyNFTbutton, setdaloyNFTbutton }) {
+export default function MintNftButton({ LOTTERY_ADDRESS, NFT_ADDRESS, checkNftButton, chainId, address, settxData, daloyNFTbutton, setdaloyNFTbutton }) {
 
     const [arrayAllowToMint, setarrayAllowToMint] = useState([])
     const provider = useProvider()
@@ -48,6 +48,8 @@ export default function MintNftButton({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, a
                 }
             }
             setarrayAllowToMint(array)
+            if (array.length == 0)
+                FromDaloy()
         } catch (err) {
             console.log(err)
         }
@@ -56,12 +58,17 @@ export default function MintNftButton({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, a
 
     useEffect(() => {
         if (daloyNFTbutton) {
-            setisMintMartenActive(false)
-            setdaloyNFTbutton(false)
-            localStorage.removeItem("overflow")
-            document.body.style.overflow = ('overflow', 'auto');
+            FromDaloy()
         }
     }, [daloyNFTbutton])
+
+    const FromDaloy = () => {
+        setisMintMartenActive(false)
+        setdaloyNFTbutton(false)
+        localStorage.removeItem("overflow")
+        document.body.style.overflow = ('overflow', 'auto');
+
+    }
 
     const MintMarten = async (element) => {
         settxData({
@@ -96,11 +103,12 @@ export default function MintNftButton({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, a
             document.body.style.overflow = ('overflow', 'auto');
         }
         getAllows()
+        checkNftButton()
     }
 
     return (
         <div>
-            <button className={isMintMartenActive ? "pulse active " : "pulse"} onClick={() => {
+            <button className={isMintMartenActive ? "pulse active " : "pulse"} style={{ fontWeight: "200" }} onClick={() => {
                 window.scrollTo(0, 0)
                 if (!isMintMartenActive) {
                     localStorage.setItem("overflow", "lock")
@@ -114,14 +122,14 @@ export default function MintNftButton({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, a
                 setisMintMartenActive(!isMintMartenActive)
 
             }
-            } >NFT</button>
+            } >N F T</button>
             <div className={isMintMartenActive ? "modallMINT active" : "modallMINT"} onClick={() => setisMintMartenActive(false)}>
                 <div className="areaMINT" onClick={e => e.stopPropagation()}>
                     <div className='imageWithArrow'>
                         {arrayAllowToMint.length > 1 && < div className="arow DEG180" style={{ margin: "0px 30px" }} onClick={() => { if (index != 0) { setindex(parseInt(index) - 1) } }}>
                             <Image src={"/rigth.png"} width={30} height={30} />
                         </div>}
-                        <div className='MINT'>
+                        <div className='MINT pulse' style={{ padding: "7px" }}>
                             <Image src={`/imagesETH/${arrayAllowToMint[index]}.png`} style={{ "border-radius": 12 }} width={350} height={350} /><br />
                         </div>
                         {arrayAllowToMint.length > 1 && <div className="arow" style={{ margin: "0px 30px" }} onClick={() => { if (index != arrayAllowToMint.length - 1) { setindex(parseInt(index) + 1) } }}>
@@ -129,7 +137,7 @@ export default function MintNftButton({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, a
                         </div>}
                     </div>
                     <div className='MINT'>
-                        <button className='mybutton Mint' style={{ margin: "20px", width: "150px" }} onClick={() => { MintMarten(arrayAllowToMint[index]) }}>Mint</button>
+                        <button className='mybutton pulse' style={{ margin: "20px", width: "150px", fontSize: "20px" }} onClick={() => { MintMarten(arrayAllowToMint[index]) }}>Mint</button>
                     </div>
                 </div>
             </div>

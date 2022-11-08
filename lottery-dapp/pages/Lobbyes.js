@@ -10,6 +10,7 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import A from "/blockchain/A.json"
 import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from '../components/Constants';
 import notForYourEyesBitch from "../notForYourEyesBitch.json"
+import IssueMaker from '../components/IssueMaker';
 import {
     chain,
     configureChains,
@@ -77,6 +78,8 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
 
     const [deposit, setdeposit] = useState("")
     const [countOfPlayers, setcountOfPlayers] = useState(0)
+    const [isdepositvalid, setisdepositvalid] = useState()
+    const [iscountOfPlayersvalid, setiscountOfPlayersvalid] = useState()
     const [token, settoken] = useState("")
     const [lobbyes, setlobbyes] = useState(lobbyETH)
     const [lobbyesActive, setlobbyesActive] = useState([])
@@ -121,7 +124,23 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
     }, [tymblerNaNetwork, chainId])
 
 
+    useEffect(() => {
+        if (countOfPlayers / 1 > 1 && countOfPlayers / 1 <= 1000)
+            setiscountOfPlayersvalid(true)
+        else if (countOfPlayers == "")
+            setiscountOfPlayersvalid(undefined)
+        else
+            setiscountOfPlayersvalid(false)
+    }, [countOfPlayers])
 
+    useEffect(() => {
+        if (parseFloat(deposit) == deposit)
+            setisdepositvalid(true)
+        else if (deposit == "")
+            setisdepositvalid(undefined)
+        else
+            setisdepositvalid(false)
+    }, [deposit])
 
     const filterUserLobbyes = async () => {
         try {
@@ -203,67 +222,64 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                 isPending: true,
                 result: null
             })
-            console.log("ssw", token)
-            if (token.decimals >= 0) {
-                console.log("ss", token)
-                const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
-                const Deposit = BigInt(deposit * 10 ** token.decimals)
-                const body = { user: address, token: token.address, countOfPlayers, deposit, chainId }
-                console.log(body, token, Deposit, chainId)
-                const tx = await contract.createNewLobby(token.address, Deposit, countOfPlayers)
-                await tx.wait()
-                await fetch('/api/createNewLobby', {
-                    method: "PUT",
-                    body: JSON.stringify(body)
-                })
+            const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
+            const Deposit = BigInt(deposit * 10 ** token.decimals)
+            const body = { user: address, token: token.address, countOfPlayers, deposit, chainId }
+            console.log(body, token, Deposit, chainId)
+            const tx = await contract.createNewLobby(token.address, Deposit, countOfPlayers)
+            await tx.wait()
+            await fetch('/api/createNewLobby', {
+                method: "PUT",
+                body: JSON.stringify(body)
+            })
 
-                const newy = { user: address, chainId }
-                await fetch('/api/getNewLobby', {
-                    method: "POST",
-                    body: JSON.stringify(newy)
-                }).then(async (data) => {
-                    const element = await data.json()
-                    const _data = {
-                        deposit: element.deposit,
-                        nowInLobby: element.nowInLobby,
-                        players: element.players,
-                        countOfPlayers: element.countOfPlayers,
-                        IERC20: element.IERC20,
-                        creator: element.creator,
-                        id: element.id,
-                        percent: parseInt(`${element.nowInLobby / element.countOfPlayers * 100}`.substring(0, 2))
-                    }
-                    setlobbyes([...lobbyes, _data])
-                    setlobbyesActive([...lobbyesActive, _data])
-                    setuserlobbyActive([...userlobbyActive, true])
+            const newy = { user: address, chainId }
+            await fetch('/api/getNewLobby', {
+                method: "POST",
+                body: JSON.stringify(newy)
+            }).then(async (data) => {
+                const element = await data.json()
+                const _data = {
+                    deposit: element.deposit,
+                    nowInLobby: element.nowInLobby,
+                    players: element.players,
+                    countOfPlayers: element.countOfPlayers,
+                    IERC20: element.IERC20,
+                    creator: element.creator,
+                    id: element.id,
+                    percent: parseInt(`${element.nowInLobby / element.countOfPlayers * 100}`.substring(0, 2))
+                }
+                setlobbyes([...lobbyes, _data])
+                setlobbyesActive([...lobbyesActive, _data])
+                setuserlobbyActive([...userlobbyActive, true])
 
-                    const temp = ALL_LOBBYES
-                    chainId == ETHid ? temp.lobbyETH.push(_data) : temp.lobbyBNB.push(_data)
-                    setAll_LOBBYES(temp)
-                })
-                settxData({
-                    isPending: true,
-                    result: true
-                })
-            }
-            else {
-                settxData({
-                    isPending: false,
-                    result: false
-                })
-            }
+                const temp = ALL_LOBBYES
+                chainId == ETHid ? temp.lobbyETH.push(_data) : temp.lobbyBNB.push(_data)
+                setAll_LOBBYES(temp)
+            })
+            settxData({
+                isPending: true,
+                result: true
+            })
+            document.getElementById("deposit").value = "";
+            document.getElementById("countofplayers").value = "";
         } catch (err) {
             console.log(err)
+            let issue
+            if (iscountOfPlayersvalid && isdepositvalid)
+                issue = IssueMaker({ data: err.code, from: "createNewLobby" })
+            else
+                issue = "Deposit or Count of players"
             settxData({
                 isPending: false,
-                result: false
+                result: false,
+                issue
             })
             if (!isConnected) {
                 setneedWallet(true)
             }
         }
-        document.getElementById("deposit").value = "";
-        document.getElementById("countofplayers").value = "";
+
     }
 
     const [needLigth, setneedLigth] = useState(false)
@@ -356,9 +372,11 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
 
 
         } catch (err) {
+            let issue = IssueMaker({ data: err.code, from: "createNewLobby" })
             settxData({
-                isPending: true,
-                result: false
+                isPending: false,
+                result: false,
+                issue
             })
             if (!isConnected) {
                 setneedWallet(true)
@@ -425,8 +443,8 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                             <option className='option' > {element.symbol}</option>
                         )}
                     </select>
-                    <input className='input I' id='deposit' placeholder='Deposit' onChange={e => setdeposit(e.target.value.toString())} />
-                    <input className='input I' id='countofplayers' placeholder='Count Of Players' onChange={e => setcountOfPlayers(e.target.value)} />
+                    <input className='input I' id='deposit' placeholder='Deposit' onChange={e => setdeposit(e.target.value.toString())} style={{ color: isdepositvalid == false ? "red" : null }} />
+                    <input className='input I' id='countofplayers' placeholder='Count Of Players' onChange={e => setcountOfPlayers(e.target.value)} style={{ color: iscountOfPlayersvalid == false ? "red" : null }} />
                     <button onClick={createNewLobby} className="mybutton I">Create New Lobby</button>
                 </div>
                 <div className='area' >

@@ -47,18 +47,21 @@
 
 }
 
-.needWallet {
+/* .needWallet {
     color: white;
     width: fit-content;
     padding: 10px;
     border-radius: 12px;
     background-color: rgb(17, 16, 16);
     animation-name: wallet;
-    animation-iteration-count: infinite;
+    animation-iteration-count: 2;
+    animation-fill-mode: forwards;
     animation-duration: 5s;
-}
+} */
+
 
 .needWallet:hover {
+    background-color: rgba(132, 118, 118, 0.2);
     cursor: pointer;
 }
 

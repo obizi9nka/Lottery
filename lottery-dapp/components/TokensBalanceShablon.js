@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Lottery from "/blockchain/Lottery.json"
 import Image from "next/image";
 import A from "/blockchain/A.json"
-import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB } from './Constants';
+import { USDT_ETH } from './Constants';
 import {
     chain,
     configureChains,
@@ -94,10 +94,10 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
                         </div>
 
                     </div >
-                    <div className="tokenImageDElete" id="delete" >
+                    {element.address != USDT_ETH && < div className="tokenImageDElete" id="delete" >
                         <Image className=" hover" src="/delete.png" onClick={() => { deleteToken() }} width={25} height={25} />
-                    </div>
-                </div>
+                    </div>}
+                </div >
 
             )
         else

@@ -132,6 +132,8 @@ function MyApp({ Component, pageProps }) {
     settymblerNaNetwork(chain == undefined ? tymblerNaNetwork : (chain.id == ETHid ? true : false))
   }, [chain])
 
+  console.log(chainId, LOTTERY_ADDRESS)
+
   useEffect(() => {
     setchainId(chain != undefined ? chain.id : 0)
     if (chain != undefined) {
@@ -143,7 +145,6 @@ function MyApp({ Component, pageProps }) {
       setnftAddress(tymblerNaNetwork ? MudeBzNFTETH : MudeBzNFTBNB)
     }
   }, [chain, tymblerNaNetwork])
-
 
   const checkChain = async () => {
     if (chain?.id == ETHid) {
@@ -169,6 +170,7 @@ function MyApp({ Component, pageProps }) {
 
       <Head>
         <meta name="viewport" content='width=device-width' />
+
       </Head>
       <InfoPopUp data={txData} settxData={settxData} />
       <WagmiConfig client={wagmiClient}>
@@ -227,7 +229,9 @@ function MyApp({ Component, pageProps }) {
           <a className='menuSmartfon'> About </a>
         </Link>
       </div>
+
     </div >
+
   )
 }
 
