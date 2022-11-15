@@ -55,10 +55,10 @@ contract Lobby is Balance, Ownable {
     uint256 internal REVARD_FOR_HOLDERS = (MAX_SUPPLAY / 100) * 8; // 80 000 000
     uint256 internal REVARD_FOR_HOLDERS_EVER = (MAX_SUPPLAY / 100) * 17; // 170 000 000
     uint256 internal REVARD_OWNER = (MAX_SUPPLAY / 100) * 13; // 130 000 000
-    uint256 internal REVARD_LOBBY = (MAX_SUPPLAY / 100) * 28; // 280 000 000
-    uint256 internal REVARD_LOTTERY = (MAX_SUPPLAY / 100) * 9; // 90 000 000
+    uint256 internal REVARD_LOBBY = (MAX_SUPPLAY / 100) * 30; // 300 000 000
+    uint256 internal REVARD_LOTTERY = (MAX_SUPPLAY / 100) * 10; // 100 000 000
     uint256 internal REVARD_REF = (MAX_SUPPLAY / 100) * 21; // 210 000 000
-    uint256 internal REVARD_GENIUS = (MAX_SUPPLAY / 100) * 4; // 210 000 000
+    uint256 internal REVARD_GENIUS = (MAX_SUPPLAY / 100) * 1; // 10 000 000
 
     uint256 internal REVARD_FOREACH_HOLDERS_EVER = 0;
 
@@ -171,7 +171,7 @@ contract Lobby is Balance, Ownable {
             LotteryCount >= 1051 &&
             address(_lobby.token) == address(MUDaddress) &&
             HEEP >= length * 10 &&
-            _lobby.deposit >= 10**19
+            _lobby.deposit >= 5 * 10**19
         ) {
             for (uint256 i = 0; i < length; i++) {
                 if (AutoMint != 0) {

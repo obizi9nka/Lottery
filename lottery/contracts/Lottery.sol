@@ -31,6 +31,7 @@ contract Lottery is Lobby {
 
     event enter(address user);
     event play(uint id, address winer);
+    event mistery(address genius, string _string);
 
     mapping(uint256 => LotteryShablon) Lotteries;
 
@@ -46,6 +47,8 @@ contract Lottery is Lobby {
 
     mapping(bytes32 => address) PromSetReverse;
 
+    mapping(address => uint) allowTryMistery;
+
     bytes32 immutable Mistery;
 
     uint256 deposit;
@@ -55,6 +58,24 @@ contract Lottery is Lobby {
 
     constructor(bytes32 Hash) {
         Mistery = Hash;
+    }
+
+    function tryMistery(string memory _string) public {
+        require(
+            allowTryMistery[msg.sender] + 3600000 < block.timestamp,
+            "Time"
+        );
+        require(REVARD_GENIUS > 0, "prize lost");
+        allowTryMistery[msg.sender] = block.timestamp;
+        if (Mistery == keccak256(abi.encodePacked(_string))) {
+            shouldRevard[msg.sender] += REVARD_GENIUS;
+            REVARD_GENIUS = 0;
+            emit mistery(msg.sender, _string);
+        }
+    }
+
+    function getRevardGenius() public view returns (uint256) {
+        return REVARD_GENIUS;
     }
 
     function getAutoEnter(address a) public view returns (uint256[] memory) {
@@ -286,6 +307,7 @@ contract Lottery is Lobby {
             HOLDERS_EVER();
             OWNER();
             tokenForLottery = MUDaddress;
+            deposit = 10**19;
         }
 
         emit play(LotteryCount, winer);
