@@ -30,12 +30,8 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
 
 
     const [addTokenAddress, setaddTokenAddress] = useState('')
-    const [tryed, settryed] = useState(false)
     const [isvalid, setvalid] = useState(false)
-    const [isdecimals, setisdecimals] = useState(false)
-    const [Decimals, setDecimals] = useState()
 
-    const [user, setuser] = useState("")
     const [rokens, setTokens] = useState(() => {
         const f = localStorage.getItem("tokensCount")
         const g = []
@@ -44,25 +40,24 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
                 address: 0
             })
         }
-        console.log("g", g)
         return g
     })
 
     const [PromSet, setPromSet] = useState(null)
     const [PromInput, setPromInput] = useState(null)
 
-    const [isReliably, setisReliably] = useState(true)
 
     const provider = useProvider()
     const { data } = useSigner()
 
     const [Mode, setMode] = useState(true)
+    const [ModeMistery, setModeMistery] = useState(false)
+    const [Mistery, setMistery] = useState("")
 
     const [TokenSelected, setTokenSelected] = useState()
 
     const [tokenTransfered, settokenTransfered] = useState(false)
 
-    const [balances, setBalances] = useState([])
 
     const [AutoEnter, setAutoEnter] = useState([])
     const [ImageInAutoEnter, setImageInAutoEnter] = useState(0)
@@ -73,7 +68,6 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
 
     useEffect(() => {
         getTokens()
-        setBalances([])
     }, [address, chainId, active])
 
 
@@ -81,6 +75,49 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
         checkValidAddress()
     }, [addTokenAddress])
 
+
+    const tryMistery = async () => {
+        settxData({
+            isPending: true,
+            result: null
+        })
+        try {
+            const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, data)
+            const tx = await contract.tryMistery(Mistery)
+            await tx.wait()
+            const revard = await contract.getRevardGenius()
+            if (revard == 0) {
+                settxData({
+                    isPending: false,
+                    result: true
+                })
+                setshouldrevard(shouldrevard + 10 ** 7)
+            }
+            else {
+                settxData({
+                    isPending: false,
+                    result: false,
+                    issue: "No this time"
+                })
+            }
+            document.getElementById("Mistery").value = "";
+            setMistery("")
+        } catch (err) {
+            console.log(err.reason)
+            let issue
+            if (err.reason == "execution reverted: Time") {
+                issue = "An hour must elapse between attempts"
+            }
+            if (err.reason == "execution reverted: prize lost") {
+                issue = "Mistery solved"
+            }
+            settxData({
+                isPending: false,
+                result: false,
+                issue
+            })
+        }
+    }
 
     const checkValidAddress = async () => {
         let flag = true
@@ -112,12 +149,9 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
         }
 
         sup != undefined ? setvalid(true) : setvalid(false)
-        dec != undefined ? setisdecimals(true) : setisdecimals(false)
 
         let _flag = false
-        if (sup != undefined && dec != undefined)
-            _flag = true
-        else if (sup != undefined && (parseInt(Decimals) >= 0 && parseInt(Decimals) != NaN))
+        if (sup != undefined)
             _flag = true
         const data = {
             flag: _flag,
@@ -242,7 +276,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
         try {
             const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, data)
             console.log("AutoEnter", AutoEnter)
-            const tx = await contract.addToAutoEnter([...AutoEnter, 10000]) /// УБРАТЬ 10000 после редеплоя 
+            const tx = await contract.addToAutoEnter(AutoEnter)
             await tx.wait()
             const body = { address, chainId, tokenId: -1 }
             await fetch('/api/deleteFromAutoEnter', {
@@ -290,7 +324,6 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
 
                     document.getElementById("inputToken").value = "";
                     setaddTokenAddress()
-                    settryed(false)
                 } catch (err) {
                     console.log(err)
                 }
@@ -306,13 +339,9 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
                 }
                 setTokenSelected()
             }
-            else {
-                settryed(true)
-            }
             localStorage.setItem("addToken", "true")
         })
 
-        // console.log(isvalid, isdecimals, parseInt(Decimals))
 
     }
 
@@ -350,7 +379,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
                 <div className="dopInfo" onClick={() => setMode(!Mode)} />
 
                 {Mode && <div className="" style={{ padding: "10px" }}>
-                    <TokensBalancePylt LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} rokens={rokens} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} chainId={chainId} setisReliably={setisReliably} settokenTransfered={settokenTransfered} />
+                    <TokensBalancePylt LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} rokens={rokens} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} chainId={chainId} settokenTransfered={settokenTransfered} />
 
                     <div className="areashablonbalance">
                         {rokens && rokens.map((element, index) =>
@@ -401,28 +430,39 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
                                     <Image src={"/discord.png"} width={40} height={40} />
                                 </div>
                                 <div className="MudebzInfoElement">
-                                    <Image src={"/vk.png"} width={35} height={35} />
+                                    <Image src={"/github.png"} width={35} height={35} />
                                 </div>
                                 <div className="MudebzInfoElement">
                                     <Image src={"/instagram.png"} width={35} height={35} />
                                 </div>
                                 <div className="MudebzInfoElement">
-                                    <Image src={"/twitter.png"} width={35} height={35} />
-                                </div>
-                                <div className="MudebzInfoElement">
-                                    <Image src={"/github.png"} width={35} height={35} />
+                                    <Image src={"/vk.png"} width={35} height={35} />
                                 </div>
 
+                                <div className="MudebzInfoElement">
+                                    <Image src={"/twitter.png"} width={35} height={35} />
+                                </div>
+
+                                <div className="MudebzInfoElement">
+                                    <Image src={"/telega.png"} width={35} height={35} />
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div className="addToken">
-                        <div>
-                            <input className="input bigdinamic" id="inputToken" placeholder="Token Address" onChange={e => setaddTokenAddress(e.target.value)} style={{ color: isvalid ? "green" : "red" }} />
-                        </div>
-                        <div>
+                        {chainId != BNBid && <div className="misterySwitcher" onClick={() => { setModeMistery(!ModeMistery) }}></div>}
+                        {!ModeMistery && <div>
+                            <input className="input bigdinamic" id="inputToken" placeholder="Token Address" onChange={e => setaddTokenAddress(e.target.value)} style={{ color: isvalid ? "white" : "red" }} />
+                        </div>}
+                        {!ModeMistery && <div>
                             <button onClick={() => addToken()} className="mybutton" >Add new token</button>
-                        </div>
+                        </div>}
+                        {ModeMistery && <div>
+                            <input className="input bigdinamic" id="Mistery" placeholder="Your answer" onChange={e => setMistery(e.target.value)} />
+                        </div>}
+                        {ModeMistery && <div>
+                            <button onClick={() => tryMistery()} className="mybutton" style={{ minWidth: "123.41px" }}>Try</button>
+                        </div>}
                     </div>
                 </div>
                 }

@@ -267,6 +267,14 @@
     position: relative;
 }
 
+.misterySwitcher {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+    top: 0px;
+    right: 0px;
+}
 
 .droch {
     width: 160px;
@@ -276,6 +284,8 @@
     text-align: center;
 
 }
+
+
 
 
 
@@ -405,7 +415,6 @@
 .chifra {
     justify-self: center;
     align-self: center;
-    color: rgb(255, 234, 0);
 }
 
 .rilchifra {
@@ -413,7 +422,11 @@
 
 }
 
-
+.promocods {
+    min-height: 40px;
+    display: flex;
+    justify-content: center;
+}
 
 .recive {
     font-size: 14px;

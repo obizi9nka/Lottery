@@ -97,12 +97,11 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
       }
       else
         try {
-          document.getElementById("hours").innerHTML = (hours > 9 ? "" : "0") + hours
-          document.getElementById("minutes").innerHTML = (minutes > 9 ? "" : "0") + minutes
+          document.getElementById("hours").innerHTML = (hours > 9 ? "" : "0") + hours + ":"
+          document.getElementById("minutes").innerHTML = (minutes > 9 ? "" : "0") + minutes + ":"
           document.getElementById("seconds").innerHTML = (seconds > 9 ? "" : "0") + seconds
         } catch (err) {
           // clearInterval(x)
-          console.log(err)
         }
 
     }, 1000);
@@ -305,33 +304,13 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
       <Head>
         <title>!Mudebz</title>
         <meta name="description" content="An Ethereum Lottery dApp" />
-        <link rel="icon" href="/favicon.ico" />
+
       </Head>
       <div className=''>
-        {/* <div className='Timer'>
-          <div class="circle">
-            <div class="circle-content">
-              <div className='timer' id="hours"  ></div>
-            </div>
-          </div>
-          <div class="circle">
-            <div class="circle-content">
-              <div className='timer' id="minutes"  ></div>
-            </div>
-          </div>
-          <div class="circle">
-            <div class="circle-content">
-              <div className='timer' id="seconds"  ></div>
-            </div>
-          </div>
-        </div> */}
-
 
         <div className='Timer'>
           <div className='timer' id="hours"  ></div>
-          <div className='timer dots'>:</div>
           <div className='timer' id="minutes"  ></div>
-          <div className='timer'>:</div>
           <div className='timer' id="seconds"  ></div>
         </div>
         <div className='index'>

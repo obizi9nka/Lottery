@@ -170,7 +170,7 @@ function MyApp({ Component, pageProps }) {
 
       <Head>
         <meta name="viewport" content='width=device-width' />
-
+        <link rel="icon" href={chainId == ETHid ? "/BLACK.ico" : chainId == BNBid ? "/ORANGE.ico" : "/PURPLE.ico"} />
       </Head>
       <InfoPopUp data={txData} settxData={settxData} />
       <WagmiConfig client={wagmiClient}>
@@ -201,9 +201,9 @@ function MyApp({ Component, pageProps }) {
               <div >
                 <Image src={logo} width="280px" height="75px" />
               </div>
-              <div className='beta'>
+              {/* <div className='beta'>
                 <Image src={"/beta.png"} width={50} height={50} />
-              </div>
+              </div> */}
 
             </div>
             <Wallet isWalletAlert={isWalletAlert} setENTERED={setENTERED} setisWalletAlert={setisWalletAlert} chains={chains} LOTTERY_ADDRESS={LOTTERY_ADDRESS} BNBChain={BNBChain} txData={txData} NFT_ADDRESS={NFT_ADDRESS} setdaloynavigationSmartfon={setdaloynavigationSmartfon} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} settxData={settxData} needWallet={needWallet} setchainId={setchainId} tymblerNaNetwork={tymblerNaNetwork} />

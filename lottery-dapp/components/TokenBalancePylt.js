@@ -24,10 +24,7 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
     const [parsedDeposit, setparsedDeposit] = useState("")
     const [needApprove, setneedAprove] = useState(false)
 
-    const [tryed, settryed] = useState(false)
     const [isvalid, setvalid] = useState(false)
-
-    const [Decimals, setDecimals] = useState(18)
 
     const [placeholder, setplaceholder] = useState("Choose token")
 
@@ -39,7 +36,7 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
     useEffect(() => {
         if (TokenSelected != null) {
             rokens.forEach((element) => {
-                if (element.address == TokenSelected)
+                if (element.address == TokenSelected.address)
                     setplaceholder(element.symbol)
             })
         }
@@ -57,7 +54,7 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
         })
         try {
             console.log(parsedDeposit)
-            const contract = new ethers.Contract(TokenSelected, A.abi, signer)
+            const contract = new ethers.Contract(TokenSelected.address, A.abi, signer)
             const tx = await contract.approve(LOTTERY_ADDRESS, BigInt(parsedDeposit * 10 ** 18))
             await tx.wait()
             settxData({
@@ -82,13 +79,13 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
                 result: null
             })
             const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
-            const tokenContract = new ethers.Contract(TokenSelected, A.abi, provider)
+            const tokenContract = new ethers.Contract(TokenSelected.address, A.abi, provider)
             const decimals = await tokenContract.decimals()
-            const tx = await contract.addTokensToBalance(TokenSelected, BigInt(deposit * 10 ** decimals))
+            const tx = await contract.addTokensToBalance(TokenSelected.address, BigInt(deposit * 10 ** decimals))
             await tx.wait()
             setTokenSelected(null)
             setDeposit(0)
-            document.getElementById(TokenSelected).value = "";
+            document.getElementById("deposit/withdraw").value = "";
             settxData({
                 isPending: false,
                 result: true
@@ -102,7 +99,6 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
         }
 
     }
-
 
     useEffect(() => {
         let _deposit = ""
@@ -132,9 +128,9 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
     const checkApprove = async (_deposit) => {
         if (TokenSelected != null)
             try {
-                const tokenContract = new ethers.Contract(TokenSelected, A.abi, provider)
-                console.log(BigInt(await tokenContract.allowance(user, LOTTERY_ADDRESS)), BigInt(_deposit * 10 ** Decimals))
-                if (BigInt(await tokenContract.allowance(user, LOTTERY_ADDRESS)) < BigInt(_deposit * 10 ** Decimals)) {
+                const tokenContract = new ethers.Contract(TokenSelected.address, A.abi, provider)
+                console.log(BigInt(await tokenContract.allowance(user, LOTTERY_ADDRESS)), BigInt(_deposit * 10 ** TokenSelected.decimals))
+                if (BigInt(await tokenContract.allowance(user, LOTTERY_ADDRESS)) < BigInt(_deposit * 10 ** TokenSelected.decimals)) {
                     setneedAprove(true)
                 } else {
                     setneedAprove(false)
@@ -145,7 +141,6 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
 
     }
 
-
     const withdrow = async () => {
         try {
             settxData({
@@ -153,7 +148,7 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
                 result: null
             })
             const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
-            const tokenContract = new ethers.Contract(TokenSelected, A.abi, provider)
+            const tokenContract = new ethers.Contract(TokenSelected.address, A.abi, provider)
             let decimals = 18
             try {
                 decimals = await tokenContract.decimals()
@@ -161,11 +156,11 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
                 console.log("Net f desimals", err)
             }
             // console.log(BigInt(deposit * 10 ** decimals))
-            const tx = await contract.Withdrow(TokenSelected, BigInt(deposit * 10 ** decimals))
+            const tx = await contract.Withdrow(TokenSelected.address, BigInt(deposit * 10 ** decimals))
             await tx.wait()
             setTokenSelected(null)
             setDeposit(0)
-            document.getElementById(TokenSelected).value = "";
+            document.getElementById("deposit/withdraw").value = "";
             settxData({
                 isPending: false,
                 result: true
@@ -185,7 +180,7 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
             {needApprove && <button onClick={approve} disabled={!isvalid} className="mybutton dinamic">Enable</button>}
 
             <div className='depositvalue'>
-                <input className="input dinamic" style={{ minWidth: "110px", color: deposit == "" ? "white" : isvalid ? "white" : "red" }} disabled={TokenSelected == null} id={TokenSelected} placeholder={placeholder} onChange={e => { setDeposit(e.target.value) }} />
+                <input className="input dinamic" id="deposit/withdraw" style={{ minWidth: "110px", color: deposit == "" ? "white" : isvalid ? "white" : "red" }} disabled={TokenSelected == null} placeholder={placeholder} onChange={e => { setDeposit(e.target.value) }} />
                 {/* {(!isvalid && tryed) && <div className="invalidvalue">Invalid value</div>} */}
             </div>
 

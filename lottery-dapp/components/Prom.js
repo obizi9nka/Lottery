@@ -161,7 +161,7 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
         <div className="PROM">
             <div style={{ display: "grid" }}>
                 {IsVisible && <div className={(PromInput == null && shouldrevard.isEnteredOnce == 0) || PromSet == null ? 'PromButtons' : "NoButtons"} >
-                    <div >
+                    <div className='promocods'>
                         {PromSet == null &&
                             <button onClick={() => { if (prom.length > 0) setProm() }} className="setProm mybutton droch" >Set your code</button>}
                         {PromSet != null &&
@@ -169,9 +169,9 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
                     </div>
 
                     {((PromInput == null && shouldrevard.isEnteredOnce == 0) || PromSet == null) &&
-                        <input className="input droch" id="Prom" placeholder="Enter promo code" onChange={e => setprom(e.target.value)} />
+                        <input className="input droch promocods" id="Prom" placeholder="Enter promo code" onChange={e => setprom(e.target.value)} />
                     }
-                    <div>
+                    <div className='promocods'>
                         {(PromInput == null && shouldrevard.isEnteredOnce == 0) ?
                             <button onClick={() => { if (prom.length > 0) inputProm() }} className="inputProm mybutton droch" >Enter the code</button> : <div ></div>}
                         {!(PromInput == null && shouldrevard.isEnteredOnce == 0) &&
@@ -185,8 +185,8 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
                     Your will receive
                 </div>
                 <div className='chifra'>
-                    <div className='rilchifra' style={{ color: "purple" }}>
-                        {PromInput != null ? (shouldrevard.count - 100 > 0 ? shouldrevard.count - 100 : 0) : `${shouldrevard.count}`}<div style={{ color: "aqua", marginLeft: PromInput != null ? "10px" : "" }}>{`${PromInput != null && shouldrevard.isEnteredOnce ? " (+100)" : ""}`}</div>
+                    <div className='rilchifra' style={{ color: "purple", fontWeight: "400" }}>
+                        {PromInput != null ? (shouldrevard.count - 1000 > 0 ? shouldrevard.count - 1000 : 0) : `${shouldrevard.count}`}<div style={{ color: "aqua", marginLeft: PromInput != null ? "10px" : "" }}>{`${PromInput != null && shouldrevard.isEnteredOnce ? " (+1000)" : ""}`}</div>
                     </div>
 
                 </div>

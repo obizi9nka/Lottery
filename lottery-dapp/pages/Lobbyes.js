@@ -422,7 +422,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
             <Head>
                 <title>!Mudebz</title>
                 <meta name="description" content="An Ethereum Lottery dApp" />
-                <link rel="icon" href="/favicon.ico" />
 
             </Head>
 

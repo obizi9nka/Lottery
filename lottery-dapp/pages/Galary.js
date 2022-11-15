@@ -447,7 +447,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
             <Head>
                 <title>!MuDeBz</title>
                 <meta name="description" content="An Ethereum Lottery dApp" />
-                <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className='fiter'>
                 <div className='anotherShit'>

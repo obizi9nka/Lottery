@@ -11,7 +11,6 @@ export default function Home({ tymblerNaNetwork }) {
             <Head>
                 <title>!Mudebz</title>
                 <meta name="description" content="An Ethereum Lottery dApp" />
-                <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className="about">
                 <div className='syka'>
@@ -102,7 +101,7 @@ export default function Home({ tymblerNaNetwork }) {
                                 4. MuDeBz NFT
                             </h2>
                             <div className='obzach'>
-                                Mint price - 0.032 ETH.
+                                Mint price - 0.08 ETH.
                             </div>
                             <div className='obzach'>
                                 So, what is included with NFT?
@@ -123,7 +122,7 @@ export default function Home({ tymblerNaNetwork }) {
                             {/* </div> */}
 
                             <div className='obzach'>
-                                The collection includes about <strong className="colorPURPLE">5% of unique NFTs</strong> that are timed to coincide with holidays and important events in history. You can see their in the gallery.
+                                The collection includes about <strong className="colorPURPLE">5% of unique NFTs</strong> that are timed to coincide with holidays and important events in history.
                             </div>
                         </div>
 
@@ -157,7 +156,7 @@ export default function Home({ tymblerNaNetwork }) {
                                 NFT holders will share <strong className="colorPURPLE">8%</strong>.
                             </li>
                             <li className='Dot'>
-                                Wallets ever owning NFTs will share <strong className="colorPURPLE">19%</strong>.
+                                Wallets ever owning NFTs will share <strong className="colorPURPLE">17%</strong>.
                             </li>
                             <li className='Dot'>
                                 <strong className="colorPURPLE">21%</strong> allocated for the referral program.                            </li>
@@ -168,7 +167,7 @@ export default function Home({ tymblerNaNetwork }) {
                             </div>
                             <div className='obzach'>
                                 Every day 300 000 MUD will be drawn in the <strong className="colorPURPLE">lobby</strong>.<br />
-                                Also, all <strong className="colorPURPLE">lottery </strong>players will share 90 000 tokens per day.
+                                Also, all <strong className="colorPURPLE">lottery </strong>players will share 100 000 tokens per day.
                             </div>
                         </div>
 
@@ -177,12 +176,12 @@ export default function Home({ tymblerNaNetwork }) {
                                 6. Referral
                             </h2>
                             <div className='obzach'>
-                                Refer a friend and you both get <strong className="colorPURPLE">100 MUD</strong>.
+                                Refer a friend and you both get <strong className="colorPURPLE">1000 MUD</strong>.
                             </div>
 
                             <div className='obzach'>
                                 Create your promo code and share it.<br />
-                                When someone enters your promo code before their <strong className="colorPURPLE">first participation in the draw</strong>,<br /> you will both receive 100 MUD.
+                                When someone enters your promo code before their <strong className="colorPURPLE">first participation in the draw</strong>,<br /> you will both receive 1000 MUD.
                             </div>
 
                             <div className='obzach'>
@@ -209,7 +208,7 @@ export default function Home({ tymblerNaNetwork }) {
                                 Play with a <strong className="colorPURPLE">MUD token</strong>.
                             </li>
                             <li className='Dot'>
-                                Deposit must be at least <strong className="colorPURPLE">10 MUD</strong>.
+                                Deposit must be at least <strong className="colorPURPLE">50 MUD</strong>.
                             </li>
                             <li className='Точка'>
                                 Lottery number should be above 1050.
@@ -222,11 +221,11 @@ export default function Home({ tymblerNaNetwork }) {
                             </div>
 
                             <div className='obzach'>
-                                3. The maximum number of people who can share 19% is  <strong className="colorPURPLE">100 000</strong>.<br />
+                                3. The maximum number of people who can share 17% is  <strong className="colorPURPLE">100 000</strong>.<br />
                                 That is, only unique wallets from the first each NFT 100  transfers.
                             </div>
                             <div className='obzach'>
-                                4. MuDeBz runs on two <strong className="colorPURPLE">Ethereum mainnet and Binance smartchain</strong> blockchain.
+                                4. MuDeBz runs on two <strong className="colorPURPLE">Ethereum mainnet</strong> and <strong className="colorPURPLE">Binance smartchain</strong> blockchain.
                             </div>
                         </div>
                     </div>}
@@ -314,7 +313,7 @@ export default function Home({ tymblerNaNetwork }) {
                                 4. MuDeBz NFT
                             </h2>
                             <div className='obzach'>
-                                Цена минта NFT - 0.032 ETH.
+                                Цена минта NFT - 0.08 ETH.
                             </div>
                             <div className='obzach'>
                                 Итак, что входит в NFT?
@@ -335,7 +334,7 @@ export default function Home({ tymblerNaNetwork }) {
                             {/* </div> */}
 
                             <div className='obzach'>
-                                Коллекция включает в себя около <strong className="colorPURPLE">5% уникальных NFT</strong>, приуроченных к праздникам и важным историческим событиям. Вы можете посмотреть их в галерее.
+                                Коллекция включает в себя около <strong className="colorPURPLE">5% уникальных NFT</strong>, приуроченных к праздникам и важным историческим событиям.
                             </div>
                         </div>
                         <div className='colorWHITE'>
@@ -368,7 +367,7 @@ export default function Home({ tymblerNaNetwork }) {
                                 Владельцы NFT разделят <strong className="colorPURPLE">8%</strong>.
                             </li>
                             <li className='Точка'>
-                                Кошельки, когда-либо владевшие NFT, разделят <strong className="colorPURPLE">19%</strong>.
+                                Кошельки, когда-либо владевшие NFT, разделят <strong className="colorPURPLE">17%</strong>.
                             </li>
                             <li className='Точка'>
                                 На реферальную программу выделен <strong className="colorPURPLE">21%</strong>.
@@ -380,7 +379,7 @@ export default function Home({ tymblerNaNetwork }) {
                             </div>
                             <div className='obzach'>
                                 Каждый день в <strong className="colorPURPLE">лобби</strong> будут разыгрываться 300 000 MUD.<br />
-                                Кроме того, все <strong className="colorPURPLE">участники лотереи </strong> будут делить между собой 90 000 MUD в день.
+                                Кроме того, все <strong className="colorPURPLE">участники лотереи </strong> будут делить между собой 100 000 MUD в день.
                             </div>
                         </div>
 
@@ -389,12 +388,12 @@ export default function Home({ tymblerNaNetwork }) {
                                 6. Реферальная программа
                             </h2>
                             <div className='obzach'>
-                                Пригласите друга, и вы оба получите по <strong className="colorPURPLE">100 MUD</strong>.
+                                Пригласите друга, и вы оба получите по <strong className="colorPURPLE">1000 MUD</strong>.
                             </div>
 
                             <div className='obzach'>
                                 Создайте свой промокод и поделитесь им.<br />
-                                Если кто-то введет ваш промокод <strong className="colorPURPLE">до своего первого участия в лотерее</strong>,<br /> вы оба получите по 100 MUD.
+                                Если кто-то введет ваш промокод <strong className="colorPURPLE">до своего первого участия в лотерее</strong>,<br /> вы оба получите по 1000 MUD.
                             </div>
 
                             <div className='obzach'>
@@ -422,7 +421,7 @@ export default function Home({ tymblerNaNetwork }) {
                                 Играть на токен <strong className="colorPURPLE">MUD</strong>.
                             </li>
                             <li className='Точка'>
-                                Депозит лобби должен быть не менее <strong className="colorPURPLE">10 MUD</strong>.
+                                Депозит лобби должен быть не менее <strong className="colorPURPLE">50 MUD</strong>.
                             </li>
                             <li className='Точка'>
                                 Номер лотереи должен превышать <strong className="colorPURPLE">1050</strong>.
@@ -434,7 +433,7 @@ export default function Home({ tymblerNaNetwork }) {
                             </div>
 
                             <div className='obzach'>
-                                3. Максимальное количество людей, которые могут разделить 19%, составляет <strong className="colorPURPLE">100 000</strong>.<br />
+                                3. Максимальное количество людей, которые могут разделить 17%, составляет <strong className="colorPURPLE">100 000</strong>.<br />
                                 То есть, только уникальные кошельки из первых 100 переводов NFT.
                             </div>
                             <div className='obzach'>
@@ -446,7 +445,7 @@ export default function Home({ tymblerNaNetwork }) {
                 </div>
 
                 <div className='language' >
-                    <div className='Userguide' style={{ position: "absolute", left: "-60px", top: "-8px", borderRadius: "12px", padding: "6px 5px 0px 5px" }} onClick={() => { window.open("https://vk.com/s/v1/doc/Jn3L9rKtWLJKCce1P5m8RuiAanE3M3YIP6NL3p4ldWlR02xBBhI") }}>
+                    <div className='Userguide' style={{ position: "absolute", left: "-60px", top: "-8px", borderRadius: "12px", padding: "6px 5px 0px 5px" }} onClick={() => { window.open("https://vk.com/s/v1/doc/NvY5hQPTY2BqXWztuDukj4kS4ySky4tSV0ZoqvkA_icUn8UC1Zc") }}>
                         <Image src={"/Guide.png"} width={45} height={45} style={{}} />
                     </div>
                     <select style={{ minWidth: "90px", height: "38px" }} onClick={e => setLanguage(e.target.value)}>
