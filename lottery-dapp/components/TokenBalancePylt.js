@@ -58,7 +58,7 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
             const tx = await contract.approve(LOTTERY_ADDRESS, BigInt(parsedDeposit * 10 ** 18))
             await tx.wait()
             settxData({
-                isPending: true,
+                isPending: false,
                 result: true
             })
         } catch (err) {
