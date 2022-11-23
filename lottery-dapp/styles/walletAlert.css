@@ -290,22 +290,6 @@
 
 
 @media (max-width: 608px) {
-    .AutoEnter {
-        /* height: 250px;
-        width: 250px; */
-    }
-
-    .PDF {
-        /* justify-self: flex-start;
-        width: 80%;
-        height: 12vh; */
-    }
-
-    .MudebzInfo {
-        /* width: 80%;
-        height: 150px; */
-    }
-
     .addToken {
         width: 76vw;
         height: 12vh;
