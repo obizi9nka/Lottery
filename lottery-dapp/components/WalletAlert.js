@@ -386,87 +386,92 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
                             <TokensBalanceShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} txData={txData} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} rokens={rokens} tymblerNaNetwork={tymblerNaNetwork} tokenTransfered={tokenTransfered} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} element={element} chainId={chainId} settokenTransfered={settokenTransfered} index={{ index, last: rokens.length - 1 }} deleteTokenFromFronend={deleteTokenFromFronend} />
                         )}
                     </div>
-                    <button className="disconnect" onClick={() => { disconnect(); setActive(false); document.body.style.overflow = ('overflow', 'auto'); }}>
-                        Disconnect
-                    </button>
+                    <div className="relative">
+                        <button className="disconnect" onClick={() => { disconnect(); setActive(false); document.body.style.overflow = ('overflow', 'auto'); }}>
+                            <div></div>
+                            <div>Disconnect</div>
+                        </button>
+                    </div>
+
                 </div>}
 
-                {!Mode && <div className="" style={{ padding: "10px" }}>
-                    <div className="areaProm">
-                        <Prom LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} shouldrevard={shouldrevard} settxData={settxData} address={address} PromSet={PromSet} PromInput={PromInput} setPromInput={setPromInput} setPromSet={setPromSet} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} />
-                    </div>
-                    <div className="underProm">
-                        {AutoEnter && AutoEnter.length > 0 ?
-                            <div className="AutoEnter">
-                                <div className="areaimageINAutoEnter">
-                                    {AutoEnter.length > 1 ? <div className="arow DEG180" onClick={() => { if (ImageInAutoEnter != 0) { setImageInAutoEnter(ImageInAutoEnter - 1) } }}>
-                                        <Image src={"/rigth.png"} width={30} height={30} />
-                                    </div> : <div></div>}
-                                    <div className="imageINAutoEnter">
-                                        <Image src={`/${chainId == ETHid ? "imagesETH" : "imagesBNB"}/${AutoEnter[ImageInAutoEnter]}.png`} width={160} height={160} className="ff" />
+                {
+                    !Mode && <div className="" style={{ padding: "10px" }}>
+                        <div className="areaProm">
+                            <Prom LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} shouldrevard={shouldrevard} settxData={settxData} address={address} PromSet={PromSet} PromInput={PromInput} setPromInput={setPromInput} setPromSet={setPromSet} chainId={chainId} tymblerNaNetwork={tymblerNaNetwork} />
+                        </div>
+                        <div className="underProm">
+                            {AutoEnter && AutoEnter.length > 0 ?
+                                <div className="AutoEnter">
+                                    <div className="areaimageINAutoEnter">
+                                        {AutoEnter.length > 1 ? <div className="arow DEG180" onClick={() => { if (ImageInAutoEnter != 0) { setImageInAutoEnter(ImageInAutoEnter - 1) } }}>
+                                            <Image src={"/rigth.png"} width={30} height={30} />
+                                        </div> : <div></div>}
+                                        <div className="imageINAutoEnter">
+                                            <Image src={`/${chainId == ETHid ? "imagesETH" : "imagesBNB"}/${AutoEnter[ImageInAutoEnter]}.png`} width={160} height={160} className="ff" />
+                                        </div>
+                                        {AutoEnter.length > 1 ? <div className="arow" onClick={() => { if (ImageInAutoEnter != AutoEnter.length - 1) { setImageInAutoEnter(ImageInAutoEnter + 1) } }}>
+                                            <Image src={"/rigth.png"} width={30} height={30} />
+                                        </div> : <div></div>}
                                     </div>
-                                    {AutoEnter.length > 1 ? <div className="arow" onClick={() => { if (ImageInAutoEnter != AutoEnter.length - 1) { setImageInAutoEnter(ImageInAutoEnter + 1) } }}>
-                                        <Image src={"/rigth.png"} width={30} height={30} />
-                                    </div> : <div></div>}
-                                </div>
-                                <div className="listAutoEnter">
-                                    <div className="listAutoEnterA">
-                                        {AutoEnter.map((e, i) => { if (i != ImageInAutoEnter) { return <div style={{ padding: "0px 2px" }}>{`${e}`}</div> } else { return <div style={{ color: "purple", padding: "0px 2px" }}>{`${e}`}</div> } })}
+                                    <div className="listAutoEnter">
+                                        <div className="listAutoEnterA">
+                                            {AutoEnter.map((e, i) => { if (i != ImageInAutoEnter) { return <div style={{ padding: "0px 2px" }}>{`${e}`}</div> } else { return <div style={{ color: "purple", padding: "0px 2px" }}>{`${e}`}</div> } })}
+                                        </div>
+                                    </div>
+                                    <div className="buttonAutoEnter">
+                                        <button className="mybutton" onClick={() => addToAutoEnter()}>Pay {`${AutoEnter.length * 5} USDT`}</button>
+                                    </div>
+                                </div> :
+                                <div className="AutoEnter" />}
+                            <div className="yaxz">
+                                <div className="PDF">
+                                    <div>
+                                        <button className="mybutton" onClick={() => makePDF()}>Lobby history</button>
                                     </div>
                                 </div>
-                                <div className="buttonAutoEnter">
-                                    <button className="mybutton" onClick={() => addToAutoEnter()}>Pay {`${AutoEnter.length * 5} USDT`}</button>
-                                </div>
-                            </div> :
-                            <div className="AutoEnter" />}
-                        <div className="yaxz">
-                            <div className="PDF">
-                                <div>
-                                    <button className="mybutton" onClick={() => makePDF()}>Lobby history</button>
-                                </div>
-                            </div>
-                            <div className="MudebzInfo">
-                                <div className="MudebzInfoElement">
-                                    <Image src={"/discord.png"} width={40} height={40} />
-                                </div>
-                                <div className="MudebzInfoElement">
-                                    <Image src={"/github.png"} width={35} height={35} />
-                                </div>
-                                <div className="MudebzInfoElement">
-                                    <Image src={"/instagram.png"} width={35} height={35} />
-                                </div>
-                                <div className="MudebzInfoElement">
-                                    <Image src={"/vk.png"} width={35} height={35} />
-                                </div>
+                                <div className="MudebzInfo">
+                                    <div className="MudebzInfoElement">
+                                        <Image src={"/discord.png"} width={40} height={40} />
+                                    </div>
+                                    <div className="MudebzInfoElement">
+                                        <Image src={"/github.png"} width={35} height={35} />
+                                    </div>
+                                    <div className="MudebzInfoElement">
+                                        <Image src={"/instagram.png"} width={35} height={35} />
+                                    </div>
+                                    <div className="MudebzInfoElement">
+                                        <Image src={"/vk.png"} width={35} height={35} />
+                                    </div>
 
-                                <div className="MudebzInfoElement">
-                                    <Image src={"/twitter.png"} width={35} height={35} />
-                                </div>
+                                    <div className="MudebzInfoElement">
+                                        <Image src={"/twitter.png"} width={35} height={35} />
+                                    </div>
 
-                                <div className="MudebzInfoElement">
-                                    <Image src={"/telega.png"} width={35} height={35} />
+                                    <div className="MudebzInfoElement">
+                                        <Image src={"/telega.png"} width={35} height={35} />
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div className="addToken">
+                            {chainId != BNBid && <div className="misterySwitcher" onClick={() => { setModeMistery(!ModeMistery) }}></div>}
+                            {!ModeMistery && <div>
+                                <input className="input bigdinamic" id="inputToken" placeholder="Token Address" onChange={e => setaddTokenAddress(e.target.value)} style={{ color: isvalid ? "white" : "red" }} />
+                            </div>}
+                            {!ModeMistery && <div>
+                                <button onClick={() => addToken()} className="mybutton" >Add new token</button>
+                            </div>}
+                            {ModeMistery && <div>
+                                <input className="input bigdinamic" id="Mistery" placeholder="Your answer" onChange={e => setMistery(e.target.value)} />
+                            </div>}
+                            {ModeMistery && <div>
+                                <button onClick={() => tryMistery()} className="mybutton" style={{ minWidth: "123.41px" }}>Try</button>
+                            </div>}
+                        </div>
                     </div>
-                    <div className="addToken">
-                        {chainId != BNBid && <div className="misterySwitcher" onClick={() => { setModeMistery(!ModeMistery) }}></div>}
-                        {!ModeMistery && <div>
-                            <input className="input bigdinamic" id="inputToken" placeholder="Token Address" onChange={e => setaddTokenAddress(e.target.value)} style={{ color: isvalid ? "white" : "red" }} />
-                        </div>}
-                        {!ModeMistery && <div>
-                            <button onClick={() => addToken()} className="mybutton" >Add new token</button>
-                        </div>}
-                        {ModeMistery && <div>
-                            <input className="input bigdinamic" id="Mistery" placeholder="Your answer" onChange={e => setMistery(e.target.value)} />
-                        </div>}
-                        {ModeMistery && <div>
-                            <button onClick={() => tryMistery()} className="mybutton" style={{ minWidth: "123.41px" }}>Try</button>
-                        </div>}
-                    </div>
-                </div>
                 }
-            </div>
+            </div >
         </div >
     )
 }

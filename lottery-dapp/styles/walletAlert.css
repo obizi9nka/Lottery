@@ -154,7 +154,10 @@
 
 .disconnect {
     color: white;
-    width: 490px;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-columns: 2fr 1fr 2fr;
     height: 50px;
     font-size: 20px;
     background-color: rgb(17, 16, 16);

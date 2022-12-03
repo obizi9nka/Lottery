@@ -33,7 +33,7 @@ import { ConnectButton, connectorsForWallets, wallet } from '@rainbow-me/rainbow
 import { publicProvider } from 'wagmi/providers/public';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 
-export default function Wallet({ chains, LOTTERY_ADDRESS, setENTERED, isWalletAlert, setisWalletAlert, NFT_ADDRESS, BNBChain, setdaloynavigationSmartfon, setchainId, tymblerNaNetwork, daloyNFTbutton, setdaloyNFTbutton, settxData, needWallet, txData }) {
+export default function Wallet({ chains, LOTTERY_ADDRESS, setENTERED, setneedCheckNFT, needCheckNFT, isWalletAlert, setisWalletAlert, NFT_ADDRESS, BNBChain, setdaloynavigationSmartfon, setchainId, tymblerNaNetwork, daloyNFTbutton, setdaloyNFTbutton, settxData, needWallet, txData }) {
 
 
     const [NftButton, setNftButton] = useState(false)
@@ -55,7 +55,9 @@ export default function Wallet({ chains, LOTTERY_ADDRESS, setENTERED, isWalletAl
     useEffect(() => {
         checkNftButton()
         getAllNews()
-    }, [address, chain, LOTTERY_ADDRESS, NFT_ADDRESS])
+        if (needCheckNFT)
+            setneedCheckNFT(false)
+    }, [address, chain, LOTTERY_ADDRESS, NFT_ADDRESS, needCheckNFT])
 
     useEffect(() => {
         if (isConnected) {
@@ -186,7 +188,7 @@ export default function Wallet({ chains, LOTTERY_ADDRESS, setENTERED, isWalletAl
                     <News news={news} now={now} deleteNews={deleteNews} />
                 </div>
                 <div className='otstup'>{NftButton && <MintNftButton LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} checkNftButton={checkNftButton} settxData={settxData} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} tymblerNaNetwork={tymblerNaNetwork} chainId={chain != undefined ? chain.id : 0} address={address} />}</div>
-                {address && <div className='otstup'><button onClick={() => {
+                {address && <div className='otstup '><button onClick={() => {
                     if (!isWalletAlert)
                         document.body.style.overflow = ('overflow', 'hidden')
                     setisWalletAlert(!isWalletAlert)

@@ -73,11 +73,11 @@ export default function TokensBalancePylt({ LOTTERY_ADDRESS, NFT_ADDRESS, user, 
     }
 
     const addTokensToBalance = async () => {
+        settxData({
+            isPending: true,
+            result: null
+        })
         try {
-            settxData({
-                isPending: true,
-                result: null
-            })
             const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
             const tokenContract = new ethers.Contract(TokenSelected.address, A.abi, provider)
             const decimals = await tokenContract.decimals()

@@ -6,6 +6,7 @@ import { LotteryAddressETH, LotteryAddressBNB, ETHid, BNBid, PRODACTION } from '
 import notForYourEyesBitch from "../notForYourEyesBitch.json"
 import Lottery from "/blockchain/Lottery.json"
 import Script from "next/script"
+import Loader from "react-spinners/HashLoader";
 
 import {
   chain,
@@ -24,7 +25,7 @@ import IssueMaker from '../components/IssueMaker';
 
 
 
-export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaNetwork, settxData, setneedWallet }) {
+export default function Home({ LOTTERY_ADDRESS, chainId, setneedCheckNFT, tymblerNaNetwork, settxData, setneedWallet }) {
 
   const Default = `/blackFon.png`
 
@@ -36,7 +37,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
     lotteryIdMINUS: Default,
     lotteryIdMINUSMINUS: Default
   })
-  const [isneedShadow, setisneedShadow] = useState(false)
+  const [isneedShadow, setisneedShadow] = useState(true)
   const { data } = useSigner()
   const { chain } = useNetwork()
   const provider = useProvider()
@@ -138,6 +139,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
             setk(1000)
             clearInterval(hh)
             infinity()
+            setneedCheckNFT(true)
           }
           if (i > 100) {
             clearInterval(hh)
@@ -337,7 +339,16 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, tymblerNaN
           </div>
         </div>
         {/* <button onClick={Play}>Play</button> */}
-
+        {isneedShadow &&
+          <div className='chooseWinner chooseWinnerText'>
+            Choose winner
+          </div>
+        }
+        {isneedShadow &&
+          <div className='chooseWinner chooseWinnerLoader'>
+            <Loader />
+          </div>
+        }
       </div>
     </div >
   )

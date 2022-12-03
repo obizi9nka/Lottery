@@ -106,6 +106,7 @@ function MyApp({ Component, pageProps }) {
   const [tymblerNaNetwork, settymblerNaNetwork] = useState(true)
 
   const [needWallet, setneedWallet] = useState(false)
+  const [needCheckNFT, setneedCheckNFT] = useState(false)
 
   const [daloyNFTbutton, setdaloyNFTbutton] = useState(false)
   const [daloynavigationSmartfon, setdaloynavigationSmartfon] = useState(false)
@@ -198,7 +199,7 @@ function MyApp({ Component, pageProps }) {
                 console.log("sended")
               }
             }} >
-              <div >
+              <div style={{ width: "auto" }}>
                 <Image src={logo} width="280px" height="75px" />
               </div>
               {/* <div className='beta'>
@@ -206,10 +207,10 @@ function MyApp({ Component, pageProps }) {
               </div> */}
 
             </div>
-            <Wallet isWalletAlert={isWalletAlert} setENTERED={setENTERED} setisWalletAlert={setisWalletAlert} chains={chains} LOTTERY_ADDRESS={LOTTERY_ADDRESS} BNBChain={BNBChain} txData={txData} NFT_ADDRESS={NFT_ADDRESS} setdaloynavigationSmartfon={setdaloynavigationSmartfon} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} settxData={settxData} needWallet={needWallet} setchainId={setchainId} tymblerNaNetwork={tymblerNaNetwork} />
+            <Wallet isWalletAlert={isWalletAlert} setneedCheckNFT={setneedCheckNFT} needCheckNFT={needCheckNFT} setENTERED={setENTERED} setisWalletAlert={setisWalletAlert} chains={chains} LOTTERY_ADDRESS={LOTTERY_ADDRESS} BNBChain={BNBChain} txData={txData} NFT_ADDRESS={NFT_ADDRESS} setdaloynavigationSmartfon={setdaloynavigationSmartfon} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} settxData={settxData} needWallet={needWallet} setchainId={setchainId} tymblerNaNetwork={tymblerNaNetwork} />
           </div>
         </div >
-        <Component {...pageProps} ENTERED={ENTERED} setENTERED={setENTERED} LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} isSession={isSession} setIsSession={setIsSession} chainId={chainId} />
+        <Component {...pageProps} ENTERED={ENTERED} setneedCheckNFT={setneedCheckNFT} setENTERED={setENTERED} LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} isSession={isSession} setIsSession={setIsSession} chainId={chainId} />
 
         <footer>
         </footer>

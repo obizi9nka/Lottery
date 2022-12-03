@@ -158,8 +158,6 @@
     align-items: center;
 }
 
-.box {}
-
 .image {
     max-height: 75px;
     min-height: 75px;
@@ -191,12 +189,12 @@
     }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 800px) {
 
     .image {
         max-height: 65px;
         min-height: 65px;
-        max-width: 200px;
-        min-width: 200px;
+        max-width: 190px;
+        min-width: 190px;
     }
 }

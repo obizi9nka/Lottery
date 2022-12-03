@@ -11,6 +11,11 @@
     font-size: 16px;
 }
 
+.nftbuttonmint {
+    width: auto;
+    max-height: 40px;
+}
+
 .walletconnect {
     position: absolute;
     right: 0%;
@@ -112,12 +117,12 @@
 }
 
 .areaMINT {
-    padding-top: 40px;
-    min-width: inherit;
     height: calc(100vh - 110px);
     z-index: 1000;
-    width: inherit;
     min-width: 578px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .imageWithArrow {
@@ -129,6 +134,27 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+@media (max-width: 608px) {
+
+    .areaMINT {
+        justify-content: start;
+        padding-bottom: 50px;
+    }
+
+    .imageWithArrow {
+        width: 100vw;
+        min-width: 340px;
+
+    }
+
+    .MINT {
+        width: 100vw;
+        min-width: 340px;
+
+    }
+
 }
 
 .space-around {

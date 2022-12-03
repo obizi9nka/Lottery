@@ -136,6 +136,20 @@
     top: 10px; */
 }
 
+.chooseWinner {
+    color: white;
+    position: absolute;
+}
+
+.chooseWinnerText {
+    left: calc(50vw - 60px);
+    top: 260px;
+}
+
+.chooseWinnerLoader {
+    left: calc(50vw - 30px);
+    top: 320px;
+}
 
 @keyframes ani {
     0% {

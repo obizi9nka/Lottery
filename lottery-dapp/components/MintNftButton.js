@@ -108,7 +108,7 @@ export default function MintNftButton({ LOTTERY_ADDRESS, NFT_ADDRESS, checkNftBu
 
     return (
         <div>
-            <button className={isMintMartenActive ? "pulse active " : "pulse"} style={{ fontWeight: "200" }} onClick={() => {
+            <button className={isMintMartenActive ? "pulse active" : "pulse "} style={{ fontWeight: "200" }} onClick={() => {
                 window.scrollTo(0, 0)
                 if (!isMintMartenActive) {
                     localStorage.setItem("overflow", "lock")
@@ -125,20 +125,23 @@ export default function MintNftButton({ LOTTERY_ADDRESS, NFT_ADDRESS, checkNftBu
             } >N F T</button>
             <div className={isMintMartenActive ? "modallMINT active" : "modallMINT"} onClick={() => setisMintMartenActive(false)}>
                 <div className="areaMINT" onClick={e => e.stopPropagation()}>
-                    <div className='imageWithArrow'>
-                        {arrayAllowToMint.length > 1 && < div className="arow DEG180" style={{ margin: "0px 30px" }} onClick={() => { if (index != 0) { setindex(parseInt(index) - 1) } }}>
-                            <Image src={"/rigth.png"} width={30} height={30} />
-                        </div>}
-                        <div className='MINT pulse' style={{ padding: "7px" }}>
-                            <Image src={`/imagesETH/${arrayAllowToMint[index]}.png`} style={{ "border-radius": 12 }} width={350} height={350} /><br />
+                    <div >
+                        <div className='imageWithArrow'>
+                            {arrayAllowToMint.length > 1 && < div className="arow DEG180" style={{ margin: "0px 30px", minHeight: "30px", minWidth: "30px" }} onClick={() => { if (index != 0) { setindex(parseInt(index) - 1) } }}>
+                                <Image src={"/rigth.png"} width={30} height={30} />
+                            </div>}
+                            <div className='MINT pulse' style={{ padding: "7px" }}>
+                                <Image src={`/imagesETH/${arrayAllowToMint[index]}.png`} style={{ "border-radius": 12 }} width={350} height={350} /><br />
+                            </div>
+                            {arrayAllowToMint.length > 1 && <div className="arow" style={{ margin: "0px 30px", minHeight: "30px", minWidth: "30px" }} onClick={() => { if (index != arrayAllowToMint.length - 1) { setindex(parseInt(index) + 1) } }}>
+                                <Image src={"/rigth.png"} width={30} height={30} />
+                            </div>}
                         </div>
-                        {arrayAllowToMint.length > 1 && <div className="arow" style={{ margin: "0px 30px" }} onClick={() => { if (index != arrayAllowToMint.length - 1) { setindex(parseInt(index) + 1) } }}>
-                            <Image src={"/rigth.png"} width={30} height={30} />
-                        </div>}
+                        <div className='MINT'>
+                            <button className='mybutton pulse' style={{ margin: "20px", width: "150px", fontSize: "20px" }} onClick={() => { MintMarten(arrayAllowToMint[index]) }}>Mint</button>
+                        </div>
                     </div>
-                    <div className='MINT'>
-                        <button className='mybutton pulse' style={{ margin: "20px", width: "150px", fontSize: "20px" }} onClick={() => { MintMarten(arrayAllowToMint[index]) }}>Mint</button>
-                    </div>
+
                 </div>
             </div>
 
