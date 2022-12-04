@@ -6,13 +6,12 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract SoulBoundToken is ERC1155, ERC1155Burnable, Ownable {
-    uint256 public constant BRONZE = 1;
-    uint256 public constant SILVER = 2;
-    uint256 public constant GOLD = 3;
-
     address public signerSystem;
+    mapping(address => mapping(uint256 => uint256)) private lastTimeMinted;
 
-    constructor(address _signer) ERC1155("SoulBound") {
+    string baseUri = "ipfs://QmeodfenF3vkMXSD4LWs1GXs88FqVk3FDt5atzgdRrmx8Z/";
+
+    constructor(address _signer) ERC1155("") {
         signerSystem = _signer;
     }
 
@@ -28,8 +27,14 @@ contract SoulBoundToken is ERC1155, ERC1155Burnable, Ownable {
             "SoulBoundToken: Invalid signature"
         );
 
-        (uint256 id, address minter) = abi.decode(message, (uint256, address));
-        _mint(minter, id, 1, "");
+        (uint256 tokenId, address minter) = abi.decode(
+            message,
+            (uint256, address)
+        );
+        if (balanceOf(minter, tokenId) == 0) {
+            _mint(minter, tokenId, 1, "");
+        }
+        lastTimeMinted[minter][tokenId] = block.timestamp;
     }
 
     function verify(
@@ -51,7 +56,40 @@ contract SoulBoundToken is ERC1155, ERC1155Burnable, Ownable {
         return (signerSystem == ecrecover(messageDigest, _v, _r, _s));
     }
 
-    function setURI(string memory newuri) public onlyOwner {
-        _setURI(newuri);
+    function burn(uint256 tokenId, uint256 amount) external {
+        require(
+            balanceOf(msg.sender, tokenId) >= amount,
+            "SoulBoundToken: Insufficient balance"
+        );
+        _burn(msg.sender, tokenId, amount);
+    }
+
+    function setURI(string memory newUri) public onlyOwner {
+        baseUri = newUri;
+    }
+
+    function uri(uint256 tokenId) public view override returns (string memory) {
+        return string(abi.encodePacked(baseUri, "1", ".json"));
+    }
+
+    function _beforeTokenTransfer(
+        address /*operator*/,
+        address from,
+        address to,
+        uint256[] memory /*ids*/,
+        uint256[] memory /*amounts*/,
+        bytes memory /*data*/
+    ) internal pure override {
+        require(
+            from == address(0) || to == address(0),
+            "SoulBoundToken: Cannot transfer tokens"
+        );
+    }
+
+    function getLastTimeMinted(
+        address minter,
+        uint256 tokenId
+    ) external view returns (uint256) {
+        return lastTimeMinted[minter][tokenId];
     }
 }

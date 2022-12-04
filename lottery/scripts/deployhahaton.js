@@ -4,7 +4,7 @@ const hre = require("hardhat");
 async function main() {
 
     const aSoulBoundToken = await hre.ethers.getContractFactory("SoulBoundToken");
-    const SoulBoundToken = await aSoulBoundToken.deploy("0x53dA845Ebe1F9668c37b9fBd9a40EC6130040834");
+    const SoulBoundToken = await aSoulBoundToken.deploy("0xcd3B766CCDd6AE721141F452C550Ca635964ce71");
     await SoulBoundToken.deployed();
     console.log("SoulBoundToken deployed to:", SoulBoundToken.address);
 
