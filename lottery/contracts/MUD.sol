@@ -10,6 +10,7 @@ contract MUD is ERC20 {
     bool isPaused = true;
 
     address immutable Lottery;
+    address signerSystem;
 
     constructor(address lottery) ERC20("!Mudebz", "MUD") {
         Lottery = lottery;
@@ -24,14 +25,21 @@ contract MUD is ERC20 {
         return balanceBefore + value == balanceAfter;
     }
 
-    // function _transferFromLottery(
-    //     address from,
-    //     address to,
-    //     uint256 value
-    // ) public {
-    //     require(msg.sender == Lottery);
-    //     _transfer(from, to, value);
-    // }
+    function verify(
+        bytes calldata message,
+        bytes32 _hash,
+        uint8 _v,
+        bytes32 _r,
+        bytes32 _s
+    ) public view returns (bool result) {
+        require(_hash == keccak256(message), "Invalid hash provided");
+
+        // require();
+        bytes32 messageDigest = keccak256(
+            abi.encodePacked("\x19Ethereum Signed Message:\n32", _hash)
+        );
+        return (signerSystem == ecrecover(messageDigest, _v, _r, _s));
+    }
 
     function getTokens(uint256 b) public {
         _mint(msg.sender, b);
@@ -120,11 +128,10 @@ contract MUD is ERC20 {
             );
     }
 
-    function recoverSigner(bytes32 message, bytes memory sig)
-        internal
-        pure
-        returns (address)
-    {
+    function recoverSigner(
+        bytes32 message,
+        bytes memory sig
+    ) internal pure returns (address) {
         uint8 v;
         bytes32 r;
         bytes32 s;
@@ -134,15 +141,9 @@ contract MUD is ERC20 {
         return ecrecover(message, v, r, s);
     }
 
-    function splitSignature(bytes memory sig)
-        internal
-        pure
-        returns (
-            uint8,
-            bytes32,
-            bytes32
-        )
-    {
+    function splitSignature(
+        bytes memory sig
+    ) internal pure returns (uint8, bytes32, bytes32) {
         require(sig.length == 65);
 
         bytes32 r;

@@ -13,6 +13,9 @@ export const BNBid = 11155111
 export const USDT_ETH = "0x07a7f429A59F12ab2d3F176d1dA4420181a03Af0"
 export const USDT_BNB = "0xA4b8316c87143311e6E9f538C36f231949e107cE"
 
+export const INFURA_KEY = process.env.NEXT_PUBLIC_INFURA_KEY
+export const ALCHEMY_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY
+
 // sup = EerBgAQSP1Vebi4z
 
 

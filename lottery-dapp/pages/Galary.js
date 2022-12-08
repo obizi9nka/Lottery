@@ -6,8 +6,7 @@ import Lottery from "/blockchain/Lottery.json"
 import MudebzNFT from "/blockchain/MudebzNFT.json"
 import metadataETH from "/blockchain/metadataETH.json"
 import NftsShablon from '/components/NftsShablon'
-import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from '/components/Constants.js';
-import notForYourEyesBitch from "../notForYourEyesBitch.json"
+import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, INFURA_KEY, ALCHEMY_KEY } from '/components/Constants.js';
 
 import {
     chain,
@@ -69,9 +68,9 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
         try {
             let providerr
             if (tymblerNaNetwork)
-                providerr = new ethers.providers.InfuraProvider("goerli", notForYourEyesBitch.infuraKey)
+                providerr = new ethers.providers.InfuraProvider("goerli", INFURA_KEY)
             else
-                providerr = new ethers.providers.InfuraProvider("sepolia", notForYourEyesBitch.infuraKey)
+                providerr = new ethers.providers.InfuraProvider("sepolia", INFURA_KEY)
             if (chainId == 31337)
                 providerr = new ethers.providers.JsonRpcProvider
             console.log(providerr)
@@ -171,9 +170,9 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
             try {
                 let providerr
                 if (tymblerNaNetwork)
-                    providerr = new ethers.providers.InfuraProvider("goerli", notForYourEyesBitch.infuraKey)
+                    providerr = new ethers.providers.InfuraProvider("goerli", INFURA_KEY)
                 else
-                    providerr = new ethers.providers.InfuraProvider("sepolia", notForYourEyesBitch.infuraKey)
+                    providerr = new ethers.providers.InfuraProvider("sepolia", INFURA_KEY)
                 if (chainId == 31337)
                     providerr = new ethers.providers.JsonRpcProvider
                 const contract = new ethers.Contract(NFT_ADDRESS, MudebzNFT.abi, providerr)

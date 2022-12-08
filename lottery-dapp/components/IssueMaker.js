@@ -2,7 +2,6 @@
 
 export default function IssueMaker({ data, from }) {
 
-    console.log(from, data)
     let issue = ""
     if (data == "INSUFFICIENT_FUNDS")
         issue = "Not enough ETH on the wallet"
@@ -24,7 +23,7 @@ export default function IssueMaker({ data, from }) {
 
     else if (data == "ACTION_REJECTED")
         issue = "Transaction rejected"
-
-    console.log(issue)
+    else
+        issue = "Error not recognized"
     return issue
 }

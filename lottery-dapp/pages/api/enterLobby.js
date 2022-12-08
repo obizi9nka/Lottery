@@ -2,7 +2,6 @@ const { ethers } = require("ethers");
 import Lottery from "/blockchain/Lottery.json"
 
 import { LotteryAddressETH, LotteryAddressLocalhost, LotteryAddressBNB } from '../../components/Constants';
-import notForYourEyesBitch from "../../notForYourEyesBitch.json"
 import { ETHid, BNBid, PRODACTION } from '../../components/Constants.js';
 
 import prisma from './prisma.js';

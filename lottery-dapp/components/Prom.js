@@ -161,22 +161,29 @@ export default function Prom({ LOTTERY_ADDRESS, NFT_ADDRESS, address, shouldreva
         <div className="PROM">
             <div style={{ display: "grid" }}>
                 {IsVisible && <div className={(PromInput == null && shouldrevard.isEnteredOnce == 0) || PromSet == null ? 'PromButtons' : "NoButtons"} >
-                    <div className='promocods'>
-                        {PromSet == null &&
-                            <button onClick={() => { if (prom.length > 0) setProm() }} className="setProm mybutton droch" >Set your code</button>}
-                        {PromSet != null &&
-                            <div className='Promocode' style={{ color: "purple", height: ((!(PromInput == null && shouldrevard.isEnteredOnce == 0) && PromSet != null) ? "80px" : null) }}>{PromSet}</div>}
-                    </div>
+                    {PromSet == null &&
+                        <div className='promocods'>
+                            <button onClick={() => { if (prom.length > 0) setProm() }} className="setProm mybutton droch" >Set your code</button>
+                        </div>
+                    }
+
+                    {PromSet != null &&
+                        <div className='Promocode ' style={{ color: "purple", height: ((!(PromInput == null && shouldrevard.isEnteredOnce == 0) && PromSet != null) ? "80px" : null) }}>{PromSet}</div>
+                    }
 
                     {((PromInput == null && shouldrevard.isEnteredOnce == 0) || PromSet == null) &&
                         <input className="input droch promocods" id="Prom" placeholder="Enter promo code" onChange={e => setprom(e.target.value)} />
                     }
-                    <div className='promocods'>
-                        {(PromInput == null && shouldrevard.isEnteredOnce == 0) ?
-                            <button onClick={() => { if (prom.length > 0) inputProm() }} className="inputProm mybutton droch" >Enter the code</button> : <div ></div>}
-                        {!(PromInput == null && shouldrevard.isEnteredOnce == 0) &&
-                            <div className='Promocode' style={{ color: "aqua", height: (!(PromInput == null && shouldrevard.isEnteredOnce == 0) && PromSet != null ? "80px" : null), borderTop: (!(PromInput == null && shouldrevard.isEnteredOnce == 0) && PromSet != null ? "3px solid rgb(41 39 39)" : null) }}>{PromInput}</div>}
-                    </div>
+
+                    {(PromInput == null && shouldrevard.isEnteredOnce == 0) &&
+                        <div className='promocods'>
+                            <button onClick={() => { if (prom.length > 0) inputProm() }} className="inputProm mybutton droch" >Enter the code</button> : <div ></div>
+                        </div>}
+                    {PromInput != null &&
+                        <div className='promocods'>
+                            <div className='Promocode ' style={{ color: "aqua", height: (!(PromInput == null && shouldrevard.isEnteredOnce == 0) && PromSet != null ? "80px" : null), borderTop: (!(PromInput == null && shouldrevard.isEnteredOnce == 0) && PromSet != null ? "3px solid rgb(41 39 39)" : null) }}>{PromInput}</div>
+                        </div>
+                    }
                 </div>}
             </div>
 

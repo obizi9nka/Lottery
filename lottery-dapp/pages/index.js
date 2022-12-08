@@ -2,8 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 const { ethers, Wallet } = require("ethers");
 import { useState, useEffect } from 'react'
-import { LotteryAddressETH, LotteryAddressBNB, ETHid, BNBid, PRODACTION } from '/components/Constants.js';
-import notForYourEyesBitch from "../notForYourEyesBitch.json"
+import { LotteryAddressETH, LotteryAddressBNB, ETHid, BNBid, PRODACTION, ALCHEMY_KEY, INFURA_KEY } from '/components/Constants.js';
 import Lottery from "/blockchain/Lottery.json"
 import Script from "next/script"
 import Loader from "react-spinners/HashLoader";
@@ -37,7 +36,7 @@ export default function Home({ LOTTERY_ADDRESS, chainId, setneedCheckNFT, tymble
     lotteryIdMINUS: Default,
     lotteryIdMINUSMINUS: Default
   })
-  const [isneedShadow, setisneedShadow] = useState(true)
+  const [isneedShadow, setisneedShadow] = useState(false)
   const { data } = useSigner()
   const { chain } = useNetwork()
   const provider = useProvider()
@@ -71,9 +70,9 @@ export default function Home({ LOTTERY_ADDRESS, chainId, setneedCheckNFT, tymble
 
     let _provider, id
     if (tymblerNaNetwork)
-      _provider = new ethers.providers.InfuraProvider("goerli", notForYourEyesBitch.infuraKey)
+      _provider = new ethers.providers.InfuraProvider("goerli", INFURA_KEY)
     else
-      _provider = new ethers.providers.InfuraProvider("sepolia", notForYourEyesBitch.infuraKey)
+      _provider = new ethers.providers.InfuraProvider("sepolia", INFURA_KEY)
     if (chain?.id == 31337)
       _provider = new ethers.providers.JsonRpcProvider
     try {
@@ -112,9 +111,9 @@ export default function Home({ LOTTERY_ADDRESS, chainId, setneedCheckNFT, tymble
     console.log("###", ID, chain?.id)
     let _provider
     if (tymblerNaNetwork)
-      _provider = new ethers.providers.InfuraProvider("goerli", notForYourEyesBitch.infuraKey)
+      _provider = new ethers.providers.InfuraProvider("goerli", INFURA_KEY)
     else
-      _provider = new ethers.providers.InfuraProvider("sepolia", notForYourEyesBitch.infuraKey)
+      _provider = new ethers.providers.InfuraProvider("sepolia", INFURA_KEY)
     if (chain?.id == 31337)
       _provider = new ethers.providers.JsonRpcProvider
     try {
@@ -160,9 +159,9 @@ export default function Home({ LOTTERY_ADDRESS, chainId, setneedCheckNFT, tymble
     try {
       let _provider, _id
       if (tymblerNaNetwork)
-        _provider = new ethers.providers.InfuraProvider("goerli", notForYourEyesBitch.infuraKey)
+        _provider = new ethers.providers.InfuraProvider("goerli", INFURA_KEY)
       else
-        _provider = new ethers.providers.InfuraProvider("sepolia", notForYourEyesBitch.infuraKey)
+        _provider = new ethers.providers.InfuraProvider("sepolia", INFURA_KEY)
       if (chain?.id == 31337)
         _provider = new ethers.providers.JsonRpcProvider
       try {

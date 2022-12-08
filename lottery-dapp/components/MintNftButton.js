@@ -78,7 +78,7 @@ export default function MintNftButton({ LOTTERY_ADDRESS, NFT_ADDRESS, checkNftBu
         try {
             const contract = new ethers.Contract(NFT_ADDRESS, MudebzNFT.abi, signer)
             const tx = await contract.MintMarten(element, {
-                value: BigInt(32 * 10 ** 15)
+                value: BigInt(8 * 10 ** 16)
             })
             await tx.wait()
             const body = { tokenId: element, chainId, isMinted: true }

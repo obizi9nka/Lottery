@@ -9,7 +9,6 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import A from "/blockchain/A.json"
 import { LotteryAddressETH, MudeBzNFTETH, LotteryAddressLocalhost, MudeBzNFTLocalhost, LotteryAddressBNB, MudeBzNFTBNB, ETHid, BNBid, LocalhostId, PRODACTION } from '../components/Constants';
-import notForYourEyesBitch from "../notForYourEyesBitch.json"
 import IssueMaker from '../components/IssueMaker';
 import {
     chain,
@@ -33,8 +32,8 @@ export async function getServerSideProps() {
     let lobbyBNB = await prisma.lobbyBNB.findMany()
 
     if (lobbyETH != [])
-        lobbyETH = lobbyETH.map((element) => {
-            return {
+        lobbyETH.forEach((element, i) => {
+            lobbyETH[i] = {
                 deposit: element.deposit,
                 nowInLobby: element.nowInLobby,
                 players: element.players,
@@ -46,8 +45,8 @@ export async function getServerSideProps() {
             }
         })
     if (lobbyBNB != [])
-        lobbyBNB = lobbyBNB.map((element) => {
-            return {
+        lobbyBNB.forEach((element, i) => {
+            lobbyBNB[i] = {
                 deposit: element.deposit,
                 nowInLobby: element.nowInLobby,
                 players: element.players,
@@ -67,7 +66,7 @@ export async function getServerSideProps() {
     }
 }
 
-export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, lobbyETH, tymblerNaNetwork, settxData, setneedWallet }) {
+export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, lobbyETH, tymblerNaNetwork, settxData, setneedWallet }) {
 
 
 
@@ -83,11 +82,26 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
     const [token, settoken] = useState("")
     const [lobbyes, setlobbyes] = useState(lobbyETH)
     const [lobbyesActive, setlobbyesActive] = useState([])
+    const [imageFounded, setimageFounded] = useState([])
+    const [imageFoundedLobbyActive, setimageFoundedLobbyActive] = useState([])
     const [rokens, setTokens] = useState([{
         address: "0",
         symbol: "Tokens"
     }])
 
+    useEffect(() => {
+        setimageFounded(lobbyes.map(() => {
+            return true
+        }))
+    }, [lobbyes])
+
+    useEffect(() => {
+        setimageFoundedLobbyActive(lobbyesActive.map(() => {
+            return true
+        }))
+    }, [lobbyesActive])
+
+    console.log(imageFounded)
     ///FILTER
     const [tokenn, settokenn] = useState("")
     const [UP, setUP] = useState(true)
@@ -146,7 +160,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
         try {
             const te = []
             const f = (tymblerNaNetwork ? ALL_LOBBYES.lobbyETH : ALL_LOBBYES.lobbyBNB).filter((element) => {
-                console.log(element)
                 if (element.players.indexOf(address) === -1) {
                     te.push(false)
                 }
@@ -198,7 +211,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                         objects.push({
                             address: element.address,
                             symbol: element.symbol,
-                            decimals: element.decimals
+                            decimals: element.decimals,
                         })
                     })
                     setTokens(objects)
@@ -305,8 +318,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
         }
     }
 
-    const [isfaund, setisfaund] = useState(true)
-
     const EnterLobby = async (lobby, index) => {
         try {
             console.log(lobby)
@@ -328,6 +339,8 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                 fetch("/api/enterLobby", {
                     method: "POST",
                     body: JSON.stringify(body)
+                }).then(() => {
+                    setneedNews(true)
                 })
             } catch (err) {
                 console.log(err)
@@ -364,6 +377,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
             })
             if (flag) {
                 setlobbyes([...lobbyes])
+
             }
             else {
                 userlobbyActive[index] = true
@@ -385,7 +399,6 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
     }
     const [startIndex, setstartIndex] = useState(1)
     const [countOfRenderNfts, setcountOfRenderNfts] = useState(25)
-
 
     useEffect(() => {
         const temp = localStorage.getItem("LobbyENOUGTH")
@@ -414,6 +427,10 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
     const isEnogth = (index) => {
         return (index >= startIndex && index < parseInt(countOfRenderNfts) + parseInt(startIndex))
     }
+
+    // const ImageNotFound = (index) => {
+    //     imageFounded[index] = false
+    // }
 
 
 
@@ -451,8 +468,8 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                         <div className='LobbyShablon' style={{ borderColor: "antiquewhite", cursor: "default" }} >
                             <div className='tokenAnd'>
                                 <div className="tokeninlobbyshablon gridcenter">
-                                    {isfaund && <Image className="tokenpng" alt='?' src={`/tokens/${element.IERC20}.png`} width={45} height={45} />}
-                                    {!isfaund && <Image className="tokenpng" src="/questionMark.png" width={45} height={45} />}
+                                    {imageFoundedLobbyActive[index] && <Image className="tokenpng" alt='' onError={() => { imageFoundedLobbyActive[index] = false; setimageFoundedLobbyActive([...imageFoundedLobbyActive]) }} src={`/tokens/${element.IERC20}.png`} width={45} height={45} />}
+                                    {!imageFoundedLobbyActive[index] && <Image className="tokenpng" src="/questionMark.png" width={45} height={45} />}
                                 </div>
                                 <div className='countofplayers gridcenter'>
                                     {element.percent}%
@@ -536,8 +553,8 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, lobbyBNB, 
                             <div className='LobbyShablon' onClick={() => { if (!userlobbyActive[index]) { EnterLobby(element, index) } }} style={!userlobbyActive[index] ? {} : { margin: "0px 30px", borderColor: "antiquewhite", cursor: "default" }}>
                                 <div className='tokenAnd'>
                                     <div className="tokeninlobbyshablon gridcenter">
-                                        {isfaund && <Image className="tokenpng" alt='?' src={`/tokens/${element.IERC20}.png`} width={45} height={45} />}
-                                        {!isfaund && <Image className="tokenpng" src="/question_mark.png" width={45} height={45} />}
+                                        {imageFounded[index] && <Image className="tokenpng" alt='' onError={() => { imageFounded[index] = false; setimageFounded([...imageFounded]) }} src={`/tokens/${element.IERC20}.png`} width={45} height={45} />}
+                                        {!imageFounded[index] && <Image className="tokenpng" src="/questionMark.png" width={45} height={45} />}
                                     </div>
                                     <div className='countofplayers gridcenter'>
                                         <strong style={{ color: needLigth && filterModeScreen == 2 ? "rgb(42 255 0)" : null }}>{`${element.percent}%`}</strong>

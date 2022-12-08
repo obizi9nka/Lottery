@@ -33,7 +33,7 @@ import { ConnectButton, connectorsForWallets, wallet } from '@rainbow-me/rainbow
 import { publicProvider } from 'wagmi/providers/public';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 
-export default function Wallet({ chains, LOTTERY_ADDRESS, setENTERED, setneedCheckNFT, needCheckNFT, isWalletAlert, setisWalletAlert, NFT_ADDRESS, BNBChain, setdaloynavigationSmartfon, setchainId, tymblerNaNetwork, daloyNFTbutton, setdaloyNFTbutton, settxData, needWallet, txData }) {
+export default function Wallet({ chains, LOTTERY_ADDRESS, setneedNews, needNews, setENTERED, setneedCheckNFT, needCheckNFT, isWalletAlert, setisWalletAlert, NFT_ADDRESS, BNBChain, setdaloynavigationSmartfon, setchainId, tymblerNaNetwork, daloyNFTbutton, setdaloyNFTbutton, settxData, needWallet, txData }) {
 
 
     const [NftButton, setNftButton] = useState(false)
@@ -112,6 +112,14 @@ export default function Wallet({ chains, LOTTERY_ADDRESS, setENTERED, setneedChe
             console.log(err)
         }
     }
+
+
+    useEffect(() => {
+        if (needNews) {
+            getAllNews()
+            setneedNews(false)
+        }
+    }, [needNews])
 
     const [news, setnews] = useState([])
     const [now, setnow] = useState()
