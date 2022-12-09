@@ -472,13 +472,19 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, 
                                     {!imageFoundedLobbyActive[index] && <Image className="tokenpng" src="/questionMark.png" width={45} height={45} />}
                                 </div>
                                 <div className='countofplayers gridcenter'>
-                                    {element.percent}%
+                                    <div style={{ position: "relative" }}>
+                                        <div className="circle" style={{ backgroundImage: `conic-gradient(#fffeee ${element.percent}%, #232323 0)` }}>
+                                            <div className='countOfPlayersImagetru'>
+                                                <Image src="/persons.png" width={40} height={40} />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div className='predepositlobby'>
                                 <div className='depositlobby'>
                                     <div>Deposit: {element.deposit}</div>
-                                    <div>Pot: {`${(element.deposit * element.countOfPlayers)}`}</div>
+                                    <div>Prize: {`${(element.deposit * element.countOfPlayers)}`}</div>
                                     <div>Players: {element.nowInLobby}/{element.countOfPlayers}</div>
                                 </div>
                             </div>
@@ -514,15 +520,9 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, 
                     </div>
                     <div>
                         <select className="choosetoken" style={{ minWidth: "85px" }} onClick={(e) => { e.target.value == "Deposit" ? filterMode = 1 : e.target.value == "Percent" ? filterMode = 2 : filterMode = 3 }}>
-                            <option>
-                                Deposit
-                            </option>
-                            <option >
-                                Percent
-                            </option>
-                            <option >
-                                Players
-                            </option>
+                            <option>Deposit</option>
+                            <option>Percent</option>
+                            <option>Players</option>
                         </select>
                     </div>
 
@@ -550,20 +550,26 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, 
                 <div className='alllobbyes'>
                     {lobbyes && lobbyes.map((element, index) => isEnogth(index + 1) &&
                         <div className='areaAraund'>
-                            <div className='LobbyShablon' onClick={() => { if (!userlobbyActive[index]) { EnterLobby(element, index) } }} style={!userlobbyActive[index] ? {} : { margin: "0px 30px", borderColor: "antiquewhite", cursor: "default" }}>
+                            <div className={(!userlobbyActive[index]) ? 'LobbyShablon shadows' : 'LobbyShablon'} onClick={() => { if (!userlobbyActive[index]) { EnterLobby(element, index) } }} style={!userlobbyActive[index] ? {} : { margin: "0px 30px", borderColor: "antiquewhite", cursor: "default" }}>
                                 <div className='tokenAnd'>
                                     <div className="tokeninlobbyshablon gridcenter">
-                                        {imageFounded[index] && <Image className="tokenpng" alt='' onError={() => { imageFounded[index] = false; setimageFounded([...imageFounded]) }} src={`/tokens/${element.IERC20}.png`} width={45} height={45} />}
-                                        {!imageFounded[index] && <Image className="tokenpng" src="/questionMark.png" width={45} height={45} />}
+                                        {imageFounded[index] && <Image className="tokenpng" alt='' onError={() => { imageFounded[index] = false; setimageFounded([...imageFounded]) }} src={`/tokens/${element.IERC20}.png`} width={46} height={46} />}
+                                        {!imageFounded[index] && <Image className="tokenpng" src="/questionMark.png" width={46} height={46} />}
                                     </div>
                                     <div className='countofplayers gridcenter'>
-                                        <strong style={{ color: needLigth && filterModeScreen == 2 ? "rgb(42 255 0)" : null }}>{`${element.percent}%`}</strong>
+                                        <div style={{ position: "relative" }}>
+                                            <div className="circle" style={{ backgroundImage: `conic-gradient(#fffeee ${element.percent}%, #232323 0)` }}>
+                                                <div className='countOfPlayersImagetru'>
+                                                    <Image src="/persons.png" width={40} height={40} />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className='predepositlobby'>
                                     <div className='depositlobby'>
                                         <div>Deposit: <strong style={{ color: needLigth && filterModeScreen == 1 ? "rgb(42 255 0)" : null }}>{element.deposit}</strong></div>
-                                        <div>Pot: <strong>{`${(element.deposit * element.countOfPlayers)}`.substring(0, 10)}</strong></div>
+                                        <div>Prize: <strong>{`${(element.deposit * element.countOfPlayers)}`.substring(0, 10)}</strong></div>
                                         <div>Players: <strong style={{ color: needLigth && filterModeScreen == 3 ? "rgb(42 255 0)" : null }}>{element.nowInLobby}/{element.countOfPlayers}</strong></div>
                                     </div>
                                 </div>

@@ -42,7 +42,8 @@ export default function MintNftButton({ LOTTERY_ADDRESS, NFT_ADDRESS, checkNftBu
             const wins = await lottery._allowToNFT(address)
             console.log(wins.lotteryes)
             const array = []
-            for (let i = 0; i < parseInt(wins.lotteryes.length, 10); i++) {
+            const stop = parseInt(wins.lotteryes.length)
+            for (let i = 0; i < stop; i++) {
                 if (!await nft.istokenMints(wins.lotteryes[i])) {
                     array.push(parseInt(wins.lotteryes[i]))
                 }
@@ -122,7 +123,7 @@ export default function MintNftButton({ LOTTERY_ADDRESS, NFT_ADDRESS, checkNftBu
                 setisMintMartenActive(!isMintMartenActive)
 
             }
-            } >N F T</button>
+            } >NFT</button>
             <div className={isMintMartenActive ? "modallMINT active" : "modallMINT"} onClick={() => setisMintMartenActive(false)}>
                 <div className="areaMINT" onClick={e => e.stopPropagation()}>
                     <div >

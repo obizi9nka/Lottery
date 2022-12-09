@@ -111,10 +111,23 @@
     opacity: 0;
 }
 
+.circleTimer {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #232323;
+    overflow: hidden;
+}
+
+.Timerarea {
+    position: absolute;
+    display: flex;
+}
+
 .Timer {
     position: absolute;
     display: flex;
-    justify-content: center;
     left: calc(50vw - 135px / 2);
     top: calc(90px + 10vh);
 }

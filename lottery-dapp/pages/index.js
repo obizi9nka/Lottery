@@ -314,6 +314,7 @@ export default function Home({ LOTTERY_ADDRESS, chainId, setneedCheckNFT, tymble
           <div className='timer' id="minutes"  ></div>
           <div className='timer' id="seconds"  ></div>
         </div>
+
         <div className='index'>
           <div className={k >= 10 && isneedShadow ? "MINUSMINUS snebes" : isneedShadow ? "MINUSMINUS shadow" : 'MINUSMINUS '}>
             <Image src={Images.lotteryIdMINUSMINUS} className="tttt" width={150} height={150} />
@@ -349,6 +350,9 @@ export default function Home({ LOTTERY_ADDRESS, chainId, setneedCheckNFT, tymble
           </div>
         }
       </div>
+      {/* <Image src="/persons.png" width={30} height={30} /> */}
+
+
     </div >
   )
 }
