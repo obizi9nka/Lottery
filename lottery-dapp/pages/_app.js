@@ -133,7 +133,6 @@ function MyApp({ Component, pageProps }) {
     settymblerNaNetwork(chain == undefined ? tymblerNaNetwork : (chain.id == ETHid ? true : false))
   }, [chain])
 
-  console.log(chainId, LOTTERY_ADDRESS)
 
   useEffect(() => {
     setchainId(chain != undefined ? chain.id : 0)
@@ -171,21 +170,21 @@ function MyApp({ Component, pageProps }) {
 
       <Head>
         <meta name="viewport" content='width=device-width' />
-        <link rel="icon" href={chainId == ETHid ? "/BLACK.ico" : chainId == BNBid ? "/ORANGE.ico" : "/PURPLE.ico"} />
+        <link rel="icon" href={"/BLACK.ico"} />
       </Head>
       <InfoPopUp data={txData} settxData={settxData} />
       <WagmiConfig client={wagmiClient}>
         <div className="nav">
           <div className='content'>
-            <div className='navigation' onClick={() => { setIsSession(true); setdaloyNFTbutton(true) }}>
+            <div className='navigation' >
               <Link href="/" >
-                <a className='menu'> Lottery </a>
+                <a className='menu' onClick={() => { setIsSession(true); setdaloyNFTbutton(true) }}> Lottery </a>
               </Link>
               <Link href="/Lobbyes">
                 <a className='menu'> Lobby </a>
               </Link>
-              <Link href="/Galary">
-                <a className='menu'> Gallery </a>
+              <Link href="/Galary" >
+                <a className='menu' onClick={() => { setIsSession(true); setdaloyNFTbutton(true) }}> Gallery </a>
               </Link>
               <Link href="/About">
                 <a className='menu'> About </a>

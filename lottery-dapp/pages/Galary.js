@@ -311,7 +311,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
         sessionStorage.setItem("all", JSON.stringify(shuffled))
         sessionStorage.setItem("minted", JSON.stringify(minted))
         sessionStorage.setItem("notMinted", JSON.stringify(notMinted))
-        sessionStorage.setItem("chaindata", JSON.stringify(tymblerNaNetwork))
+        sessionStorage.setItem("chaindata", JSON.stringify({ tymblerNaNetwork, address }))
         sessionStorage.setItem("notShuffle", JSON.stringify(noshuffled))
         setIsSession(false)
 
@@ -328,14 +328,9 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
         });
     }
 
-    // console.log(NFTS, tokensMints, tokensNotMints)
-    useEffect(() => {
-        setNFT()
-    }, [address])
-
     useEffect(() => {
         // setNFT()
-        if (!isSession || tymblerNaNetwork != JSON.parse(sessionStorage.getItem("chaindata"))) {
+        if (!isSession || tymblerNaNetwork != JSON.parse(sessionStorage.getItem("chaindata")).tymblerNaNetwork || address != JSON.parse(sessionStorage.getItem("chaindata")).address) {
             setNFT()
         }
         else {
@@ -346,7 +341,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
             setNotShuffle(JSON.parse(sessionStorage.getItem("notShuffle")))
             setIsKek(false)
         }
-    }, [chainId, tymblerNaNetwork])
+    }, [chainId, tymblerNaNetwork, address])
 
 
     const [startIndex, setstartIndex] = useState(1)

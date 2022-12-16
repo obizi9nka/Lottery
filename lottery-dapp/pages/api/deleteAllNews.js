@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     if (chainId == ETHid) {
         result = await prisma.user.update({
             where: {
-                address: req.body
+                address: address
             },
             data: {
                 newsETH: null
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     else {
         result = await prisma.user.update({
             where: {
-                address: req.body
+                address: address
             },
             data: {
                 newsBNB: null

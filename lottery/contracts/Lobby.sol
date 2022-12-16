@@ -19,30 +19,22 @@ contract Lobby is Balance, Ownable {
         uint256 nowInLobby;
     }
 
-    event newLobby(
-        address indexed creator,
-        uint256 indexed deposit,
-        uint256 indexed countOfPlayers,
-        uint256 LobbyId
-    );
+    event newLobby(address, uint, lobbyShablon, uint);
 
     event enterLobby(
+        address indexed user,
         address creator,
-        uint256 LobbyId,
-        address user,
-        address[] players,
-        uint256 deposit,
-        uint256 countOfPlayers,
-        IERC20 token
+        uint lobbyId,
+        lobbyShablon,
+        uint
     );
+
     event playLobby(
+        address indexed winner,
         address creator,
-        uint256 LobbyId,
-        address[] players,
-        uint256 deposit,
-        uint256 countOfPlayers,
-        IERC20 token,
-        address winer
+        uint lobbyId,
+        lobbyShablon,
+        uint
     );
 
     mapping(address => uint256) lobbyCountForAddress; // количество активных лобби пользователя
@@ -50,7 +42,7 @@ contract Lobby is Balance, Ownable {
 
     mapping(address => mapping(uint256 => lobbyShablon)) lobby;
 
-    uint256 internal MAX_SUPPLAY = 10**9; // 1 000 000 000
+    uint256 internal MAX_SUPPLAY = 10 ** 9; // 1 000 000 000
 
     uint256 internal REVARD_FOR_HOLDERS = (MAX_SUPPLAY / 100) * 8; // 80 000 000
     uint256 internal REVARD_FOR_HOLDERS_EVER = (MAX_SUPPLAY / 100) * 17; // 170 000 000
@@ -69,6 +61,7 @@ contract Lobby is Balance, Ownable {
     mapping(address => uint256) internal shouldRevard;
 
     uint256 LotteryCount = 1;
+    uint VALUE = 10 ** 16;
 
     MUD MUDaddress;
     ERC721with NFT;
@@ -79,23 +72,23 @@ contract Lobby is Balance, Ownable {
         AutoMint = value;
     }
 
+    function setVALUE(uint value) public onlyOwner {
+        VALUE = value;
+    }
+
     function getHEEP() public view returns (uint256) {
         return HEEP;
     }
 
-    function getlobbyCountForAddress(address _address)
-        public
-        view
-        returns (uint256)
-    {
+    function getlobbyCountForAddress(
+        address _address
+    ) public view returns (uint256) {
         return lobbyCountForAddress[_address];
     }
 
-    function getlobbyCountForAddressHistory(address _address)
-        public
-        view
-        returns (uint256)
-    {
+    function getlobbyCountForAddressHistory(
+        address _address
+    ) public view returns (uint256) {
         return lobbyCountForAddressALL[_address];
     }
 
@@ -103,7 +96,8 @@ contract Lobby is Balance, Ownable {
         IERC20 tokenAddress,
         uint256 deposit,
         uint256 countOfPlayers
-    ) external {
+    ) external payable {
+        require(msg.value == VALUE);
         address msgsender = msg.sender;
         require(
             balanceInTokenForAccount[tokenAddress][msgsender] >= deposit &&
@@ -125,6 +119,7 @@ contract Lobby is Balance, Ownable {
         //         break;
         //     }
         // }
+
         lobbyShablon storage temp = lobby[msgsender][lobbyId];
 
         temp.players.push(msgsender);
@@ -134,10 +129,11 @@ contract Lobby is Balance, Ownable {
         temp.nowInLobby = 1;
         temp.winer = address(0);
 
-        emit newLobby(msg.sender, deposit, countOfPlayers, lobbyId);
+        emit newLobby(msgsender, lobbyId, temp, block.timestamp);
     }
 
-    function EnterLobby(address lobbyCreator, uint256 lobbyId) public {
+    function EnterLobby(address lobbyCreator, uint256 lobbyId) public payable {
+        require(msg.value == VALUE);
         address msgsender = msg.sender;
         lobbyShablon storage temp = lobby[lobbyCreator][lobbyId];
 
@@ -154,10 +150,18 @@ contract Lobby is Balance, Ownable {
 
         if (nowInLobby == temp.countOfPlayers) {
             address winer = LobbyPlay(temp);
+            emit playLobby(winer, lobbyCreator, lobbyId, temp, block.timestamp);
             temp.winer = winer;
-            lobby[lobbyCreator][lobbyId].nowInLobby = 0;
+            temp.nowInLobby = 0;
             lobbyCountForAddress[lobbyCreator]--;
         }
+        emit enterLobby(
+            msg.sender,
+            lobbyCreator,
+            lobbyId,
+            temp,
+            block.timestamp
+        );
     }
 
     function LobbyPlay(lobbyShablon memory _lobby) private returns (address) {
@@ -171,26 +175,17 @@ contract Lobby is Balance, Ownable {
             LotteryCount >= 1051 &&
             address(_lobby.token) == address(MUDaddress) &&
             HEEP >= length * 10 &&
-            _lobby.deposit >= 5 * 10**19
+            _lobby.deposit >= 5 * 10 ** 19
         ) {
             for (uint256 i = 0; i < length; i++) {
                 if (AutoMint != 0) {
                     MUDaddress._mintFromLottery(
                         _lobby.players[i],
-                        AutoMint * 10**18
+                        AutoMint * 10 ** 18
                     );
                 } else {
                     shouldRevard[_lobby.players[i]] += 10;
                 }
-                // MUDaddress._mintFromLottery(_lobby.players[i], 10 * 10**18);
-                // MUDaddress._transferFromLottery(
-                //     _lobby.players[i],
-                //     address(this),
-                //     10 * 10**18
-                // );
-                // balanceInTokenForAccount[IERC20(MUDaddress)][
-                //     _lobby.players[i]
-                // ] += 10 * 10**18;
                 unchecked {
                     HEEP -= 10;
                 }
@@ -200,11 +195,9 @@ contract Lobby is Balance, Ownable {
         return _lobby.players[rand];
     }
 
-    function getRandNumber(uint256 _playersCount)
-        public
-        view
-        returns (uint256)
-    {
+    function getRandNumber(
+        uint256 _playersCount
+    ) public view returns (uint256) {
         if (_playersCount != 0) {
             return
                 uint256(keccak256(abi.encodePacked(block.timestamp))) %
@@ -226,11 +219,10 @@ contract Lobby is Balance, Ownable {
         return false;
     }
 
-    function getLobby(address creator, uint256 lobbyid)
-        public
-        view
-        returns (lobbyShablon memory)
-    {
+    function getLobby(
+        address creator,
+        uint256 lobbyid
+    ) public view returns (lobbyShablon memory) {
         return lobby[creator][lobbyid];
     }
 }

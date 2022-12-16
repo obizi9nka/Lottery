@@ -74,10 +74,6 @@ contract Lottery is Lobby {
         }
     }
 
-    function getRevardGenius() public view returns (uint256) {
-        return REVARD_GENIUS;
-    }
-
     function getAutoEnter(address a) public view returns (uint256[] memory) {
         return autoEnter[a].lotteryes;
     }
@@ -90,15 +86,9 @@ contract Lottery is Lobby {
         return address(tokenForLottery);
     }
 
-    function getAdrressNFT() public view returns (address) {
-        return address(NFT);
-    }
-
-    function getLotteryShablonByIndex(uint256 lotteryId)
-        external
-        view
-        returns (LotteryShablon memory)
-    {
+    function getLotteryShablonByIndex(
+        uint256 lotteryId
+    ) external view returns (LotteryShablon memory) {
         return Lotteries[lotteryId];
     }
 
@@ -179,19 +169,18 @@ contract Lottery is Lobby {
         }
     }
 
-    function _findAddressInfirst1000Winers(address a, uint256 TokenId)
-        public
-        view
-        returns (bool)
-    {
+    function _findAddressInfirst1000Winers(
+        address a,
+        uint256 TokenId
+    ) public view returns (bool) {
         if (first1000Winers[TokenId] == a) return true;
         return false;
     }
 
-    function findAddressInPlayers(address _a, uint256 lottery)
-        private
-        returns (bool)
-    {
+    function findAddressInPlayers(
+        address _a,
+        uint256 lottery
+    ) private returns (bool) {
         LotteryShablon memory temp = Lotteries[lottery];
         uint256 stop = temp.playersCount;
 
@@ -232,23 +221,6 @@ contract Lottery is Lobby {
         }
     }
 
-    function Enter() external {
-        require(
-            (getBalance(tokenForLottery, msg.sender)) >= deposit &&
-                !findAddressInPlayers(msg.sender, LotteryCount),
-            "no allow"
-        );
-
-        if (countOfLotteryEnter[msg.sender] == 0 && REVARD_REF_ALLOW >= 2000) {
-            checkRef();
-        }
-        countOfLotteryEnter[msg.sender]++;
-        balanceInTokenForAccount[tokenForLottery][msg.sender] -= deposit;
-
-        Lotteries[LotteryCount].players.push(msg.sender);
-        Lotteries[LotteryCount].playersCount++;
-    }
-
     function Play() public {
         require(msg.sender == owner() || msg.sender == autotask);
         address winer;
@@ -284,7 +256,7 @@ contract Lottery is Lobby {
             // >=1051 and <2051 / >=31 and <171
             address[] memory players = Lotteries[LotteryCount].players;
             uint256 length = players.length;
-            if (length > 0 && (FOR_ONE_LOTTERY * 10**18 > length)) {
+            if (length > 0 && (FOR_ONE_LOTTERY * 10 ** 18 > length)) {
                 uint256 forOne = (FOR_ONE_LOTTERY / length);
                 for (uint256 i = 0; i < length; i++) {
                     shouldRevard[players[i]] += forOne;
@@ -307,7 +279,7 @@ contract Lottery is Lobby {
             HOLDERS_EVER();
             OWNER();
             tokenForLottery = MUDaddress;
-            deposit = 10**19;
+            deposit = 10 ** 19;
         }
 
         emit play(LotteryCount, winer);
@@ -318,7 +290,7 @@ contract Lottery is Lobby {
         uint256[] memory tokens = NFT.gettokensMints();
         uint256 length = tokens.length;
         if (length > 0) {
-            uint256 forOne = (REVARD_FOR_HOLDERS / length) * 10**18;
+            uint256 forOne = (REVARD_FOR_HOLDERS / length) * 10 ** 18;
             for (uint256 i = 0; i < length; i++) {
                 shouldRevard[NFT.ownerOf(tokens[i])] += forOne;
                 // MUDaddress._mintFromLottery(NFT.ownerOf(tokens[i]), forOne);
@@ -330,7 +302,7 @@ contract Lottery is Lobby {
         address[] memory adressEver = NFT.getaddressHowOwnedNFT();
         uint256 length = adressEver.length;
         if (length > 0) {
-            uint256 forOne = (REVARD_FOR_HOLDERS_EVER / length) * 10**18;
+            uint256 forOne = (REVARD_FOR_HOLDERS_EVER / length) * 10 ** 18;
             for (uint256 i = 0; i < length; i++) {
                 shouldRevard[adressEver[i]] += forOne;
                 // MUDaddress._mintFromLottery(adressEver[i], forOne);
@@ -339,7 +311,7 @@ contract Lottery is Lobby {
     }
 
     function OWNER() private {
-        MUDaddress._mintFromLottery(owner(), REVARD_OWNER * 10**18);
+        MUDaddress._mintFromLottery(owner(), REVARD_OWNER * 10 ** 18);
     }
 
     function receiveRevard() public {
@@ -347,7 +319,7 @@ contract Lottery is Lobby {
         require(
             MUDaddress._mintFromLottery(
                 msg.sender,
-                shouldRevard[msg.sender] * 10**18
+                shouldRevard[msg.sender] * 10 ** 18
             )
         );
         shouldRevard[msg.sender] = 0;

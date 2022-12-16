@@ -24,55 +24,53 @@ import {
 } from 'wagmi';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const prisma = new PrismaClient();
 
 
-export async function getServerSideProps() {
-    let lobbyETH = await prisma.lobbyETH.findMany()
-    let lobbyBNB = await prisma.lobbyBNB.findMany()
+// export async function getServerSideProps() {
+//     let lobbyETH = await prisma.lobbyETH.findMany()
+//     let lobbyBNB = await prisma.lobbyBNB.findMany()
 
-    if (lobbyETH != [])
-        lobbyETH.forEach((element, i) => {
-            lobbyETH[i] = {
-                deposit: element.deposit,
-                nowInLobby: element.nowInLobby,
-                players: element.players,
-                IERC20: element.IERC20,
-                countOfPlayers: element.countOfPlayers,
-                creator: element.creator,
-                id: element.id,
-                percent: parseInt(`${element.nowInLobby / element.countOfPlayers * 100}`.substring(0, 2))
-            }
-        })
-    if (lobbyBNB != [])
-        lobbyBNB.forEach((element, i) => {
-            lobbyBNB[i] = {
-                deposit: element.deposit,
-                nowInLobby: element.nowInLobby,
-                players: element.players,
-                countOfPlayers: element.countOfPlayers,
-                IERC20: element.IERC20,
-                creator: element.creator,
-                id: element.id,
-                percent: parseInt(`${element.nowInLobby / element.countOfPlayers * 100}`.substring(0, 2))
-            }
-        })
+//     if (lobbyETH != [])
+//         lobbyETH.forEach((element, i) => {
+//             lobbyETH[i] = {
+//                 deposit: element.deposit,
+//                 nowInLobby: element.nowInLobby,
+//                 players: element.players,
+//                 IERC20: element.IERC20,
+//                 countOfPlayers: element.countOfPlayers,
+//                 creator: element.creator,
+//                 id: element.id,
+//                 percent: parseInt(`${element.nowInLobby / element.countOfPlayers * 100}`.substring(0, 2))
+//             }
+//         })
+//     if (lobbyBNB != [])
+//         lobbyBNB.forEach((element, i) => {
+//             lobbyBNB[i] = {
+//                 deposit: element.deposit,
+//                 nowInLobby: element.nowInLobby,
+//                 players: element.players,
+//                 countOfPlayers: element.countOfPlayers,
+//                 IERC20: element.IERC20,
+//                 creator: element.creator,
+//                 id: element.id,
+//                 percent: parseInt(`${element.nowInLobby / element.countOfPlayers * 100}`.substring(0, 2))
+//             }
+//         })
 
-    return {
-        props: {
-            lobbyETH,
-            lobbyBNB
-        }
-    }
-}
+//     return {
+//         props: {
+//             lobbyETH,
+//             lobbyBNB
+//         }
+//     }
+// }
 
-export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, lobbyETH, tymblerNaNetwork, settxData, setneedWallet }) {
-
-
-
+export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaNetwork, settxData, setneedWallet }) {
     const [ALL_LOBBYES, setAll_LOBBYES] = useState({
-        lobbyBNB,
-        lobbyETH
+        lobbysETH: [],
+        lobbysBNB: [],
+        lobbysETHActive: [],
+        lobbysBNBActive: []
     })
 
     const [deposit, setdeposit] = useState("")
@@ -80,7 +78,7 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, 
     const [isdepositvalid, setisdepositvalid] = useState()
     const [iscountOfPlayersvalid, setiscountOfPlayersvalid] = useState()
     const [token, settoken] = useState("")
-    const [lobbyes, setlobbyes] = useState(lobbyETH)
+    const [lobbyes, setlobbyes] = useState([])
     const [lobbyesActive, setlobbyesActive] = useState([])
     const [imageFounded, setimageFounded] = useState([])
     const [imageFoundedLobbyActive, setimageFoundedLobbyActive] = useState([])
@@ -89,19 +87,26 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, 
         symbol: "Tokens"
     }])
 
+
+
     useEffect(() => {
-        setimageFounded(lobbyes.map(() => {
-            return true
-        }))
+        if (lobbyes == undefined)
+            setimageFounded([])
+        else
+            setimageFounded(lobbyes.map(() => {
+                return true
+            }))
     }, [lobbyes])
 
     useEffect(() => {
-        setimageFoundedLobbyActive(lobbyesActive.map(() => {
-            return true
-        }))
+        if (lobbyes == undefined)
+            setimageFoundedLobbyActive([])
+        else
+            setimageFoundedLobbyActive(lobbyesActive.map(() => {
+                return true
+            }))
     }, [lobbyesActive])
 
-    console.log(imageFounded)
     ///FILTER
     const [tokenn, settokenn] = useState("")
     const [UP, setUP] = useState(true)
@@ -115,25 +120,37 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, 
     const signer = data
     const { address, isConnected } = useAccount()
 
-    const [userlobbyActive, setuserlobbyActive] = useState([])
+
+
+    useEffect(() => {
+        getAllLobbyes()
+    }, [address])
+
+    const getAllLobbyes = async () => {
+        const body = { user: address, isConnected, chainId }
+        await fetch("/api/getAllLobby", {
+            method: "POST",
+            body: JSON.stringify(body)
+        }).then(async (data) => {
+            const lobbys = await data.json()
+            setAll_LOBBYES(lobbys)
+            setlobbyesActive(chainId == ETHid ? lobbys.lobbysETHActive : lobbys.lobbysBNBActive)
+            setlobbyes(chainId == ETHid ? lobbys.lobbysETH : lobbys.lobbysBNB)
+        })
+    }
 
 
 
     useEffect(() => {
-        if (chain == undefined) {
+        if (!isConnected) {
             if (tymblerNaNetwork) {
-                setlobbyes(lobbyETH)
+                setlobbyes(ALL_LOBBYES.lobbysETH)
             }
             else {
-                setlobbyes(lobbyBNB)
+                setlobbyes(ALL_LOBBYES.lobbysBNB)
             }
         } else {
-            if (chainId == ETHid) {
-                setlobbyes(lobbyETH)
-            }
-            else {
-                setlobbyes(lobbyBNB)
-            }
+            getAllLobbyes()
         }
     }, [tymblerNaNetwork, chainId])
 
@@ -156,44 +173,98 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, 
             setisdepositvalid(false)
     }, [deposit])
 
-    const filterUserLobbyes = async () => {
-        try {
-            const te = []
-            const f = (tymblerNaNetwork ? ALL_LOBBYES.lobbyETH : ALL_LOBBYES.lobbyBNB).filter((element) => {
-                if (element.players.indexOf(address) === -1) {
-                    te.push(false)
-                }
-                else {
-                    te.push(true)
-                    return element
-                }
-
-            })
-            setuserlobbyActive(te)
-            setlobbyesActive(f)
-        } catch (err) {
-            setlobbyesActive([])
-            console.log(err)
-        }
-
-    }
-
     useEffect(() => {
         getTokens()
     }, [address, chainId])
 
+    // useEffect(() => {
+    //     events()
+    // }, [])
 
-    useEffect(() => {
-        if (isConnected) {
-            filterUserLobbyes()
-        }
-        else {
-            setuserlobbyActive([])
-            setlobbyesActive([])
-        }
+    // const events = async () => {
+    //     const now = new Date().getTime() / 1000
+    //     console.log(now)
+    //     const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
 
-    }, [address, chainId, LOTTERY_ADDRESS, ALL_LOBBYES])
+    //     let lobbys
+    //     const body = { user: address, isConnected, chainId }
+    //     await fetch("/api/getAllLobby", {
+    //         method: "POST",
+    //         body: JSON.stringify(body)
+    //     }).then(async (data) => {
+    //         lobbys = await data.json()
+    //         console.log("FFFFFFFF")
+    //     })
 
+
+    //     contract.removeAllListeners()
+    //     // contract.on("playLobby", (user, creator, lobbyId, lobby, time) => {
+    //     //     console.log(user, lobby)
+    //     // })
+    //     // contract.on("enterLobby", async (user, creator, lobbyId, lobby, time) => {
+    //     //     if (time > now) {
+    //     //         const stop = lobbyes.length
+    //     //         for (let i = 0; i < stop; i++) {
+    //     //             if (lobbyId == lobbyes[i].id && lobbyes[i].creator == creator) {
+    //     //                 if (parseInt(BigInt(lobby.nowInLobby)) != 0) {
+    //     //                     if (chainId == ETHid) {
+    //     //                         ALL_LOBBYES.lobbysETH[i].nowInLobby = parseInt(BigInt(lobby.nowInLobby))
+    //     //                         ALL_LOBBYES.lobbysETH[i].players += user + "_"
+    //     //                         if (user == address) {
+    //     //                             lobbyes[i].isEntered = true
+    //     //                             setlobbyesActive([...lobbyesActive, lobbyes[i]])
+    //     //                         }
+    //     //                         setlobbyes([...lobbyes])
+    //     //                     }
+    //     //                     else {
+    //     //                         ALL_LOBBYES.lobbysBNB[i].nowInLobby = parseInt(BigInt(lobby.nowInLobby))
+    //     //                         ALL_LOBBYES.lobbysBNB[i].players += user + "_"
+    //     //                         if (user == address) {
+    //     //                             lobbyes[i].isEntered = true
+    //     //                             setlobbyesActive([...lobbyesActive, lobbyes[i]])
+    //     //                         }
+    //     //                         setlobbyes([...lobbyes])
+    //     //                     }
+
+    //     //                 }
+    //     //                 break
+    //     //             }
+    //     //         }
+    //     //     }
+    //     // })
+    //     contract.on("newLobby", async (user, lobbyId, lobby, time) => {
+    //         if (time > now) {
+    //             console.log(parseInt(lobbyId), "dd", time, now, lobbys)
+    //             const bod = {
+    //                 addresses: [lobby.token]
+    //             }
+    //             await fetch("/api/getTokensGlobal", {
+    //                 method: "POST",
+    //                 body: JSON.stringify(bod)
+    //             }).then(async (data) => {
+    //                 const token = await data.json()
+    //                 const _data = {
+    //                     deposit: `${parseInt(lobby.deposit) / (10 ** token[0].decimals)}`,
+    //                     nowInLobby: parseInt(lobby.nowInLobby),
+    //                     // players: lobby.players,
+    //                     countOfPlayers: parseInt(lobby.countOfPlayers),
+    //                     IERC20: token[0].address,
+    //                     creator: user,
+    //                     id: parseInt(lobbyId),
+    //                     percent: parseInt(`${lobby.nowInLobby / lobby.countOfPlayers * 100}`.substring(0, 2)),
+    //                     isEntered: user == address
+    //                 }
+
+    //                 chainId == ETHid ? ALL_LOBBYES.lobbysETH.push(_data) : ALL_LOBBYES.lobbysBNB.push(_data)
+    //                 chainId == ETHid ? ALL_LOBBYES.lobbysETHActive.push(_data) : ALL_LOBBYES.lobbysBNBActive.push(_data)
+    //                 setlobbyes(chainId == ETHid ? ALL_LOBBYES.lobbysETH : ALL_LOBBYES.lobbysBNB)
+    //                 if (_data.creator == address)
+    //                     setlobbyesActive(chainId == ETHid ? ALL_LOBBYES.lobbysETHActive : ALL_LOBBYES.lobbysBNBActive)
+    //                 setAll_LOBBYES(ALL_LOBBYES)
+    //             })
+    //         }
+    //     })
+    // }
 
     const getTokens = async () => {
         if (isConnected) {
@@ -229,7 +300,6 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, 
     }
 
     const createNewLobby = async () => {
-
         try {
             settxData({
                 isPending: true,
@@ -239,7 +309,7 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, 
             const Deposit = BigInt(deposit * 10 ** token.decimals)
             const body = { user: address, token: token.address, countOfPlayers, deposit, chainId }
             console.log(body, token, Deposit, chainId)
-            const tx = await contract.createNewLobby(token.address, Deposit, countOfPlayers)
+            const tx = await contract.createNewLobby(token.address, Deposit, countOfPlayers, { value: BigInt(10 ** 16) })
             await tx.wait()
             await fetch('/api/createNewLobby', {
                 method: "PUT",
@@ -260,22 +330,26 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, 
                     IERC20: element.IERC20,
                     creator: element.creator,
                     id: element.id,
-                    percent: parseInt(`${element.nowInLobby / element.countOfPlayers * 100}`.substring(0, 2))
+                    percent: parseInt(`${element.nowInLobby / element.countOfPlayers * 100}`.substring(0, 2)),
+                    isEntered: true
                 }
                 setlobbyes([...lobbyes, _data])
                 setlobbyesActive([...lobbyesActive, _data])
-                setuserlobbyActive([...userlobbyActive, true])
 
                 const temp = ALL_LOBBYES
-                chainId == ETHid ? temp.lobbyETH.push(_data) : temp.lobbyBNB.push(_data)
+                chainId == ETHid ? temp.lobbysETH.push(_data) : temp.lobbysBNB.push(_data)
                 setAll_LOBBYES(temp)
             })
             settxData({
                 isPending: true,
                 result: true
             })
-            document.getElementById("deposit").value = "";
-            document.getElementById("countofplayers").value = "";
+
+            try {
+                document.getElementById("deposit").value = "";
+                document.getElementById("countofplayers").value = "";
+            } catch (err) { }
+
         } catch (err) {
             console.log(err)
             let issue
@@ -310,7 +384,7 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, 
             filterMode,
             UP
         }
-        setlobbyes([...Filter(!tymblerNaNetwork ? ALL_LOBBYES.lobbyBNB : ALL_LOBBYES.lobbyETH, settings)])
+        setlobbyes([...Filter(!tymblerNaNetwork ? ALL_LOBBYES.lobbysBNB : ALL_LOBBYES.lobbysETH, settings)])
         try {
 
         } catch (err) {
@@ -326,7 +400,7 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, 
                 result: null
             })
             const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
-            const tx = await contract.EnterLobby(lobby.creator, lobby.id)
+            const tx = await contract.EnterLobby(lobby.creator, lobby.id, { value: BigInt(10 ** 16) })
             await tx.wait()
 
             const _lobby = await contract.getLobby(lobby.creator, lobby.id)
@@ -347,26 +421,26 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, 
             }
 
             const loby = await contract.getLobby(creator, id)
-            let flag = false
             const stop = lobbyes.length
             for (let i = 0; i < stop; i++) {
                 if (id == lobbyes[i].id && lobbyes[i].creator === creator) {
                     if (parseInt(BigInt(loby.nowInLobby)) != 0) {
                         lobbyes[i].nowInLobby = parseInt(BigInt(loby.nowInLobby))
+                        lobbyes[i].isEntered = true
                         if (chainId == ETHid) {
-                            ALL_LOBBYES.lobbyETH[i].nowInLobby = parseInt(BigInt(loby.nowInLobby))
-                            ALL_LOBBYES.lobbyETH[i].players = loby.players
+                            ALL_LOBBYES.lobbysETH[i].nowInLobby = parseInt(BigInt(loby.nowInLobby))
+                            ALL_LOBBYES.lobbysETH[i].players = address + "_"
                         }
                         else {
-                            ALL_LOBBYES.lobbyBNB[i].nowInLobby = parseInt(BigInt(loby.nowInLobby))
-                            ALL_LOBBYES.lobbyBNB[i].players = loby.players
+                            ALL_LOBBYES.lobbysBNB[i].nowInLobby = parseInt(BigInt(loby.nowInLobby))
+                            ALL_LOBBYES.lobbysBNB[i].players = address + "_"
                         }
 
                         setlobbyesActive([...lobbyesActive, lobbyes[i]])
                     }
                     else {
-                        flag = true
                         lobbyes.splice(i, 1)
+                        setlobbyes([...lobbyes])
                     }
                     break
                 }
@@ -375,16 +449,6 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, 
                 isPending: true,
                 result: true
             })
-            if (flag) {
-                setlobbyes([...lobbyes])
-
-            }
-            else {
-                userlobbyActive[index] = true
-                setuserlobbyActive([...userlobbyActive])
-            }
-
-
         } catch (err) {
             let issue = IssueMaker({ data: err.code, from: "createNewLobby" })
             settxData({
@@ -427,11 +491,6 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, 
     const isEnogth = (index) => {
         return (index >= startIndex && index < parseInt(countOfRenderNfts) + parseInt(startIndex))
     }
-
-    // const ImageNotFound = (index) => {
-    //     imageFounded[index] = false
-    // }
-
 
 
     return (
@@ -550,7 +609,7 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, lobbyBNB, 
                 <div className='alllobbyes'>
                     {lobbyes && lobbyes.map((element, index) => isEnogth(index + 1) &&
                         <div className='areaAraund'>
-                            <div className={(!userlobbyActive[index]) ? 'LobbyShablon shadows' : 'LobbyShablon'} onClick={() => { if (!userlobbyActive[index]) { EnterLobby(element, index) } }} style={!userlobbyActive[index] ? {} : { margin: "0px 30px", borderColor: "antiquewhite", cursor: "default" }}>
+                            <div className={(!element.isEntered) ? 'LobbyShablon shadows' : 'LobbyShablon'} onClick={() => { if (!element.isEntered) { EnterLobby(element, index) } }} style={!element.isEntered ? {} : { margin: "0px 30px", borderColor: "antiquewhite", cursor: "default" }}>
                                 <div className='tokenAnd'>
                                     <div className="tokeninlobbyshablon gridcenter">
                                         {imageFounded[index] && <Image className="tokenpng" alt='' onError={() => { imageFounded[index] = false; setimageFounded([...imageFounded]) }} src={`/tokens/${element.IERC20}.png`} width={46} height={46} />}

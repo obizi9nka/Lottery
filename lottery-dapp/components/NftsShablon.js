@@ -267,16 +267,16 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, setneedWalle
                                     Data: {Data.date}
                                 </div>
                                 <div style={{ fontWeight: "500", color: "black" }}>
-                                    Bank: {Data.players != null ? `${Data.players * 5}` : '—'}
+                                    Bank: {Data.players != null ? `${Data.players * 5}` : 'TBА'}
                                 </div>
                                 <div style={{ fontWeight: "500", color: "black" }}>
-                                    Players: {Data.players != null ? `${Data.players}` : '—'}
+                                    Players: {Data.players != null ? `${Data.players}` : 'TBА'}
                                 </div>
                                 <div style={{ fontWeight: "500", color: "black" }}>
                                     Price: {istokenOnSell ? `${cost} ETH` : 'Not on sale'}
                                 </div>
                                 <div style={{ fontWeight: "500", color: "black" }}>
-                                    Transfer count: {Data.TransferCount}
+                                    Transfers count: {Data.TransferCount}
                                 </div>
                             </div>
                         </div>
@@ -291,48 +291,3 @@ export default function NftsShablon({ LOTTERY_ADDRESS, NFT_ADDRESS, setneedWalle
     )
 
 }
-
-// {clicked && <input className='input ' onChange={e => setcost(e.target.value)} style={{ width: "70px" }} placeholder='cost' />}
-//                                 {!istokenOnSell && !isMessage && <button onClick={putOnSell} className='mybutton '>Put On Sell</button>}
-//
-//                                 {!istokenOnSell && isMessage && <input className='inputMessage' onChange={e => setenteredMessage(e.target.value)} />}
-//                                 {!istokenOnSell && isMessage && <button onClick={setMessage} className='mybutton'>go</button>}
-//                                 {istokenOnSell && <button onClick={removeFromSell} className='mybutton '>Remove from sale</button>}
-
-
-// if (ISowner || Data.isowner)
-//         return (
-//             <div className='nftsShablon'>
-//                 <div className='pad'>
-//                     <div className='bordernft'>
-//                         <Image src={image} style={{ "border-radius": 10 }} width={200} height={200} />
-//                         <div className='i'>
-//                             {istokenOnSell && <div className='inline'>
-//                                 <div style={{ color: "white", fontSize: 30, alignSelf: "center" }}>{cost}</div>
-//                                 <Image src="/tokens/ETH.png" style={{ "border-radius": 10 }} width={20} height={20} />
-//                             </div>}
-//                             {clicked && <input className='input ' onChange={e => setcost(e.target.value)} style={{ width: "70px" }} placeholder='cost' />}
-//                             {!istokenOnSell && <button onClick={putOnSell} className='mybutton '>Sell</button>}
-//                             {istokenOnSell && <button onClick={removeFromSell} className='mybutton '>Cancel</button>}
-//                         </div>
-//                         <div className={Data.ismints ? "greendot absolute" : "reddot absolute"} />
-//                     </div>
-//                 </div>
-//             </div >
-//         )
-//     else
-//         return (
-//             <div className='nftsShablon'>
-//                 <div className='pad'>
-//                     <div className='bordernft'>
-//                         <Image src={image} style={{ "border-radius": 10 }} width={200} height={200} />
-//                         <div className='i'>
-//                             {istokenOnSell && <h1 style={{ color: "white" }}> {cost}</h1>}
-//                             {istokenOnSell && <Image src="/tokens/ETH.png" style={{ "border-radius": 10 }} width={20} height={20} />}
-//                             {istokenOnSell && <button onClick={buy} className='mybutton i'>Buy</button>}
-//                         </div>
-//                         <div className={Data.ismints ? "greendot absolute" : "reddot absolute"} />
-//                     </div>
-//                 </div>
-//             </div>
-//         )

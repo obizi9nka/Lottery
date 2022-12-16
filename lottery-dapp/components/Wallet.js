@@ -175,11 +175,11 @@ export default function Wallet({ chains, LOTTERY_ADDRESS, setneedNews, needNews,
     const deleteNews = async () => {
         // const provider = new ethers.providers.Web3Provider(window.ethereum)
         // const signer = provider.getSigner()
-        const u = address//await signer.getAddress()
+        const body = { address, chainId }
         try {
             await fetch("/api/deleteAllNews", {
                 method: "POST",
-                body: u
+                body: JSON.stringify(body)
             })
         } catch (err) {
             console.log(err)
