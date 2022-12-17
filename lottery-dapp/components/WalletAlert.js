@@ -379,9 +379,23 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
                 <div className="dopInfo" onClick={() => setMode(!Mode)} />
 
                 {Mode && <div className="" style={{ padding: "10px" }}>
-                    <TokensBalancePylt LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} rokens={rokens} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} chainId={chainId} settokenTransfered={settokenTransfered} />
-
+                    <div className="addToken">
+                        {chainId == BNBid && <div className="misterySwitcher" onClick={() => { setModeMistery(!ModeMistery) }}></div>}
+                        {!ModeMistery && <div>
+                            <input className="input bigdinamic" id="inputToken" placeholder="Token Address" onChange={e => setaddTokenAddress(e.target.value)} style={{ color: isvalid ? "white" : "red" }} />
+                        </div>}
+                        {!ModeMistery && <div>
+                            <button onClick={() => addToken()} className="mybutton" >Add new token</button>
+                        </div>}
+                        {ModeMistery && <div>
+                            <input className="input bigdinamic" id="Mistery" placeholder="Your answer" onChange={e => setMistery(e.target.value)} />
+                        </div>}
+                        {ModeMistery && <div>
+                            <button onClick={() => tryMistery()} className="mybutton" style={{ minWidth: "123.41px" }}>Try</button>
+                        </div>}
+                    </div>
                     <div className="areashablonbalance">
+
                         {rokens && rokens.map((element, index) =>
                             <TokensBalanceShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} txData={txData} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} rokens={rokens} tymblerNaNetwork={tymblerNaNetwork} tokenTransfered={tokenTransfered} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} element={element} chainId={chainId} settokenTransfered={settokenTransfered} index={{ index, last: rokens.length - 1 }} deleteTokenFromFronend={deleteTokenFromFronend} />
                         )}
@@ -454,21 +468,7 @@ export default function WalletAlert({ LOTTERY_ADDRESS, NFT_ADDRESS, setENTERED, 
                                 </div>
                             </div>
                         </div>
-                        <div className="addToken">
-                            {chainId != BNBid && <div className="misterySwitcher" onClick={() => { setModeMistery(!ModeMistery) }}></div>}
-                            {!ModeMistery && <div>
-                                <input className="input bigdinamic" id="inputToken" placeholder="Token Address" onChange={e => setaddTokenAddress(e.target.value)} style={{ color: isvalid ? "white" : "red" }} />
-                            </div>}
-                            {!ModeMistery && <div>
-                                <button onClick={() => addToken()} className="mybutton" >Add new token</button>
-                            </div>}
-                            {ModeMistery && <div>
-                                <input className="input bigdinamic" id="Mistery" placeholder="Your answer" onChange={e => setMistery(e.target.value)} />
-                            </div>}
-                            {ModeMistery && <div>
-                                <button onClick={() => tryMistery()} className="mybutton" style={{ minWidth: "123.41px" }}>Try</button>
-                            </div>}
-                        </div>
+
                     </div>
                 }
             </div >

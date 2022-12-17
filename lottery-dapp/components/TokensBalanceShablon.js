@@ -26,37 +26,53 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
     const [DELETED, setDELETED] = useState(false)
 
     const [isfaund, setisfaund] = useState(element.isImageAdded)
+    const [needApprove, setneedAprove] = useState(undefined)
 
 
     const provider = useProvider()
 
     useEffect(() => {
-        if (element.balance == undefined || TokenSelected?.address == element.address || txData.result) {
-            checkBalance()
+        checkApprove()
+    }, [element, user])
+
+
+    const approve = async () => {
+        settxData({
+            isPending: true,
+            result: null
+        })
+        try {
+            const contract = new ethers.Contract(element.address, A.abi, signer)
+            const tx = await contract.approve(LOTTERY_ADDRESS, BigInt(1000 * 10 ** 18))
+            await tx.wait()
+            settxData({
+                isPending: false,
+                result: true
+            })
+            setneedAprove(false)
+        } catch (err) {
+            settxData({
+                isPending: false,
+                result: false
+            })
+            console.log(err)
         }
-        else {
-            setbalance(element.balance)
-        }
-        setisfaund(element.isImageAdded)
-    }, [chainId, user, element, TokenSelected, rokens, txData])
 
+    }
 
-    const checkBalance = async () => {
-        if (element.address != 0)
-            try {
-                const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
-
-                const temp = BigInt(await contract.getBalance(element.address, user))
-                console.log(temp, element)
-                let _balance = parseInt(BigInt(temp) / BigInt(10 ** parseInt(element.decimals)))
-
-                element.balance = _balance.toString()
-                setbalance(_balance)
-            } catch (err) {
-                console.log("checkBalance", err)
-                setbalance(0)
-                element.balance = "0"
+    const checkApprove = async () => {
+        try {
+            const tokenContract = new ethers.Contract(element.address, A.abi, provider)
+            if (BigInt(await tokenContract.allowance(user, LOTTERY_ADDRESS)) == 0) {
+                setneedAprove(true)
+            } else {
+                setneedAprove(false)
             }
+            console.log(parseInt(await tokenContract.allowance(user, LOTTERY_ADDRESS)))
+        } catch (err) {
+            console.log(err)
+        }
+
     }
 
     const deleteToken = async () => {
@@ -77,18 +93,30 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
 
 
     if (!DELETED) {
-        if (element.address != 0 && balance != -1)
+        if (element.address != 0)
             return (
                 <div className="relative">
-                    <div className={TokenSelected?.address == element.address ? "shablonbalanceClicked" : 'shablonbalance'} onClick={(e) => { if (element.address != TokenSelected?.address) { setTokenSelected(element) } else { setTokenSelected(null) } }}
+                    <div className={'shablonbalance'}
                         style={{ margin: index.last == index.index ? "" : index.index == 0 ? "0px 0px 10px 0px" : index.last == index.index ? "10px 0px 0px 0px" : "10px 0px 10px 0px" }} >
                         <div className="tokenImage">
-                            {isfaund && <Image className="tokenpng" src={`/tokens/${element.address}.png`} width={32} height={32} />}
-                            {!isfaund && <Image className="tokenpng" src="/questionMark.png" width={32} height={32} />}
+                            {element.isImageAdded && <Image className="tokenpng" src={`/tokens/${element.address}.png`} width={32} height={32} />}
+                            {!element.isImageAdded && <Image className="tokenpng" src="/questionMark.png" width={32} height={32} />}
                         </div>
-                        <div class="balanceForToken">
+                        {needApprove != undefined && <div className="approveArea">
+                            {needApprove ?
+                                <div>
+                                    <button className="Approve" onClick={() => approve()}>Approve</button>
+                                </div>
+                                :
+                                <div className="approved">
+                                    Approved
+                                </div>
+                            }
+                        </div>}
+                        <div></div>
+                        {/* <div class="balanceForToken">
                             <div class="balance"> {balance} {!isfaund ? element.symbol : null}</div>
-                        </div>
+                        </div> */}
                     </div >
                     {element.address != USDT_ETH && < div className="tokenImageDElete" id="delete" >
                         <Image className=" hover" src="/delete.png" onClick={() => { deleteToken() }} width={25} height={25} />

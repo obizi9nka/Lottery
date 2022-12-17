@@ -1,4 +1,7 @@
 /*Lottery*/
+
+
+
 .index {
     min-height: calc(100vh - 110px);
     max-height: calc(100vh - 110px);
@@ -69,19 +72,19 @@
 
 .PLUS {
     justify-self: center;
-    opacity: 0.6;
+    opacity: 0.9;
 
 }
 
 .PLUSPLUS {
     justify-self: start;
-    opacity: 0.3;
+    opacity: 0.8;
 
 }
 
 .MINUSMINUS {
     justify-self: end;
-    opacity: 0.3;
+    opacity: 0.8;
 }
 
 .controlautoenter {

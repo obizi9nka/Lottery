@@ -4,7 +4,7 @@
 
 .areaNfts {
     margin: 0px calc(10% - 50px);
-    min-height: 80vh
+    /* min-height: 80vh */
 }
 
 
@@ -12,6 +12,10 @@
 .zx {
     align-self: center;
     justify-self: center;
+}
+
+.data {
+    min-width: calc(100vw - 2 * (10% - 30px));
 }
 
 .fiter {
@@ -55,8 +59,6 @@
     padding: 0px 10px;
     font-size: 14px;
 }
-
-.ttete {}
 
 
 .searchI:hover .searchIINFO {

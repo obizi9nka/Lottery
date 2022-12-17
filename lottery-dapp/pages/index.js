@@ -301,11 +301,10 @@ export default function Home({ LOTTERY_ADDRESS, chainId, setneedCheckNFT, tymble
   }
 
   return (
-    <div>
+    <div className=''>
       <Head>
         <title>!Mudebz</title>
         <meta name="description" content="An Ethereum Lottery dApp" />
-
       </Head>
       <div className=''>
 

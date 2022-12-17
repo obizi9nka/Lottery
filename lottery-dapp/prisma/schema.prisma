@@ -21,19 +21,17 @@ datasource db {
 model user {
   address String @id @unique
 
-  tokensETH        String?
-  countOfLobbysETH Int     @default(0)
-  newsETH          String?
-  PromSetETH       String?
-  PromInputETH     String?
-  AutoEnterETH     String?
+  tokensETH    String?
+  newsETH      String?
+  PromSetETH   String?
+  PromInputETH String?
+  AutoEnterETH String?
 
-  countOfLobbysBNB Int     @default(0)
-  tokensBNB        String?
-  newsBNB          String?
-  PromSetBNB       String?
-  PromInputBNB     String?
-  AutoEnterBNB     String?
+  tokensBNB    String?
+  newsBNB      String?
+  PromSetBNB   String?
+  PromInputBNB String?
+  AutoEnterBNB String?
 
   userLobbyesBNB        lobbyBNB[]
   userLobbyesETH        lobbyETH[]

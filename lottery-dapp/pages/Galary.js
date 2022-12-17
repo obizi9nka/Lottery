@@ -330,7 +330,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
 
     useEffect(() => {
         // setNFT()
-        if (!isSession || tymblerNaNetwork != JSON.parse(sessionStorage.getItem("chaindata")).tymblerNaNetwork || address != JSON.parse(sessionStorage.getItem("chaindata")).address) {
+        if (!isSession || tymblerNaNetwork != JSON.parse(sessionStorage.getItem("chaindata"))?.tymblerNaNetwork || address != JSON.parse(sessionStorage.getItem("chaindata"))?.address) {
             setNFT()
         }
         else {
@@ -437,7 +437,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
 
 
     return (
-        <div className='areaNfts'>
+        <div className='areaNfts MAIN_MARGIG'>
             <Head>
                 <title>!MuDeBz</title>
                 <meta name="description" content="An Ethereum Lottery dApp" />
@@ -478,6 +478,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
 
                     </label>
                     <select className="choosetoken" style={{ minWidth: "40px" }} id="enougth" onClick={(e) => { localStorage.setItem("ENOUGTH", e.target.value); setcountOfRenderNfts(parseInt(e.target.value)) }}>
+                        <option>5</option>
                         <option>25</option>
                         <option>100</option>
                         <option>250</option>

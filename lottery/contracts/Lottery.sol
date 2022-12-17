@@ -193,32 +193,38 @@ contract Lottery is Lobby {
     function addToAutoEnter(uint256[] memory _lotteryes) public {
         uint256 stop = _lotteryes.length;
         require(
-            balanceInTokenForAccount[tokenForLottery][msg.sender] >=
-                (stop * deposit),
-            "not enougth money"
+            tokenForLottery.balanceOf(msg.sender) >= stop * deposit &&
+                tokenForLottery.allowance(msg.sender, address(this)) >=
+                stop * deposit,
+            "balance or allowance"
         );
         uint _LotteryCount = LotteryCount;
         for (uint256 i = 0; i < stop; i++) {
-            require(_lotteryes[i] > _LotteryCount);
+            require(
+                _lotteryes[i] >= _LotteryCount,
+                "Some lottery < lotteryCount"
+            );
         }
 
         if (countOfLotteryEnter[msg.sender] == 0 && REVARD_REF_ALLOW >= 2000) {
             checkRef();
         }
         AUTOENTER storage pointer = autoEnter[msg.sender];
-
+        uint256 success = 0;
         for (uint256 i = 0; i < stop; i++) {
-            //(stop - 1) не нужно!
             if (!findAddressInPlayers(msg.sender, _lotteryes[i])) {
-                balanceInTokenForAccount[tokenForLottery][
-                    msg.sender
-                ] -= deposit;
+                success++;
                 Lotteries[_lotteryes[i]].players.push(msg.sender);
                 Lotteries[_lotteryes[i]].playersCount++;
                 countOfLotteryEnter[msg.sender]++;
                 pointer.lotteryes.push(_lotteryes[i]);
             }
         }
+        tokenForLottery.transferFrom(
+            msg.sender,
+            address(this),
+            success * deposit
+        );
     }
 
     function Play() public {
@@ -239,10 +245,10 @@ contract Lottery is Lobby {
             first1000Winers[LotteryCount] = winer;
             _first1000Winers[winer].lotteryes.push(LotteryCount);
         }
-
-        balanceInTokenForAccount[tokenForLottery][winer] +=
-            deposit *
-            Lotteries[LotteryCount].playersCount;
+        tokenForLottery.transfer(
+            winer,
+            deposit * Lotteries[LotteryCount].playersCount
+        );
 
         Lotteries[LotteryCount].winer = winer;
 
@@ -260,15 +266,6 @@ contract Lottery is Lobby {
                 uint256 forOne = (FOR_ONE_LOTTERY / length);
                 for (uint256 i = 0; i < length; i++) {
                     shouldRevard[players[i]] += forOne;
-                    // MUDaddress._mintFromLottery(players[i], forOne);
-                    // MUDaddress._transferFromLottery(
-                    //     players[i],
-                    //     address(this),
-                    //     forOne
-                    // );
-                    // balanceInTokenForAccount[IERC20(MUDaddress)][
-                    //     players[i]
-                    // ] += forOne;
                 }
             }
             HEEP += FOR_ONE_DAY_LOBBY;
@@ -290,7 +287,7 @@ contract Lottery is Lobby {
         uint256[] memory tokens = NFT.gettokensMints();
         uint256 length = tokens.length;
         if (length > 0) {
-            uint256 forOne = (REVARD_FOR_HOLDERS / length) * 10 ** 18;
+            uint256 forOne = (REVARD_FOR_HOLDERS / length);
             for (uint256 i = 0; i < length; i++) {
                 shouldRevard[NFT.ownerOf(tokens[i])] += forOne;
                 // MUDaddress._mintFromLottery(NFT.ownerOf(tokens[i]), forOne);
@@ -302,7 +299,7 @@ contract Lottery is Lobby {
         address[] memory adressEver = NFT.getaddressHowOwnedNFT();
         uint256 length = adressEver.length;
         if (length > 0) {
-            uint256 forOne = (REVARD_FOR_HOLDERS_EVER / length) * 10 ** 18;
+            uint256 forOne = (REVARD_FOR_HOLDERS_EVER / length);
             for (uint256 i = 0; i < length; i++) {
                 shouldRevard[adressEver[i]] += forOne;
                 // MUDaddress._mintFromLottery(adressEver[i], forOne);

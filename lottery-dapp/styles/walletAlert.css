@@ -122,12 +122,36 @@
 .shablonbalance {
     display: grid;
     height: 60px;
-    grid-template-columns: 2fr 7fr;
+    grid-template-columns: 2fr 7fr 2fr;
     border-radius: 12px;
     background-color: rgb(19, 20, 20);
 }
 
 .shablonbalance:hover {
+    cursor: pointer;
+}
+
+.approveArea {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.Approve {
+    width: 150px;
+    border-radius: 12px;
+    height: 30px;
+    border: none;
+    background-color: rgb(8, 129, 243);
+}
+
+.approved {
+    color: rgb(206, 22, 216);
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.Approve:hover {
     cursor: pointer;
 }
 
@@ -243,7 +267,6 @@
 }
 
 .addToken {
-    margin-top: 10px;
     display: flex;
     justify-content: space-around;
     align-items: center;

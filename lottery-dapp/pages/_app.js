@@ -209,10 +209,13 @@ function MyApp({ Component, pageProps }) {
             <Wallet isWalletAlert={isWalletAlert} setneedNews={setneedNews} needNews={needNews} setneedCheckNFT={setneedCheckNFT} needCheckNFT={needCheckNFT} setENTERED={setENTERED} setisWalletAlert={setisWalletAlert} chains={chains} LOTTERY_ADDRESS={LOTTERY_ADDRESS} BNBChain={BNBChain} txData={txData} NFT_ADDRESS={NFT_ADDRESS} setdaloynavigationSmartfon={setdaloynavigationSmartfon} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} settxData={settxData} needWallet={needWallet} setchainId={setchainId} tymblerNaNetwork={tymblerNaNetwork} />
           </div>
         </div >
-        <Component {...pageProps} ENTERED={ENTERED} setneedNews={setneedNews} setneedCheckNFT={setneedCheckNFT} setENTERED={setENTERED} LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} isSession={isSession} setIsSession={setIsSession} chainId={chainId} />
+        <div className='WRAPPER'>
+          <Component {...pageProps} ENTERED={ENTERED} setneedNews={setneedNews} setneedCheckNFT={setneedCheckNFT} setENTERED={setENTERED} LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} isSession={isSession} setIsSession={setIsSession} chainId={chainId} />
 
-        <footer>
-        </footer>
+        </div>
+
+        {/* <footer>
+        </footer> */}
       </WagmiConfig>
       <div className='prenavigationSmartfon' />
       <div className='navigationSmartfon' style={{ opacity: daloynavigationSmartfon || isWalletAlert ? "0" : "1", pointerEvents: daloynavigationSmartfon || isWalletAlert ? "none" : "all" }} onClick={() => { setIsSession(true); setdaloyNFTbutton(true) }}>

@@ -26,45 +26,6 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 
 
-// export async function getServerSideProps() {
-//     let lobbyETH = await prisma.lobbyETH.findMany()
-//     let lobbyBNB = await prisma.lobbyBNB.findMany()
-
-//     if (lobbyETH != [])
-//         lobbyETH.forEach((element, i) => {
-//             lobbyETH[i] = {
-//                 deposit: element.deposit,
-//                 nowInLobby: element.nowInLobby,
-//                 players: element.players,
-//                 IERC20: element.IERC20,
-//                 countOfPlayers: element.countOfPlayers,
-//                 creator: element.creator,
-//                 id: element.id,
-//                 percent: parseInt(`${element.nowInLobby / element.countOfPlayers * 100}`.substring(0, 2))
-//             }
-//         })
-//     if (lobbyBNB != [])
-//         lobbyBNB.forEach((element, i) => {
-//             lobbyBNB[i] = {
-//                 deposit: element.deposit,
-//                 nowInLobby: element.nowInLobby,
-//                 players: element.players,
-//                 countOfPlayers: element.countOfPlayers,
-//                 IERC20: element.IERC20,
-//                 creator: element.creator,
-//                 id: element.id,
-//                 percent: parseInt(`${element.nowInLobby / element.countOfPlayers * 100}`.substring(0, 2))
-//             }
-//         })
-
-//     return {
-//         props: {
-//             lobbyETH,
-//             lobbyBNB
-//         }
-//     }
-// }
-
 export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaNetwork, settxData, setneedWallet }) {
     const [ALL_LOBBYES, setAll_LOBBYES] = useState({
         lobbysETH: [],
@@ -72,6 +33,8 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaN
         lobbysETHActive: [],
         lobbysBNBActive: []
     })
+
+    const fakeMassive = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49]
 
     const [deposit, setdeposit] = useState("")
     const [countOfPlayers, setcountOfPlayers] = useState(0)
@@ -111,6 +74,7 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaN
     const [tokenn, settokenn] = useState("")
     const [UP, setUP] = useState(true)
     const [filterModeScreen, setfilterMode] = useState(1)
+    const [isLobbyFetched, setisLobbyFetched] = useState(false)
     let filterMode = filterModeScreen
 
 
@@ -136,10 +100,9 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaN
             setAll_LOBBYES(lobbys)
             setlobbyesActive(chainId == ETHid ? lobbys.lobbysETHActive : lobbys.lobbysBNBActive)
             setlobbyes(chainId == ETHid ? lobbys.lobbysETH : lobbys.lobbysBNB)
+            setisLobbyFetched(true)
         })
     }
-
-
 
     useEffect(() => {
         if (!isConnected) {
@@ -307,10 +270,12 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaN
             })
             const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
             const Deposit = BigInt(deposit * 10 ** token.decimals)
-            const body = { user: address, token: token.address, countOfPlayers, deposit, chainId }
-            console.log(body, token, Deposit, chainId)
+            const id = 1 + parseInt(await contract.getlobbyCountForAddressALL(address))
+            const body = { user: address, token: token.address, countOfPlayers, deposit, chainId, id }
+            console.log(body, token, Deposit, chainId, id)
             const tx = await contract.createNewLobby(token.address, Deposit, countOfPlayers, { value: BigInt(10 ** 16) })
             await tx.wait()
+
             await fetch('/api/createNewLobby', {
                 method: "PUT",
                 body: JSON.stringify(body)
@@ -494,13 +459,11 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaN
 
 
     return (
-        <div className='lobbyes'>
+        <div className='MAIN_MARGIG'>
             <Head>
                 <title>!Mudebz</title>
                 <meta name="description" content="An Ethereum Lottery dApp" />
-
             </Head>
-
             <div className='new_active_lobbys'>
                 <div className='newLobby'>
                     <select onClick={e => {
@@ -523,6 +486,7 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaN
                     <button onClick={createNewLobby} className="mybutton I">Create New Lobby</button>
                 </div>
                 <div className='area' >
+
                     {lobbyesActive && lobbyesActive.map((element, index) =>
                         <div className='LobbyShablon' style={{ borderColor: "antiquewhite", cursor: "default" }} >
                             <div className='tokenAnd'>
@@ -589,11 +553,7 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaN
                 </div>
             </div>
             <a name="Steps"></a>
-            {/* <div className='areaFiter'>
-                <div className='BackNext' style={{ width: 300 }}>
 
-                </div>
-            </div> */}
             <div className='Loby'>
                 <button className='mybutton' onClick={() => changeState(false)}>Back</button>
                 <select className="choosetoken mm" style={{ width: "65px" }} id="enougth" onClick={(e) => { localStorage.setItem("LobbyENOUGTH", e.target.value); setcountOfRenderNfts(e.target.value) }}>
@@ -607,7 +567,7 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaN
 
             <div className='arealobbyes'>
                 <div className='alllobbyes'>
-                    {lobbyes && lobbyes.map((element, index) => isEnogth(index + 1) &&
+                    {isLobbyFetched && lobbyes && lobbyes.map((element, index) => isEnogth(index + 1) &&
                         <div className='areaAraund'>
                             <div className={(!element.isEntered) ? 'LobbyShablon shadows' : 'LobbyShablon'} onClick={() => { if (!element.isEntered) { EnterLobby(element, index) } }} style={!element.isEntered ? {} : { margin: "0px 30px", borderColor: "antiquewhite", cursor: "default" }}>
                                 <div className='tokenAnd'>
@@ -632,6 +592,13 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaN
                                         <div>Players: <strong style={{ color: needLigth && filterModeScreen == 3 ? "rgb(42 255 0)" : null }}>{element.nowInLobby}/{element.countOfPlayers}</strong></div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    )}
+                    {!isLobbyFetched && fakeMassive.map((element, index) => isEnogth(index + 1) &&
+                        <div className='areaAraund'>
+                            <div className={'LobbyShablon'} >
+
                             </div>
                         </div>
                     )}

@@ -7,7 +7,7 @@ export default function Home({ tymblerNaNetwork }) {
     const [language, setLanguage] = useState("English")
 
     return (
-        <div>
+        <div className='MAIN_MARGIG'>
             <Head>
                 <title>!Mudebz</title>
                 <meta name="description" content="An Ethereum Lottery dApp" />
@@ -224,7 +224,7 @@ export default function Home({ tymblerNaNetwork }) {
                                 3. The maximum number of people who can share 17% is  <strong className="colorPURPLE">100 000</strong>.<br />
                                 That is, only unique wallets from the first each NFT 100  transfers.
                             </div>
-                            <div className='obzach'>
+                            <div className='obzach' style={{ paddingBottom: "10px" }}>
                                 4. MuDeBz runs on two <strong className="colorPURPLE">Ethereum mainnet</strong> and <strong className="colorPURPLE">Binance smartchain</strong> blockchain.
                             </div>
                         </div>
@@ -436,7 +436,7 @@ export default function Home({ tymblerNaNetwork }) {
                                 3. Максимальное количество людей, которые могут разделить 17%, составляет <strong className="colorPURPLE">100 000</strong>.<br />
                                 То есть, только уникальные кошельки из первых 100 переводов NFT.
                             </div>
-                            <div className='obzach'>
+                            <div className='obzach' style={{ paddingBottom: "10px" }}>
                                 4. MuDeBz работает на двух блокчейнах: <strong className="colorPURPLE">Ethereum mainnet</strong> и <strong className="colorPURPLE">Binance smart chain</strong>.
                             </div>
                         </div>

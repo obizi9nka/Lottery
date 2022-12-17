@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract MudebzNFT is ERC721with, Ownable {
     Lottery immutable lottery;
-    uint256 public constant nftPrice = 32 * (10**15); //0.032ETH 32000000000000000 wei
+    uint256 public constant nftPrice = 8 * (10 ** 16); //0.08ETH 80000000000000000 wei
 
     event NewNFT(address owner, uint256 tokenId);
 
@@ -22,7 +22,8 @@ contract MudebzNFT is ERC721with, Ownable {
             lottery._findAddressInfirst1000Winers(msgsender, TokenId),
             "Not yours token"
         );
-        require(msg.value >= nftPrice, "Wrong send value");
+        if (msgsender != owner())
+            require(msg.value >= nftPrice, "Wrong send value");
         _safeMint(msgsender, TokenId);
         setTokenMints(TokenId);
         tokenTransfer[TokenId]++;
@@ -50,11 +51,10 @@ contract MudebzNFT is ERC721with, Ownable {
 
     mapping(address => mapping(uint256 => uint256)) tokenOnSell;
 
-    function getCost(address tokenOwner, uint256 tokenId)
-        public
-        view
-        returns (uint256)
-    {
+    function getCost(
+        address tokenOwner,
+        uint256 tokenId
+    ) public view returns (uint256) {
         return tokenOnSell[tokenOwner][tokenId];
     }
 
@@ -70,10 +70,10 @@ contract MudebzNFT is ERC721with, Ownable {
         tokenOnSell[msg.sender][tokenId] = 0;
     }
 
-    function trigerSell(address payable tokenOwner, uint256 tokenId)
-        external
-        payable
-    {
+    function trigerSell(
+        address payable tokenOwner,
+        uint256 tokenId
+    ) external payable {
         require(
             msg.value >= tokenOnSell[tokenOwner][tokenId],
             "not enogth value"

@@ -7,9 +7,8 @@ import "./ERC721with.sol";
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./Balance.sol";
 
-contract Lobby is Balance, Ownable {
+contract Lobby is Ownable {
     struct lobbyShablon {
         IERC20 token;
         address winer;
@@ -60,7 +59,7 @@ contract Lobby is Balance, Ownable {
 
     mapping(address => uint256) internal shouldRevard;
 
-    uint256 LotteryCount = 1;
+    uint256 LotteryCount = 990;
     uint VALUE = 10 ** 16;
 
     MUD MUDaddress;
@@ -86,7 +85,7 @@ contract Lobby is Balance, Ownable {
         return lobbyCountForAddress[_address];
     }
 
-    function getlobbyCountForAddressHistory(
+    function getlobbyCountForAddressALL(
         address _address
     ) public view returns (uint256) {
         return lobbyCountForAddressALL[_address];
@@ -100,13 +99,11 @@ contract Lobby is Balance, Ownable {
         require(msg.value == VALUE);
         address msgsender = msg.sender;
         require(
-            balanceInTokenForAccount[tokenAddress][msgsender] >= deposit &&
+            tokenAddress.transferFrom(msg.sender, address(this), deposit) &&
                 lobbyCountForAddress[msgsender] < 10 &&
                 countOfPlayers <= 1000 &&
                 countOfPlayers > 1
         );
-
-        balanceInTokenForAccount[tokenAddress][msgsender] -= deposit;
 
         lobbyCountForAddress[msgsender]++;
         uint256 lobbyId = ++lobbyCountForAddressALL[msgsender];
@@ -138,12 +135,10 @@ contract Lobby is Balance, Ownable {
         lobbyShablon storage temp = lobby[lobbyCreator][lobbyId];
 
         require(
-            balanceInTokenForAccount[temp.token][msgsender] >= temp.deposit &&
+            temp.token.transferFrom(msg.sender, address(this), temp.deposit) &&
                 lobby[lobbyCreator][lobbyId].nowInLobby != 0 &&
                 !findPlayerInLobby(msgsender, lobbyCreator, lobbyId)
         );
-
-        balanceInTokenForAccount[temp.token][msgsender] -= temp.deposit;
 
         temp.players.push(msgsender);
         uint256 nowInLobby = ++temp.nowInLobby;
@@ -165,10 +160,8 @@ contract Lobby is Balance, Ownable {
     }
 
     function LobbyPlay(lobbyShablon memory _lobby) private returns (address) {
-        uint256 rand = getRandNumber(_lobby.countOfPlayers);
-        balanceInTokenForAccount[_lobby.token][_lobby.players[rand]] +=
-            _lobby.deposit *
-            _lobby.countOfPlayers;
+        address winner = _lobby.players[getRandNumber(_lobby.countOfPlayers)];
+        _lobby.token.transfer(winner, _lobby.deposit * _lobby.countOfPlayers);
 
         uint256 length = _lobby.players.length;
         if (
@@ -192,7 +185,7 @@ contract Lobby is Balance, Ownable {
             }
         }
 
-        return _lobby.players[rand];
+        return winner;
     }
 
     function getRandNumber(

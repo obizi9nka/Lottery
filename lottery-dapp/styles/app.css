@@ -1,6 +1,11 @@
 /*_app*/
 
 
+.WRAPPER {
+    max-height: calc(100vh - 110px);
+}
+
+
 .nav {
     /* margin: 0px 90px;
   
