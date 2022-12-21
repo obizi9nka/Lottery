@@ -650,62 +650,6 @@ export default function Home({ LOTTERY_ADDRESS, VERSION, setVERSION, chainId, se
 
 
   return (
-    // <div>
-    //   {
-    //     VERSION ?
-    //       <div className=''>
-    //         < Head >
-    //           <title>!Mudebz</title>
-    //           <meta name="description" content="An Ethereum Lottery dApp" />
-    //         </Head >
-    //         <div className='menuLobby menuHover pointer'>
-    //           Lobby
-    //         </div>
-    //         <div className='menuGallery menuHover pointer'>
-    //           Gallery
-    //         </div>
-    //         <div className='NewsButtonText menuHover pointer' onClick={() => {
-    //           setVERSION(!VERSION);
-    //         }}>
-    //           News
-    //         </div>
-    //         {
-    //           IsNEWS && <div className="Hard_Tokens" style={{ padding: "10px" }}>
-    //             <div className="">
-    //               {chainId == BNBid && <div className="misterySwitcher" onClick={() => { setModeMistery(!ModeMistery) }}></div>}
-    //               {!ModeMistery && <div>
-    //                 <input className="input bigdinamic" id="inputToken" placeholder="Token Address" onChange={e => setaddTokenAddress(e.target.value)} style={{ color: isvalid ? "white" : "red" }} />
-    //               </div>}
-    //               {!ModeMistery && <div>
-    //                 <button onClick={() => addToken()} className="mybutton" >Add new token</button>
-    //               </div>}
-    //               {ModeMistery && <div>
-    //                 <input className="input bigdinamic" id="Mistery" placeholder="Your answer" onChange={e => setMistery(e.target.value)} />
-    //               </div>}
-    //               {ModeMistery && <div>
-    //                 <button onClick={() => tryMistery()} className="mybutton" style={{ minWidth: "123.41px" }}>Try</button>
-    //               </div>}
-    //             </div>
-    //             <div className="">
-    //               {rokens && rokens.map((element, index) =>
-    //                 <TokensBalanceShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} txData={txData} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} rokens={rokens} tymblerNaNetwork tokenTransfered={tokenTransfered} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} element={element} chainId={chainId} settokenTransfered={settokenTransfered} index={{ index, last: rokens.length - 1 }} deleteTokenFromFronend={deleteTokenFromFronend} />
-    //               )}
-    //             </div>
-    //             <div className="">
-    //               <button className="" onClick={() => { disconnect(); setActive(false); document.body.style.overflow = ('overflow', 'auto'); }}>
-    //                 <div></div>
-    //                 <div>Disconnect</div>
-    //               </button>
-    //             </div>
-
-    //           </div>
-    //         }
-
-
-
-
-    //       </div >
-    //       :
     <div className=''>
       <Head>
         <title>!Mudebz</title>
@@ -758,7 +702,5 @@ export default function Home({ LOTTERY_ADDRESS, VERSION, setVERSION, chainId, se
 
 
     </div >
-    //   }
-    // </div>
   )
 }

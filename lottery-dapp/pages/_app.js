@@ -185,7 +185,7 @@ function MyApp({ Component, pageProps }) {
           <div className="nav">
             <div className='content'>
               <div className='navigation' onClick={() => { setIsSession(true); setdaloyNFTbutton(true) }} >
-                <Link href="/Lottery" >
+                <Link href="/" >
                   <a className='menu'> Lottery </a>
                 </Link>
                 <Link href="/Lobbyes">

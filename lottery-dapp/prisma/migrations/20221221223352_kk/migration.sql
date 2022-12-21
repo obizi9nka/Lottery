@@ -2,19 +2,17 @@
 CREATE TABLE "user" (
     "address" TEXT NOT NULL,
     "tokensETH" TEXT,
-    "countOfLobbysETH" INTEGER NOT NULL DEFAULT 0,
     "newsETH" TEXT,
     "PromSetETH" TEXT,
     "PromInputETH" TEXT,
     "AutoEnterETH" TEXT,
-    "messageETH" TEXT,
-    "countOfLobbysBNB" INTEGER NOT NULL DEFAULT 0,
+    "LobbiesETH" TEXT,
     "tokensBNB" TEXT,
     "newsBNB" TEXT,
     "PromSetBNB" TEXT,
     "PromInputBNB" TEXT,
     "AutoEnterBNB" TEXT,
-    "messageBNB" TEXT,
+    "LobbiesBNB" TEXT,
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("address")
 );
@@ -24,7 +22,6 @@ CREATE TABLE "lobbyETH" (
     "id" INTEGER NOT NULL,
     "creator" TEXT NOT NULL,
     "IERC20" TEXT NOT NULL,
-    "players" TEXT NOT NULL,
     "deposit" TEXT NOT NULL,
     "countOfPlayers" INTEGER NOT NULL,
     "nowInLobby" INTEGER NOT NULL,
@@ -36,11 +33,6 @@ CREATE TABLE "lobbyETH" (
 CREATE TABLE "lobbyHistoryETH" (
     "id" INTEGER NOT NULL,
     "creator" TEXT NOT NULL,
-    "IERC20" TEXT NOT NULL,
-    "players" TEXT NOT NULL,
-    "winner" TEXT NOT NULL,
-    "deposit" TEXT NOT NULL,
-    "countOfPlayers" INTEGER NOT NULL,
 
     CONSTRAINT "lobbyHistoryETH_pkey" PRIMARY KEY ("creator","id")
 );
@@ -50,7 +42,6 @@ CREATE TABLE "lobbyBNB" (
     "id" INTEGER NOT NULL,
     "creator" TEXT NOT NULL,
     "IERC20" TEXT NOT NULL,
-    "players" TEXT NOT NULL,
     "deposit" TEXT NOT NULL,
     "countOfPlayers" INTEGER NOT NULL,
     "nowInLobby" INTEGER NOT NULL,
@@ -62,11 +53,6 @@ CREATE TABLE "lobbyBNB" (
 CREATE TABLE "lobbyHistoryBNB" (
     "id" INTEGER NOT NULL,
     "creator" TEXT NOT NULL,
-    "IERC20" TEXT NOT NULL,
-    "players" TEXT NOT NULL,
-    "winner" TEXT NOT NULL,
-    "deposit" TEXT NOT NULL,
-    "countOfPlayers" INTEGER NOT NULL,
 
     CONSTRAINT "lobbyHistoryBNB_pkey" PRIMARY KEY ("creator","id")
 );
