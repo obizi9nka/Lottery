@@ -27,7 +27,7 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
 
     const [isfaund, setisfaund] = useState(element.isImageAdded)
     const [needApprove, setneedAprove] = useState(undefined)
-
+    const { data } = useSigner()
 
     const provider = useProvider()
 
@@ -42,7 +42,7 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
             result: null
         })
         try {
-            const contract = new ethers.Contract(element.address, A.abi, signer)
+            const contract = new ethers.Contract(element.address, A.abi, data)
             const tx = await contract.approve(LOTTERY_ADDRESS, BigInt(1000 * 10 ** 18))
             await tx.wait()
             settxData({

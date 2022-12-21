@@ -20,15 +20,16 @@ import {
     useConnect,
     useNetwork
 } from 'wagmi';
+import Head from 'next/head';
 
 
-export default function MintNftButton({ LOTTERY_ADDRESS, NFT_ADDRESS, checkNftButton, chainId, address, settxData, daloyNFTbutton, setdaloyNFTbutton }) {
+export default function MintNftButton({ LOTTERY_ADDRESS, NFT_ADDRESS, setisMintMartenActive, isMintMartenActive, checkNftButton, chainId, address, settxData, daloyNFTbutton, setdaloyNFTbutton }) {
 
     const [arrayAllowToMint, setarrayAllowToMint] = useState([])
     const provider = useProvider()
     const { data } = useSigner()
     const signer = data
-    const [isMintMartenActive, setisMintMartenActive] = useState(false)
+
     const [index, setindex] = useState(0)
 
     useEffect(() => {
@@ -109,6 +110,9 @@ export default function MintNftButton({ LOTTERY_ADDRESS, NFT_ADDRESS, checkNftBu
 
     return (
         <div>
+            <Head>
+
+            </Head>
             <button className={isMintMartenActive ? "pulse active" : "pulse "} style={{ fontWeight: "200" }} onClick={() => {
                 window.scrollTo(0, 0)
                 if (!isMintMartenActive) {

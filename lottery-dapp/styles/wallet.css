@@ -95,7 +95,6 @@
     MintNftButtom
 */
 .modallMINT {
-    background-color: #110e0e;
     position: fixed;
     top: 100px;
     left: 0;
@@ -103,7 +102,6 @@
     z-index: 99;
     pointer-events: none;
     opacity: 0;
-    transition: 0.2s;
     width: 100vw;
     height: 200vh;
     min-width: 530px;
@@ -117,7 +115,9 @@
 }
 
 .areaMINT {
-    height: calc(100vh - 110px);
+    background-color: #110e0e;
+    transition: 0.2s;
+    height: calc(100vh - 100px);
     z-index: 1000;
     min-width: 578px;
     display: flex;

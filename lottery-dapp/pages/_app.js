@@ -4,6 +4,7 @@ import '../styles/galary.css'
 import '../styles/lobby.css'
 import '../styles/about.css'
 import '../styles/app.css'
+import '../styles/Hard.css'
 
 import "../styles/wallet.css"
 import "../styles/walletAlert.css"
@@ -44,6 +45,8 @@ import { infuraProvider } from 'wagmi/providers/infura'
 import { publicProvider } from 'wagmi/providers/public';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import InfoPopUp from '../components/InfoPopUp';
+import Hard from '../components/Hard'
+import { Verify } from 'crypto'
 
 
 const BNBChain = {
@@ -111,11 +114,14 @@ function MyApp({ Component, pageProps }) {
   const [daloyNFTbutton, setdaloyNFTbutton] = useState(false)
   const [daloynavigationSmartfon, setdaloynavigationSmartfon] = useState(false)
 
+  const [isMintMartenActive, setisMintMartenActive] = useState(false)
 
   const [LOTTERY_ADDRESS, setlotteryAddress] = useState("")
   const [NFT_ADDRESS, setnftAddress] = useState("")
 
   const [isWalletAlert, setisWalletAlert] = useState(false)
+
+  const [VERSION, setVERSION] = useState(false)
 
   const { chain } = useNetwork()
 
@@ -166,59 +172,61 @@ function MyApp({ Component, pageProps }) {
 
   return (
 
-    <div className='main'>
-
+    <div className='main BACKGRAUND'>
       <Head>
-        <meta name="viewport" content='width=device-width' />
+        <title>!Mudebz</title>
+        <meta name="viewport" content='width=device-width, user-scalable=no' />
+        {/* <meta name="description" content="An Ethereum Lottery dApp" /> */}
         <link rel="icon" href={"/BLACK.ico"} />
       </Head>
-      <InfoPopUp data={txData} settxData={settxData} />
+      {!VERSION && <InfoPopUp data={txData} settxData={settxData} />}
       <WagmiConfig client={wagmiClient}>
-        <div className="nav">
-          <div className='content'>
-            <div className='navigation' >
-              <Link href="/" >
-                <a className='menu' onClick={() => { setIsSession(true); setdaloyNFTbutton(true) }}> Lottery </a>
-              </Link>
-              <Link href="/Lobbyes">
-                <a className='menu'> Lobby </a>
-              </Link>
-              <Link href="/Galary" >
-                <a className='menu' onClick={() => { setIsSession(true); setdaloyNFTbutton(true) }}> Gallery </a>
-              </Link>
-              <Link href="/About">
-                <a className='menu'> About </a>
-              </Link>
-            </div>
-
-            <div className='image' onClick={() => {
-              if (chain == undefined)
-                settymblerNaNetwork(!tymblerNaNetwork)
-              else {
-                console.log("sended")
-              }
-            }} >
-              <div style={{ width: "auto" }}>
-                <Image src={logo} width="280px" height="75px" />
+        {!VERSION ? <div>
+          <div className="nav">
+            <div className='content'>
+              <div className='navigation' onClick={() => { setIsSession(true); setdaloyNFTbutton(true) }} >
+                <Link href="/Lottery" >
+                  <a className='menu'> Lottery </a>
+                </Link>
+                <Link href="/Lobbyes">
+                  <a className='menu'> Lobby </a>
+                </Link>
+                <Link href="/Galary" >
+                  <a className='menu' > Gallery </a>
+                </Link>
+                <Link href="/About">
+                  <a className='menu'> About </a>
+                </Link>
               </div>
-              {/* <div className='beta'>
+
+              <div className='image' onClick={() => {
+                if (chain == undefined)
+                  settymblerNaNetwork(!tymblerNaNetwork)
+                else {
+                  console.log("sended")
+                }
+              }} >
+                <div style={{ width: "auto" }}>
+                  <Image src={logo} width="280px" height="75px" />
+                </div>
+                {/* <div className='beta'>
                 <Image src={"/beta.png"} width={50} height={50} />
               </div> */}
 
+              </div>
+              <Wallet isWalletAlert={isWalletAlert} setisMintMartenActive={setisMintMartenActive} isMintMartenActive={isMintMartenActive} setneedNews={setneedNews} needNews={needNews} setneedCheckNFT={setneedCheckNFT} needCheckNFT={needCheckNFT} setENTERED={setENTERED} setisWalletAlert={setisWalletAlert} chains={chains} LOTTERY_ADDRESS={LOTTERY_ADDRESS} BNBChain={BNBChain} txData={txData} NFT_ADDRESS={NFT_ADDRESS} setdaloynavigationSmartfon={setdaloynavigationSmartfon} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} settxData={settxData} needWallet={needWallet} setchainId={setchainId} tymblerNaNetwork={tymblerNaNetwork} />
             </div>
-            <Wallet isWalletAlert={isWalletAlert} setneedNews={setneedNews} needNews={needNews} setneedCheckNFT={setneedCheckNFT} needCheckNFT={needCheckNFT} setENTERED={setENTERED} setisWalletAlert={setisWalletAlert} chains={chains} LOTTERY_ADDRESS={LOTTERY_ADDRESS} BNBChain={BNBChain} txData={txData} NFT_ADDRESS={NFT_ADDRESS} setdaloynavigationSmartfon={setdaloynavigationSmartfon} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} settxData={settxData} needWallet={needWallet} setchainId={setchainId} tymblerNaNetwork={tymblerNaNetwork} />
-          </div>
-        </div >
-        <div className='WRAPPER'>
-          <Component {...pageProps} ENTERED={ENTERED} setneedNews={setneedNews} setneedCheckNFT={setneedCheckNFT} setENTERED={setENTERED} LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} isSession={isSession} setIsSession={setIsSession} chainId={chainId} />
-
+          </div >
+          {!isMintMartenActive && <div className='WRAPPER'>
+            <Component {...pageProps} ENTERED={ENTERED} VERSION={VERSION} setVERSION={setVERSION} setneedNews={setneedNews} setneedCheckNFT={setneedCheckNFT} setENTERED={setENTERED} LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} settxData={settxData} tymblerNaNetwork={tymblerNaNetwork} isSession={isSession} setIsSession={setIsSession} chainId={chainId} />
+          </div>}
         </div>
-
-        {/* <footer>
-        </footer> */}
+          :
+          <Hard  {...pageProps} ENTERED={ENTERED} Data={txData} settxData={settxData} VERSION={VERSION} setVERSION={setVERSION} setneedNews={setneedNews} setneedCheckNFT={setneedCheckNFT} setENTERED={setENTERED} LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} setneedWallet={setneedWallet} tymblerNaNetwork={tymblerNaNetwork} isSession={isSession} setIsSession={setIsSession} chainId={chainId} />
+        }
       </WagmiConfig>
-      <div className='prenavigationSmartfon' />
-      <div className='navigationSmartfon' style={{ opacity: daloynavigationSmartfon || isWalletAlert ? "0" : "1", pointerEvents: daloynavigationSmartfon || isWalletAlert ? "none" : "all" }} onClick={() => { setIsSession(true); setdaloyNFTbutton(true) }}>
+      {!VERSION && <div className='prenavigationSmartfon' />}
+      {!VERSION && <div className='navigationSmartfon' style={{ opacity: daloynavigationSmartfon || isWalletAlert ? "0" : "1", pointerEvents: daloynavigationSmartfon || isWalletAlert ? "none" : "all" }} onClick={() => { setIsSession(true); setdaloyNFTbutton(true) }}>
         <Link href="/" >
           <a className='menuSmartfon'> Lottery </a>
         </Link>
@@ -231,7 +239,7 @@ function MyApp({ Component, pageProps }) {
         <Link href="/About">
           <a className='menuSmartfon'> About </a>
         </Link>
-      </div>
+      </div>}
 
     </div >
 

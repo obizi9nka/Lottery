@@ -8,9 +8,18 @@ export default async function handler(req, res) {
 
     deposit = `${deposit}`
 
-    countOfPlayers = parseInt(countOfPlayers)
+    let lobbbies = await prisma.user.findUnique({
+        where: {
+            address: user
+        },
+        select: {
+            LobbiesBNB: chainId == BNBid,
+            LobbiesETH: chainId == ETHid
+        }
+    })
+    lobbbies = chainId == ETHid ? lobbbies.LobbiesETH : lobbbies.LobbiesBNB
 
-    const players = user + "_"
+    lobbbies = lobbbies != null ? (lobbbies + `${user}&${id}_`) : `${user}&${id}_`
 
     let result
     if (chainId === ETHid) {
@@ -20,9 +29,16 @@ export default async function handler(req, res) {
                 creator: user,
                 IERC20: token,
                 countOfPlayers,
-                players,
                 nowInLobby: 1,
                 deposit,
+            }
+        })
+        await prisma.user.update({
+            where: {
+                address: user
+            },
+            data: {
+                LobbiesETH: lobbbies
             }
         })
     } else {
@@ -32,9 +48,16 @@ export default async function handler(req, res) {
                 creator: user,
                 IERC20: token,
                 countOfPlayers,
-                players,
                 nowInLobby: 1,
                 deposit,
+            }
+        })
+        await prisma.user.update({
+            where: {
+                address: user
+            },
+            data: {
+                LobbiesBNB: lobbbies
             }
         })
     }

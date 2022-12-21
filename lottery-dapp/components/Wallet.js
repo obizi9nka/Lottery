@@ -33,7 +33,7 @@ import { ConnectButton, connectorsForWallets, wallet } from '@rainbow-me/rainbow
 import { publicProvider } from 'wagmi/providers/public';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 
-export default function Wallet({ chains, LOTTERY_ADDRESS, setneedNews, needNews, setENTERED, setneedCheckNFT, needCheckNFT, isWalletAlert, setisWalletAlert, NFT_ADDRESS, BNBChain, setdaloynavigationSmartfon, setchainId, tymblerNaNetwork, daloyNFTbutton, setdaloyNFTbutton, settxData, needWallet, txData }) {
+export default function Wallet({ chains, LOTTERY_ADDRESS, setisMintMartenActive, isMintMartenActive, setneedNews, needNews, setENTERED, setneedCheckNFT, needCheckNFT, isWalletAlert, setisWalletAlert, NFT_ADDRESS, BNBChain, setdaloynavigationSmartfon, setchainId, tymblerNaNetwork, daloyNFTbutton, setdaloyNFTbutton, settxData, needWallet, txData }) {
 
 
     const [NftButton, setNftButton] = useState(false)
@@ -195,7 +195,7 @@ export default function Wallet({ chains, LOTTERY_ADDRESS, setneedNews, needNews,
                     <Image src="/news.png" width={25} height={25} />
                     <News news={news} now={now} deleteNews={deleteNews} />
                 </div>
-                <div className='otstup'>{NftButton && <MintNftButton LOTTERY_ADDRESS={LOTTERY_ADDRESS} NFT_ADDRESS={NFT_ADDRESS} checkNftButton={checkNftButton} settxData={settxData} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} tymblerNaNetwork={tymblerNaNetwork} chainId={chain != undefined ? chain.id : 0} address={address} />}</div>
+                <div className='otstup'>{NftButton && <MintNftButton LOTTERY_ADDRESS={LOTTERY_ADDRESS} setisMintMartenActive={setisMintMartenActive} isMintMartenActive={isMintMartenActive} NFT_ADDRESS={NFT_ADDRESS} checkNftButton={checkNftButton} settxData={settxData} daloyNFTbutton={daloyNFTbutton} setdaloyNFTbutton={setdaloyNFTbutton} tymblerNaNetwork={tymblerNaNetwork} chainId={chain != undefined ? chain.id : 0} address={address} />}</div>
                 {address && <div className='otstup '><button onClick={() => {
                     if (!isWalletAlert)
                         document.body.style.overflow = ('overflow', 'hidden')

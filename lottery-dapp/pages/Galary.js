@@ -437,7 +437,7 @@ export default function Home({ LOTTERY_ADDRESS, NFT_ADDRESS, chainId, ENTERED, s
 
 
     return (
-        <div className='areaNfts MAIN_MARGIG'>
+        <div className='areaNfts'>
             <Head>
                 <title>!MuDeBz</title>
                 <meta name="description" content="An Ethereum Lottery dApp" />

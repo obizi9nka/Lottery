@@ -59,7 +59,7 @@ contract Lobby is Ownable {
 
     mapping(address => uint256) internal shouldRevard;
 
-    uint256 LotteryCount = 990;
+    uint256 LotteryCount = 1; //990
     uint VALUE = 10 ** 16;
 
     MUD MUDaddress;

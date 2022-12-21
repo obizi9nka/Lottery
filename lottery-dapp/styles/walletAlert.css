@@ -224,6 +224,7 @@
 .yaxz {
     display: grid;
     margin-left: 10px;
+    height: 250px;
 }
 
 .AutoEnter {
@@ -236,25 +237,36 @@
 }
 
 .PDF {
-
     width: 180px;
-    height: 100px;
+    height: 80px;
     background-color: rgb(19 20 20);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
 }
 
 .MudebzInfo {
     width: 180px;
-    height: 190px;
+    height: 130px;
     padding: 10px 15px;
     background-color: rgb(19 20 20);
     border-radius: 12px;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    margin-bottom: 5px;
+}
+
+.SwitchNetwork {
+    width: 180px;
+    height: 80px;
+    background-color: rgb(19 20 20);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
 }
 
 .MudebzInfoElement {

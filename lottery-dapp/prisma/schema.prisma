@@ -26,12 +26,14 @@ model user {
   PromSetETH   String?
   PromInputETH String?
   AutoEnterETH String?
+  LobbiesETH   String?
 
   tokensBNB    String?
   newsBNB      String?
   PromSetBNB   String?
   PromInputBNB String?
   AutoEnterBNB String?
+  LobbiesBNB   String?
 
   userLobbyesBNB        lobbyBNB[]
   userLobbyesETH        lobbyETH[]
@@ -43,7 +45,6 @@ model lobbyETH {
   id             Int
   creator        String
   IERC20         String
-  players        String
   deposit        String
   countOfPlayers Int
   nowInLobby     Int
@@ -53,14 +54,9 @@ model lobbyETH {
 }
 
 model lobbyHistoryETH {
-  id             Int
-  creator        String
-  IERC20         String
-  players        String
-  winner         String
-  deposit        String
-  countOfPlayers Int
-  user           user   @relation(fields: [creator], references: [address])
+  id      Int
+  creator String
+  user    user   @relation(fields: [creator], references: [address])
 
   @@id([creator, id])
 }
@@ -69,7 +65,6 @@ model lobbyBNB {
   id             Int
   creator        String
   IERC20         String
-  players        String
   deposit        String
   countOfPlayers Int
   nowInLobby     Int
@@ -79,14 +74,9 @@ model lobbyBNB {
 }
 
 model lobbyHistoryBNB {
-  id             Int
-  creator        String
-  IERC20         String
-  players        String
-  winner         String
-  deposit        String
-  countOfPlayers Int
-  user           user   @relation(fields: [creator], references: [address])
+  id      Int
+  creator String
+  user    user   @relation(fields: [creator], references: [address])
 
   @@id([creator, id])
 }

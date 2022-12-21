@@ -1,11 +1,12 @@
 import Head from 'next/head'
 import Image from 'next/image'
-const { ethers, Wallet } = require("ethers");
-import { useState, useEffect } from 'react'
-import { LotteryAddressETH, LotteryAddressBNB, ETHid, BNBid, PRODACTION, ALCHEMY_KEY, INFURA_KEY } from '/components/Constants.js';
+import { useEffect, useState } from 'react'
+const { ethers } = require("ethers");
+import TokensBalanceShablon from '../components/TokensBalanceShablon'
+import A from "/blockchain/A.json"
 import Lottery from "/blockchain/Lottery.json"
-import Script from "next/script"
-import Loader from "react-spinners/HashLoader";
+import { LotteryAddressETH, LotteryAddressBNB, ETHid, BNBid, PRODACTION, ALCHEMY_KEY, INFURA_KEY } from '/components/Constants.js';
+
 
 import {
   chain,
@@ -15,16 +16,361 @@ import {
   defaultChains,
   useAccount,
   useContractWrite,
-  useNetwork,
-  useProvider,
+  usePrepareContractWritde,
+  useConnect,
+  useDisconnect,
   useSigner,
-  usePrepareContractWritde
+  useNetwork,
+  useSwitchNetwork,
+  useProvider
 } from 'wagmi';
-import IssueMaker from '../components/IssueMaker';
+export default function Home({ LOTTERY_ADDRESS, VERSION, setVERSION, chainId, setneedCheckNFT, tymblerNaNetwork, settxData, setneedWallet }) {
+
+  const { address, isConnected } = useAccount()
+
+  const [IsNEWS, setIsNEWS] = useState(false)
+
+  // const [addTokenAddress, setaddTokenAddress] = useState('')
+  // const [isvalid, setvalid] = useState(false)
+
+  // const [rokens, setTokens] = useState(() => {
+  //   try {
+  //     const f = localStorage.getItem("tokensCount")
+  //     const g = []
+  //     for (let i = 0; i < f; i++) {
+  //       g.push({
+  //         address: 0
+  //       })
+  //     }
+  //     return g
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
+
+  // })
+  // const [PromSet, setPromSet] = useState(null)
+  // const [PromInput, setPromInput] = useState(null)
+
+
+  // const provider = useProvider()
+  // const { data } = useSigner()
+
+  // const { switchNetwork } = useSwitchNetwork()
+
+  // const [Mode, setMode] = useState(true)
+  // const [ModeMistery, setModeMistery] = useState(false)
+  // const [Mistery, setMistery] = useState("")
+
+  // const [TokenSelected, setTokenSelected] = useState()
+
+  // const [tokenTransfered, settokenTransfered] = useState(false)
+
+
+  // const [AutoEnter, setAutoEnter] = useState([])
+  // const [ImageInAutoEnter, setImageInAutoEnter] = useState(0)
+
+  // const [shouldrevard, setshouldrevard] = useState({})
+  // const { disconnect } = useDisconnect()
+
+
+  // useEffect(() => {
+  //   getTokens()
+  // }, [address, chainId, active])
+
+
+  // useEffect(() => {
+  //   checkValidAddress()
+  // }, [addTokenAddress])
+
+
+  // const tryMistery = async () => {
+  //   settxData({
+  //     isPending: true,
+  //     result: null
+  //   })
+  //   try {
+  //     const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, data)
+  //     const tx = await contract.tryMistery(Mistery)
+  //     await tx.wait()
+  //     const revard = await contract.getRevardGenius()
+  //     if (revard == 0) {
+  //       settxData({
+  //         isPending: false,
+  //         result: true
+  //       })
+  //       setshouldrevard(shouldrevard + 10 ** 7)
+  //     }
+  //     else {
+  //       settxData({
+  //         isPending: false,
+  //         result: false,
+  //         issue: "No this time"
+  //       })
+  //     }
+  //     document.getElementById("Mistery").value = "";
+  //     setMistery("")
+  //   } catch (err) {
+  //     console.log(err.reason)
+  //     let issue
+  //     if (err.reason == "execution reverted: Time") {
+  //       issue = "An hour must elapse between attempts"
+  //     }
+  //     if (err.reason == "execution reverted: prize lost") {
+  //       issue = "Mistery solved"
+  //     }
+  //     settxData({
+  //       isPending: false,
+  //       result: false,
+  //       issue
+  //     })
+  //   }
+  // }
+
+  // const checkValidAddress = async () => {
+  //   let flag = true
+  //   rokens.forEach(element => {
+  //     if (element.address == addTokenAddress)
+  //       flag = false
+  //   });
+  //   let sup, dec, symb
+  //   if (flag) {
+  //     try {
+  //       const contract = new ethers.Contract(addTokenAddress, A.abi, provider)
+  //       sup = await contract.totalSupply()//проверка на валидность
+  //       try {
+  //         dec = await contract.decimals()
+  //       } catch {
+  //         dec = 18
+  //       }
+
+  //       try {
+  //         symb = await contract.symbol()
+  //       } catch {
+  //         symb = "000"
+  //       }
+
+  //       console.log("valid")
+  //     } catch (err) {
+  //       console.log(err, "no valid")
+  //     }
+  //   }
+
+  //   sup != undefined ? setvalid(true) : setvalid(false)
+
+  //   let _flag = false
+  //   if (sup != undefined)
+  //     _flag = true
+  //   const data = {
+  //     flag: _flag,
+  //     symbol: symb,
+  //     decimals: dec
+  //   }
+  //   return data
+  // }
+
+  // const getTokens = async () => {
+  //   try {
+  //     const body = { address, chainId }
+  //     await fetch('/api/getUserTokens', {
+  //       method: "POST",
+  //       body: JSON.stringify(body)
+  //     }).then(async (data) => {
+  //       const temp = await data.json()
+  //       const objects = []
+  //       temp.forEach((element) => {
+  //         objects.push({
+  //           address: element.address,
+  //           symbol: element.symbol,
+  //           decimals: element.decimals,
+  //           balance: undefined,
+  //           isImageAdded: element.isImageAdded
+  //         })
+  //       })
+  //       setTokens(objects)
+  //       console.log("tokensCount")
+  //       localStorage.setItem("tokensCount", objects.length)
+  //     })
+  //   } catch (err) {
+  //     console.log("getUserTokens", err)
+  //   }
+  //   ////////////////////////////////////////////////
+  //   try {
+  //     const body = { user: address, chainId }
+  //     await fetch('/api/getUserData', {
+  //       method: "POST",
+  //       body: JSON.stringify(body)
+  //     })
+  //       .then(async (data) => {
+  //         const temp = await data.json()
+  //         let set, In, Auto
+  //         if (chainId === ETHid) {
+  //           set = temp.PromSetETH
+  //           In = temp.PromInputETH
+  //           Auto = temp.AutoEnterETH
+  //         }
+  //         else {
+  //           set = temp.PromSetBNB
+  //           In = temp.PromInputBNB
+  //           Auto = temp.AutoEnterBNB
+  //         }
+  //         const contractLottery = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
+
+  //         try {
+  //           const temp = parseInt(await contractLottery.getshouldRevard(address))
+  //           const r = parseInt(await contractLottery.getcountOfLotteryEnter(address))
+  //           const tyy = {
+  //             count: temp,
+  //             isEnteredOnce: r
+  //           }
+  //           setshouldrevard(tyy)
+  //         } catch (err) {
+  //           console.log("dich", err)
+  //           setshouldrevard({
+  //             count: 0,
+  //             isEnteredOnce: undefined
+  //           })
+  //         }
+
+
+  //         if (Auto != null) {
+  //           Auto = Auto.split("_")
+  //           Auto.pop()
+  //           Auto.sort((a, b) => {
+  //             return a - b
+  //           })
+  //           let id = 1001
+  //           try {
+  //             id = parseInt(await contractLottery.getLotteryCount())
+
+  //           } catch (err) {
+  //             console.log(err)
+  //           }
+
+  //           Auto.forEach(async element => {
+  //             if (element < id) {
+  //               const body = { address, chainId, tokenId: element }
+  //               Auto.splice(Auto.indexOf(element), 1)
+  //               await fetch('/api/deleteFromAutoEnter', {
+  //                 method: "POST",
+  //                 body: JSON.stringify(body)
+  //               })
+  //             }
+  //           })
+  //         }
+  //         setPromSet(set)
+  //         setPromInput(In)
+  //         setAutoEnter(Auto)
+  //       })
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
+  // }
+
+  // function deleteTokenFromFronend(address) {
+  //   const temp = []
+  //   rokens.map(element => {
+  //     if (element.address != address)
+  //       temp.push(element)
+  //   });
+  //   setTokens(temp)
+  // }
+
+  // const addToAutoEnter = async () => {
+  //   settxData({
+  //     isPending: true,
+  //     result: null
+  //   })
+  //   try {
+  //     const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, data)
+  //     console.log("AutoEnter", AutoEnter)
+  //     const tx = await contract.addToAutoEnter(AutoEnter)
+  //     await tx.wait()
+  //     const body = { address, chainId, tokenId: -1 }
+  //     await fetch('/api/deleteFromAutoEnter', {
+  //       method: "POST",
+  //       body: JSON.stringify(body)
+  //     })
+  //     setAutoEnter([])
+  //     settxData({
+  //       isPending: false,
+  //       result: true
+  //     })
+  //     setENTERED(true)
+  //     setTokens()
+  //   } catch (err) {
+  //     console.log(err)
+  //     settxData({
+  //       isPending: false,
+  //       result: false
+  //     })
+  //   }
+  // }
+
+  // const addToken = async () => {
+  //   const n = new Promise((res) => {
+  //     res(checkValidAddress())
+  //   })
+  //   n.then(async (result) => {
+  //     if (result.flag) {
+  //       const _addTokenAddress = addTokenAddress
+  //       const body = { address, addTokenAddress: _addTokenAddress, chainId, symbol: result.symbol, decimals: result.decimals }
+  //       const data = {
+  //         address: _addTokenAddress,
+  //         symbol: result.symbol,
+  //         decimals: result.decimals,
+  //         balance: 0
+  //       }
+  //       setTokens([...rokens, data])
+  //       try {
+  //         await fetch('/api/addToken', {
+  //           method: "PUT",
+  //           body: JSON.stringify(body)
+  //         }).then(() => {
+  //           getTokens()
+  //         })
+
+  //         document.getElementById("inputToken").value = "";
+  //         setaddTokenAddress()
+  //       } catch (err) {
+  //         console.log(err)
+  //       }
+
+  //       try {
+  //         await fetch('/api/addTokenGlobal', {
+  //           method: "POST",
+  //           body: JSON.stringify(body)
+  //         })
+
+  //       } catch {
+  //         console.log(err)
+  //       }
+  //       setTokenSelected()
+  //     }
+  //     localStorage.setItem("addToken", "true")
+  //   })
+
+
+  // }
+
+  // const makePDF = async () => {
+  //   let data
+  //   try {
+  //     const body = { user: address, chainId }
+  //     await fetch("/api/pdf", {
+  //       method: "POST",
+  //       body: JSON.stringify(body)
+  //     }).then(async (_data) => {
+  //       data = await _data.json()
+  //       console.log(data)
+  //       pdfMake.createPdf(data).open();
+  //     })
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
 
 
 
-export default function Home({ LOTTERY_ADDRESS, chainId, setneedCheckNFT, tymblerNaNetwork, settxData, setneedWallet }) {
+  // }
 
   const Default = `/blackFon.png`
 
@@ -37,10 +383,7 @@ export default function Home({ LOTTERY_ADDRESS, chainId, setneedCheckNFT, tymble
     lotteryIdMINUSMINUS: Default
   })
   const [isneedShadow, setisneedShadow] = useState(false)
-  const { data } = useSigner()
   const { chain } = useNetwork()
-  const provider = useProvider()
-  const { address, isConnected } = useAccount()
 
   useEffect(() => {
     checkAmIn()
@@ -245,19 +588,23 @@ export default function Home({ LOTTERY_ADDRESS, chainId, setneedCheckNFT, tymble
         result: null
       })
       const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, data)
-      const tx = await contract.Enter()
+      const tx = await contract.addToAutoEnter([parseInt(await contract.getLotteryCount())])
       await tx.wait()
       setamIn(true)
-      contract.once("enter", async () => {
-        console.log("Welcome!", address)
-      })
+      // contract.once("enter", async () => {
+      //   console.log("Welcome!", address)
+      // })
       settxData({
         isPending: false,
         result: true
       })
     } catch (err) {
       console.log(err)
-      let issue = IssueMaker({ data: err.code, from: "Enter" })
+      let issue
+      if (isConnected)
+        issue = IssueMaker({ data: err.code, from: "Enter" })
+      else
+        issue = "Connect wallet"
       settxData({
         isPending: false,
         result: false,
@@ -300,7 +647,65 @@ export default function Home({ LOTTERY_ADDRESS, chainId, setneedCheckNFT, tymble
     }
   }
 
+
+
   return (
+    // <div>
+    //   {
+    //     VERSION ?
+    //       <div className=''>
+    //         < Head >
+    //           <title>!Mudebz</title>
+    //           <meta name="description" content="An Ethereum Lottery dApp" />
+    //         </Head >
+    //         <div className='menuLobby menuHover pointer'>
+    //           Lobby
+    //         </div>
+    //         <div className='menuGallery menuHover pointer'>
+    //           Gallery
+    //         </div>
+    //         <div className='NewsButtonText menuHover pointer' onClick={() => {
+    //           setVERSION(!VERSION);
+    //         }}>
+    //           News
+    //         </div>
+    //         {
+    //           IsNEWS && <div className="Hard_Tokens" style={{ padding: "10px" }}>
+    //             <div className="">
+    //               {chainId == BNBid && <div className="misterySwitcher" onClick={() => { setModeMistery(!ModeMistery) }}></div>}
+    //               {!ModeMistery && <div>
+    //                 <input className="input bigdinamic" id="inputToken" placeholder="Token Address" onChange={e => setaddTokenAddress(e.target.value)} style={{ color: isvalid ? "white" : "red" }} />
+    //               </div>}
+    //               {!ModeMistery && <div>
+    //                 <button onClick={() => addToken()} className="mybutton" >Add new token</button>
+    //               </div>}
+    //               {ModeMistery && <div>
+    //                 <input className="input bigdinamic" id="Mistery" placeholder="Your answer" onChange={e => setMistery(e.target.value)} />
+    //               </div>}
+    //               {ModeMistery && <div>
+    //                 <button onClick={() => tryMistery()} className="mybutton" style={{ minWidth: "123.41px" }}>Try</button>
+    //               </div>}
+    //             </div>
+    //             <div className="">
+    //               {rokens && rokens.map((element, index) =>
+    //                 <TokensBalanceShablon LOTTERY_ADDRESS={LOTTERY_ADDRESS} txData={txData} NFT_ADDRESS={NFT_ADDRESS} settxData={settxData} rokens={rokens} tymblerNaNetwork tokenTransfered={tokenTransfered} setTokenSelected={setTokenSelected} TokenSelected={TokenSelected} user={address} element={element} chainId={chainId} settokenTransfered={settokenTransfered} index={{ index, last: rokens.length - 1 }} deleteTokenFromFronend={deleteTokenFromFronend} />
+    //               )}
+    //             </div>
+    //             <div className="">
+    //               <button className="" onClick={() => { disconnect(); setActive(false); document.body.style.overflow = ('overflow', 'auto'); }}>
+    //                 <div></div>
+    //                 <div>Disconnect</div>
+    //               </button>
+    //             </div>
+
+    //           </div>
+    //         }
+
+
+
+
+    //       </div >
+    //       :
     <div className=''>
       <Head>
         <title>!Mudebz</title>
@@ -353,9 +758,7 @@ export default function Home({ LOTTERY_ADDRESS, chainId, setneedCheckNFT, tymble
 
 
     </div >
+    //   }
+    // </div>
   )
 }
-
-/*
-
-*/

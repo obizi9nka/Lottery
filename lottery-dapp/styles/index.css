@@ -72,19 +72,19 @@
 
 .PLUS {
     justify-self: center;
-    opacity: 0.9;
+    opacity: 0.95;
 
 }
 
 .PLUSPLUS {
     justify-self: start;
-    opacity: 0.8;
+    opacity: 0.9;
 
 }
 
 .MINUSMINUS {
     justify-self: end;
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
 .controlautoenter {
