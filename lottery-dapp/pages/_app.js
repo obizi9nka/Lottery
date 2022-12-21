@@ -46,7 +46,6 @@ import { publicProvider } from 'wagmi/providers/public';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import InfoPopUp from '../components/InfoPopUp';
 import Hard from '../components/Hard'
-import { Verify } from 'crypto'
 
 
 const BNBChain = {

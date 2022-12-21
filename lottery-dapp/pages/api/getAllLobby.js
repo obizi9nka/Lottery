@@ -104,7 +104,7 @@ export default async function handler(req, res) {
         lobbysBNBActive
     }
 
-    // console.log(result)
+    console.log(result)
 
     res.json(result)
 }
