@@ -5,7 +5,7 @@ import Lottery from "../../blockchain/Lottery.json"
 
 export default async function handler(req, res) {
 
-    const { user, chainId, isConnected, provider } = JSON.parse(req.body)
+    const { user, isConnected } = JSON.parse(req.body)
 
     let lobbysETH = await prisma.lobbyETH.findMany()
     let lobbysBNB = await prisma.lobbyBNB.findMany()

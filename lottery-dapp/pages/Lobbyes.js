@@ -92,9 +92,9 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaN
         console.log(address, isSession)
         if (isSession) {
             const _address = sessionStorage.getItem("addressLobbys")
-            if (address == _address) {
+            const lobbys = sessionStorage.getItem("lobbys")
+            if (address == _address && lobbys != undefined) {
                 setisLobbyFetched(true)
-                const lobbys = sessionStorage.getItem("lobbys")
                 setAll_LOBBYES(lobbys)
                 setlobbyesActive(tymblerNaNetwork ? lobbys.lobbysETHActive : lobbys.lobbysBNBActive)
                 setlobbyes(tymblerNaNetwork ? lobbys.lobbysETH : lobbys.lobbysBNB)
@@ -125,7 +125,7 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaN
     }, [address, tymblerNaNetwork])
 
     const getAllLobbyes = async () => {
-        const body = { user: address, isConnected, chainId, provider }
+        const body = { user: address, isConnected }
         await fetch("/api/getAllLobby", {
             method: "POST",
             body: JSON.stringify(body)
@@ -161,95 +161,6 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaN
     useEffect(() => {
         getTokens()
     }, [address, chainId])
-
-    // useEffect(() => {
-    //     events()
-    // }, [])
-
-    // const events = async () => {
-    //     const now = new Date().getTime() / 1000
-    //     console.log(now)
-    //     const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, provider)
-
-    //     let lobbys
-    //     const body = { user: address, isConnected, chainId }
-    //     await fetch("/api/getAllLobby", {
-    //         method: "POST",
-    //         body: JSON.stringify(body)
-    //     }).then(async (data) => {
-    //         lobbys = await data.json()
-    //         console.log("FFFFFFFF")
-    //     })
-
-
-    //     contract.removeAllListeners()
-    //     // contract.on("playLobby", (user, creator, lobbyId, lobby, time) => {
-    //     //     console.log(user, lobby)
-    //     // })
-    //     // contract.on("enterLobby", async (user, creator, lobbyId, lobby, time) => {
-    //     //     if (time > now) {
-    //     //         const stop = lobbyes.length
-    //     //         for (let i = 0; i < stop; i++) {
-    //     //             if (lobbyId == lobbyes[i].id && lobbyes[i].creator == creator) {
-    //     //                 if (parseInt(BigInt(lobby.nowInLobby)) != 0) {
-    //     //                     if (chainId == ETHid) {
-    //     //                         ALL_LOBBYES.lobbysETH[i].nowInLobby = parseInt(BigInt(lobby.nowInLobby))
-    //     //                         ALL_LOBBYES.lobbysETH[i].players += user + "_"
-    //     //                         if (user == address) {
-    //     //                             lobbyes[i].isEntered = true
-    //     //                             setlobbyesActive([...lobbyesActive, lobbyes[i]])
-    //     //                         }
-    //     //                         setlobbyes([...lobbyes])
-    //     //                     }
-    //     //                     else {
-    //     //                         ALL_LOBBYES.lobbysBNB[i].nowInLobby = parseInt(BigInt(lobby.nowInLobby))
-    //     //                         ALL_LOBBYES.lobbysBNB[i].players += user + "_"
-    //     //                         if (user == address) {
-    //     //                             lobbyes[i].isEntered = true
-    //     //                             setlobbyesActive([...lobbyesActive, lobbyes[i]])
-    //     //                         }
-    //     //                         setlobbyes([...lobbyes])
-    //     //                     }
-
-    //     //                 }
-    //     //                 break
-    //     //             }
-    //     //         }
-    //     //     }
-    //     // })
-    //     contract.on("newLobby", async (user, lobbyId, lobby, time) => {
-    //         if (time > now) {
-    //             console.log(parseInt(lobbyId), "dd", time, now, lobbys)
-    //             const bod = {
-    //                 addresses: [lobby.token]
-    //             }
-    //             await fetch("/api/getTokensGlobal", {
-    //                 method: "POST",
-    //                 body: JSON.stringify(bod)
-    //             }).then(async (data) => {
-    //                 const token = await data.json()
-    //                 const _data = {
-    //                     deposit: `${parseInt(lobby.deposit) / (10 ** token[0].decimals)}`,
-    //                     nowInLobby: parseInt(lobby.nowInLobby),
-    //                     // players: lobby.players,
-    //                     countOfPlayers: parseInt(lobby.countOfPlayers),
-    //                     IERC20: token[0].address,
-    //                     creator: user,
-    //                     id: parseInt(lobbyId),
-    //                     percent: parseInt(`${lobby.nowInLobby / lobby.countOfPlayers * 100}`.substring(0, 2)),
-    //                     isEntered: user == address
-    //                 }
-
-    //                 chainId == ETHid ? ALL_LOBBYES.lobbysETH.push(_data) : ALL_LOBBYES.lobbysBNB.push(_data)
-    //                 chainId == ETHid ? ALL_LOBBYES.lobbysETHActive.push(_data) : ALL_LOBBYES.lobbysBNBActive.push(_data)
-    //                 setlobbyes(chainId == ETHid ? ALL_LOBBYES.lobbysETH : ALL_LOBBYES.lobbysBNB)
-    //                 if (_data.creator == address)
-    //                     setlobbyesActive(chainId == ETHid ? ALL_LOBBYES.lobbysETHActive : ALL_LOBBYES.lobbysBNBActive)
-    //                 setAll_LOBBYES(ALL_LOBBYES)
-    //             })
-    //         }
-    //     })
-    // }
 
     const getTokens = async () => {
         if (isConnected) {
