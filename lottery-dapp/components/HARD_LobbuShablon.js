@@ -35,7 +35,7 @@ export default function HARD_LobbuShablon({ element, imageFounded, EnterLobby, i
                             <div>Prize: <strong>{`${(element.deposit * element.countOfPlayers)}`.substring(0, 10)}</strong></div>
                             {activeMassive == 2 ?
                                 <div>
-                                    Index: <strong >{index}</strong>
+                                    Index: <strong >{index + 1}</strong>
                                 </div>
                                 :
                                 <div>Players: <strong >{element.nowInLobby}/{element.countOfPlayers}</strong></div>

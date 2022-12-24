@@ -29,7 +29,7 @@ export default function Home({ }) {
     const [language, setLanguage] = useState("English")
 
     return (
-        <div className=''>
+        <div className='MAIN_MARGIG'>
             <Head>
                 <title>!Mudebz</title>
                 <meta name="description" content="An Ethereum Lottery dApp" />

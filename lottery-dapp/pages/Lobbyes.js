@@ -204,7 +204,7 @@ export default function Home({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaN
             const contract = new ethers.Contract(LOTTERY_ADDRESS, Lottery.abi, signer)
             const Deposit = BigInt(deposit * 10 ** token.decimals)
             const id = 1 + parseInt(await contract.getlobbyCountForAddressALL(address))
-            const body = { user: address, token: token.address, countOfPlayers, deposit, chainId, id }
+            const body = { user: address, token: token.address, countOfPlayers: parseInt(countOfPlayers), deposit, chainId, id }
             console.log(body, token, Deposit, chainId, id)
             const tx = await contract.createNewLobby(token.address, Deposit, countOfPlayers, { value: BigInt(10 ** 1) })
             await tx.wait()

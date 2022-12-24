@@ -6,7 +6,7 @@ import TokensBalanceShablon from '../components/TokensBalanceShablon'
 import A from "/blockchain/A.json"
 import Lottery from "/blockchain/Lottery.json"
 import { LotteryAddressETH, LotteryAddressBNB, ETHid, BNBid, PRODACTION, ALCHEMY_KEY, INFURA_KEY } from '/components/Constants.js';
-
+import IssueMaker from '../components/IssueMaker';
 
 import {
   chain,
@@ -383,6 +383,7 @@ export default function Home({ LOTTERY_ADDRESS, VERSION, setVERSION, chainId, se
     lotteryIdMINUSMINUS: Default
   })
   const [isneedShadow, setisneedShadow] = useState(false)
+  const { data } = useSigner()
   const { chain } = useNetwork()
 
   useEffect(() => {
@@ -663,7 +664,7 @@ export default function Home({ LOTTERY_ADDRESS, VERSION, setVERSION, chainId, se
           <div className='timer' id="seconds"  ></div>
         </div>
 
-        <div className='index'>
+        <div className='index USER_NoSelected '>
           <div className={k >= 10 && isneedShadow ? "MINUSMINUS snebes" : isneedShadow ? "MINUSMINUS shadow" : 'MINUSMINUS '}>
             <Image src={Images.lotteryIdMINUSMINUS} className="tttt" width={150} height={150} />
           </div>

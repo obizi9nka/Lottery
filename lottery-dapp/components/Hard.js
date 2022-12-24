@@ -47,6 +47,7 @@ export default function Hard({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaN
     const [lobbyes, setlobbyes] = useState([])
     const [lobbyesActive, setlobbyesActive] = useState([])
     const [imageFounded, setimageFounded] = useState([])
+    const [imageFoundedLobbyActive, setimageFoundedLobbyActive] = useState([])
     const [rokens, setTokens] = useState([{
         address: "0",
         symbol: "Tokens"
@@ -62,6 +63,15 @@ export default function Hard({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaN
                 return true
             }))
     }, [lobbyes])
+
+    useEffect(() => {
+        if (lobbyes == undefined)
+            setimageFoundedLobbyActive([])
+        else
+            setimageFoundedLobbyActive(lobbyesActive.map(() => {
+                return true
+            }))
+    }, [lobbyesActive])
 
 
 
@@ -101,7 +111,6 @@ export default function Hard({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaN
             setAll_LOBBYES(lobbys)
             setlobbyesActive(chainId == ETHid ? lobbys.lobbysETHActive : lobbys.lobbysBNBActive)
             setlobbyes(chainId == ETHid ? lobbys.lobbysETH : lobbys.lobbysBNB)
-
             setactiveMassiveLength(chainId == ETHid ? lobbys.lobbysETH.length : lobbys.lobbysBNB.length)
         })
     }
@@ -543,7 +552,7 @@ export default function Hard({ LOTTERY_ADDRESS, setneedNews, chainId, tymblerNaN
                 </div>
             } */}
             <div className={isSlideShow ? 'HARD_RigthMonitor active' : 'HARD_RigthMonitor'}>
-                <HARD_LobbuShablon element={activeMassive == 0 ? lobbyes[SlideShow] : activeMassive == 1 ? lobbyesActive[SlideShow] : news[SlideShow]} activeMassive={activeMassive} isSHOW={true} isMonitor={true} EnterLobby={EnterLobby} imageFounded={imageFounded} index={SlideShow + 1} filterModeScreen={filterModeScreen} needLigth={needLigth} setimageFounded={setimageFounded} />
+                <HARD_LobbuShablon element={activeMassive == 0 ? lobbyes[SlideShow] : activeMassive == 1 ? lobbyesActive[SlideShow] : news[SlideShow]} activeMassive={activeMassive} isSHOW={true} isMonitor={true} EnterLobby={EnterLobby} imageFounded={imageFounded} index={SlideShow} filterModeScreen={filterModeScreen} needLigth={needLigth} setimageFounded={setimageFounded} />
             </div>
             {/* <div style={{ color: "white" }}>{SlideShow}</div> */}
         </div >

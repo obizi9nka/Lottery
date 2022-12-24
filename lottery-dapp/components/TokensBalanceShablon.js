@@ -20,12 +20,8 @@ import {
 
 export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, element, rokens, chainId, index, deleteTokenFromFronend, setTokenSelected, TokenSelected, settxData, needCheck }) {
 
-
-    const [balance, setbalance] = useState(-1)
-
     const [DELETED, setDELETED] = useState(false)
 
-    const [isfaund, setisfaund] = useState(element.isImageAdded)
     const [needApprove, setneedAprove] = useState(undefined)
     const { data } = useSigner()
 
@@ -96,7 +92,7 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
         if (element.address != 0)
             return (
                 <div className="relative">
-                    <div className={'shablonbalance'}
+                    <div className={!needApprove && needApprove != undefined ? 'shablonbalance shablonbalanceClicked USER_NoSelected' : 'shablonbalance USER_NoSelected'}
                         style={{ margin: index.last == index.index ? "" : index.index == 0 ? "0px 0px 10px 0px" : index.last == index.index ? "10px 0px 0px 0px" : "10px 0px 10px 0px" }} >
                         <div className="tokenImage">
                             {element.isImageAdded && <Image className="tokenpng" src={`/tokens/${element.address}.png`} width={32} height={32} />}
@@ -108,7 +104,7 @@ export default function TokensBalanceShablon({ LOTTERY_ADDRESS, txData, user, el
                                     <button className="Approve" onClick={() => approve()}>Approve</button>
                                 </div>
                                 :
-                                <div className="approved">
+                                <div className="approved ">
                                     Approved
                                 </div>
                             }
