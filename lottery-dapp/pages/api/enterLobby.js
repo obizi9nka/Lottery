@@ -63,7 +63,7 @@ export default async function handler(req, res) {
                         LobbiesETH: true
                     }
                 })
-                const index = AlredyNews.LobbiesETH.indexOf(`${creator}&${id}_`)
+                const index = AlredyNews.LobbiesETH?.indexOf(`${creator}&${id}_`)
                 if (index != -1) {
                     AlredyNews.LobbiesETH = AlredyNews.LobbiesETH.substring(0, index) + AlredyNews.LobbiesETH.substring(index + `${creator}&${id}_`.length, AlredyNews.LobbiesETH.length)
                 }
@@ -143,7 +143,7 @@ export default async function handler(req, res) {
                         LobbiesBNB: true
                     }
                 })
-                const index = AlredyNews.LobbiesBNB.indexOf(`${creator}&${id}_`)
+                const index = AlredyNews.LobbiesBNB?.indexOf(`${creator}&${id}_`)
                 if (index != -1) {
                     AlredyNews.LobbiesBNB = AlredyNews.LobbiesBNB.substring(0, index) + AlredyNews.LobbiesBNB.substring(index + `${creator}&${id}_`.length, AlredyNews.LobbiesBNB.length)
                 }
