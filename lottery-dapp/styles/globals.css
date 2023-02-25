@@ -1,6 +1,6 @@
 html,
 body {
-  background-image: url("../public/fon/Room5UPMonitor.jpg");
+  background-image: url('../public/fon/Room5UPMonitor.jpg');
   background-size: cover;
   /* max-width: calc(100vw - 0.4em); */
   height: auto;
@@ -34,8 +34,6 @@ body {
   background: #110e0e;
 }
 
-
-
 a {
   text-decoration: none;
 }
@@ -48,8 +46,6 @@ footer {
   background-color: #110e0e;
 }
 
-
-
 select {
   text-indent: 4px;
   border: 1px solid white;
@@ -59,8 +55,6 @@ select {
   height: 44px;
   /* -webkit-appearance: none; */
 }
-
-
 
 * {
   /* font-size: 16px; */
@@ -83,8 +77,8 @@ body::-webkit-scrollbar {
 }
 
 ::-webkit-scrollbar {
-  height: .3em;
-  width: .4em;
+  height: 0.3em;
+  width: 0.4em;
 }
 
 ::-webkit-scrollbar-track {
@@ -119,7 +113,6 @@ strong {
   /* background: rgb(0, 0, 0); */
   /* background: linear-gradient(10deg, rgba(0, 0, 0, 1) 28%, rgba(130, 49, 135, 1) 75%); */
   box-shadow: 0 0 20px rgb(255, 255, 255);
-
 }
 
 .input {
@@ -160,9 +153,6 @@ strong {
   pointer-events: none;
   transition: 1s;
 }
-
-
-
 
 .InfoPopUp.active {
   pointer-events: all;
@@ -205,12 +195,10 @@ strong {
   }
 }
 
-
-
 @keyframes infoPoPUp {
   0% {
     width: 0px;
-    color: rgba(255, 255, 255, 0)
+    color: rgba(255, 255, 255, 0);
   }
 
   30% {

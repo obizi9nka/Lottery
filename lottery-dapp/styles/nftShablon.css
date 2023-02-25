@@ -2,103 +2,101 @@
     NftsShablon
 */
 
-
 .nftsShablon {
-    /* max-width: 323px;
+  /* max-width: 323px;
     min-width: 323px; */
 }
 
 .imageNftShablon {
-    display: flex;
-    justify-content: center;
-    max-width: 200px;
+  display: flex;
+  justify-content: center;
+  max-width: 200px;
 }
 
 .i {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    height: 110px;
-    max-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 110px;
+  max-width: 200px;
 }
 
 .data {
-    display: inline-flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .pad {
-    padding: 40px calc(100vw - 99vw);
-    position: relative;
+  padding: 40px calc(100vw - 99vw);
+  position: relative;
 }
 
 .inline {
-    display: flex;
-    height: 20px;
+  display: flex;
+  height: 20px;
 }
 
 .absolute {
-    position: absolute;
-    top: 5%;
-    right: 7%;
+  position: absolute;
+  top: 5%;
+  right: 7%;
 }
 
 .pylt {
-    max-width: 200px;
-    width: 200px;
-    display: flex;
-    justify-content: space-around;
+  max-width: 200px;
+  width: 200px;
+  display: flex;
+  justify-content: space-around;
 }
 
 .inputmessage {
-    margin-top: 10px;
-    word-break: normal;
-    text-align: center;
-    min-height: 100px;
-    min-width: 200px;
-    max-height: 100px;
-    max-width: 200px;
-    color: rgb(255, 255, 255);
-    background-color: #110e0e;
+  margin-top: 10px;
+  word-break: normal;
+  text-align: center;
+  min-height: 100px;
+  min-width: 200px;
+  max-height: 100px;
+  max-width: 200px;
+  color: rgb(255, 255, 255);
+  background-color: #110e0e;
 }
 
 .ok {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
 }
 
-
 .bordernft {
-    position: relative;
-    padding: 10px 10px 0px 10px;
-    background-color: rgb(29 28 28);
-    border-radius: 10px;
-    min-height: 320px;
-    max-width: 220px;
-    min-width: 220px;
+  position: relative;
+  padding: 10px 10px 0px 10px;
+  background-color: rgb(29 28 28);
+  border-radius: 10px;
+  min-height: 320px;
+  max-width: 220px;
+  min-width: 220px;
 }
 
 .bordernft.ID {
-    position: relative;
-    padding: 10px 10px 0px 10px;
-    border-radius: 10px;
-    min-height: 320px;
-    max-width: 220px;
-    min-width: 220px;
-    background-color: rgb(178, 102, 96);
+  position: relative;
+  padding: 10px 10px 0px 10px;
+  border-radius: 10px;
+  min-height: 320px;
+  max-width: 220px;
+  min-width: 220px;
+  background-color: rgb(178, 102, 96);
 }
 
 @media (max-width: 770px) {
-    .data {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-    }
+  .data {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
 
-    .areaNfts {
-        margin: 0px;
-        min-height: 80vh;
-    }
+  .areaNfts {
+    margin: 0px;
+    min-height: 80vh;
+  }
 }

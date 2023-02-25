@@ -1,182 +1,168 @@
 /*Lottery*/
 
-
-
 .index {
-    min-height: calc(100vh - 110px);
-    max-height: calc(100vh - 110px);
-    display: grid;
-    align-items: center;
-    grid-template-columns: repeat(5, 1fr);
+  min-height: calc(100vh - 110px);
+  max-height: calc(100vh - 110px);
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(5, 1fr);
 }
 
-
 .newnft {
-    margin-top: 40px;
-    display: flex;
-    flex-direction: column;
-    justify-self: center;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
 }
 
 @media (max-width: 1519px) {
-    .index {
-        grid-template-columns: 1fr 1fr 1fr;
-    }
+  .index {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 
-    .PLUSPLUS {
-        display: none;
-    }
+  .PLUSPLUS {
+    display: none;
+  }
 
-    .MINUSMINUS {
-        display: none;
-    }
-
-
+  .MINUSMINUS {
+    display: none;
+  }
 }
 
 @media (max-width: 920px) {
-    .index {
-        grid-template-columns: 1fr;
-    }
+  .index {
+    grid-template-columns: 1fr;
+  }
 
-    .PLUS {
-        display: none;
-    }
-
+  .PLUS {
+    display: none;
+  }
 }
 
 @media (max-width: 570px) {
-    /* .index {
+  /* .index {
         align-items: flex-start;
     } */
 
-    .newnft {
-        margin-top: 30px;
-    }
-
-
+  .newnft {
+    margin-top: 30px;
+  }
 }
-
-
 
 .tttt {
-    border-radius: 12px;
+  border-radius: 12px;
 }
 
-
-
 .enterNftPlay {
-    margin-top: 7%;
-    align-self: center;
+  margin-top: 7%;
+  align-self: center;
 }
 
 .PLUS {
-    justify-self: center;
-    opacity: 0.7;
-
+  justify-self: center;
+  opacity: 0.7;
 }
 
 .PLUSPLUS {
-    justify-self: start;
-    opacity: 0.7;
-
+  justify-self: start;
+  opacity: 0.7;
 }
 
 .MINUSMINUS {
-    justify-self: end;
-    opacity: 0.4;
+  justify-self: end;
+  opacity: 0.4;
 }
 
 .controlautoenter {
-    display: flex;
-    color: white;
+  display: flex;
+  color: white;
 }
 
 .nftmintbuttonactive {
-    color: white;
-    border: 1px;
-    border-style: solid;
-    padding: 10px;
-    border-radius: 12px;
-    border-color: white;
-    background-color: rgb(110, 21, 124);
+  color: white;
+  border: 1px;
+  border-style: solid;
+  padding: 10px;
+  border-radius: 12px;
+  border-color: white;
+  background-color: rgb(110, 21, 124);
 }
 
 .snebes {
-    transform: translateY(-150%);
-    animation: ani 2s forwards;
-    transform: skew(30deg, 30deg);
-    animation-iteration-count: 1;
+  transform: translateY(-150%);
+  animation: ani 2s forwards;
+  transform: skew(30deg, 30deg);
+  animation-iteration-count: 1;
 }
 
 .shadow {
-    transition: 1s;
-    opacity: 0;
+  transition: 1s;
+  opacity: 0;
 }
 
 .circleTimer {
-    position: relative;
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    background: #232323;
-    overflow: hidden;
+  position: relative;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #232323;
+  overflow: hidden;
 }
 
 .Timerarea {
-    position: absolute;
-    display: flex;
+  position: absolute;
+  display: flex;
 }
 
 .Timer {
-    position: absolute;
-    display: flex;
-    left: calc(50vw - 135px / 2);
-    top: calc(90px + 10vh);
+  position: absolute;
+  display: flex;
+  left: calc(50vw - 135px / 2);
+  top: calc(90px + 10vh);
 }
 
 @media (max-width: 340px) {
-    .Timer {
-        left: unset;
-        top: unset;
-        margin-left: 100px;
-    }
+  .Timer {
+    left: unset;
+    top: unset;
+    margin-left: 100px;
+  }
 }
 
 .timer {
-    color: rgb(141, 141, 141);
-    font-size: 35px;
-    font-weight: 400;
-    /* position: absolute;
+  color: rgb(141, 141, 141);
+  font-size: 35px;
+  font-weight: 400;
+  /* position: absolute;
     left: 20px;
     top: 10px; */
 }
 
 .chooseWinner {
-    color: white;
-    position: absolute;
+  color: white;
+  position: absolute;
 }
 
 .chooseWinnerText {
-    left: calc(50vw - 60px);
-    top: 260px;
+  left: calc(50vw - 60px);
+  top: 260px;
 }
 
 .chooseWinnerLoader {
-    left: calc(50vw - 30px);
-    top: 320px;
+  left: calc(50vw - 30px);
+  top: 320px;
 }
 
 @keyframes ani {
-    0% {
-        transform: translateY(-600%);
-    }
+  0% {
+    transform: translateY(-600%);
+  }
 
-    100% {
-        transform: translateY(0%);
-    }
+  100% {
+    transform: translateY(0%);
+  }
 
-    /* 91% {
+  /* 91% {
         transform: translate(1px, -3px) rotate(0deg);
     }
 
