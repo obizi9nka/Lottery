@@ -1,211 +1,199 @@
 /*_app*/
 
-
 .WRAPPER {
-    max-height: calc(100vh - 110px);
+  max-height: calc(100vh - 110px);
 }
 
-
 .nav {
-    /* margin: 0px 90px;
+  /* margin: 0px 90px;
   
     border-left: 3px solid rgb(255, 255, 255);
     border-right: 3px solid rgb(255, 255, 255);
     border-bottom: 3px solid rgb(255, 255, 255); */
-    min-height: 110px;
-    padding-right: 10%;
-    padding-left: 10%;
+  min-height: 110px;
+  padding-right: 10%;
+  padding-left: 10%;
 }
 
 .VERSION_SWITCHER {
-    position: absolute;
-    background-color: #ffffff;
-    width: 30px;
-    height: 30px;
+  position: absolute;
+  background-color: #ffffff;
+  width: 30px;
+  height: 30px;
 }
 
 @media (max-width: 1100px) {
-
-    .nav {
-        padding-right: 2%;
-        padding-left: 2%;
-    }
+  .nav {
+    padding-right: 2%;
+    padding-left: 2%;
+  }
 }
 
-
 @media (max-width: 1100px) {
+  .navigation {
+    justify-self: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
 
-    .navigation {
-        justify-self: center;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-    }
+  .wallet {
+    display: none;
+  }
 
-    .wallet {
-        display: none;
-    }
+  .content {
+    grid-template-columns: 2fr 2fr;
+  }
 
-    .content {
-        grid-template-columns: 2fr 2fr;
-    }
-
-    .menu {
-        /* margin: 5px 15px 5px 0px; */
-        margin: 10px 17px;
-    }
+  .menu {
+    /* margin: 5px 15px 5px 0px; */
+    margin: 10px 17px;
+  }
 }
 
 .navigationSmartfon {
-    position: fixed;
-    bottom: -3px;
-    background-color: #131314;
-    left: 0px;
-    right: 0px;
-    height: 50px;
-    display: none;
-    z-index: 100000000000000;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+  position: fixed;
+  bottom: -3px;
+  background-color: #131314;
+  left: 0px;
+  right: 0px;
+  height: 50px;
+  display: none;
+  z-index: 100000000000000;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
 .prenavigationSmartfon {
-    margin-bottom: 30px;
-    display: none;
+  margin-bottom: 30px;
+  display: none;
 }
 
-
 @media (max-width: 608px) {
-    .navigation {
-        display: none;
-    }
+  .navigation {
+    display: none;
+  }
 
-    .navigationSmartfon {
-        display: grid;
-    }
+  .navigationSmartfon {
+    display: grid;
+  }
 
-    .prenavigationSmartfon {
-        display: block;
-    }
-
+  .prenavigationSmartfon {
+    display: block;
+  }
 }
 
 @media (max-width: 610px) {
-    .navigation {
-        justify-self: start;
-    }
+  .navigation {
+    justify-self: start;
+  }
 
-    .menu {
-        margin: 5px 15px 5px 0px;
-    }
+  .menu {
+    margin: 5px 15px 5px 0px;
+  }
 }
 
 .menuSmartfon {
-    color: #ffffff;
-    justify-self: center;
-    align-self: center;
+  color: #ffffff;
+  justify-self: center;
+  align-self: center;
 }
 
 .content {
-    min-height: inherit;
-    display: grid;
+  min-height: inherit;
+  display: grid;
 }
 
 @media (max-width: 4000px) {
-    .content {
-        grid-template-columns: 2fr 2fr 2fr;
-    }
+  .content {
+    grid-template-columns: 2fr 2fr 2fr;
+  }
 }
 
 @media (max-width: 608px) {
-    .content {
-        grid-template-columns: 5fr 2fr;
-    }
+  .content {
+    grid-template-columns: 5fr 2fr;
+  }
 }
-
 
 .navigation {
-    align-self: center;
+  align-self: center;
 }
 
-
 .container {
-    display: flex;
-    height: inherit;
-    align-items: center;
+  display: flex;
+  height: inherit;
+  align-items: center;
 }
 
 .between {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .d {
-    display: flex;
-    width: auto;
+  display: flex;
+  width: auto;
 }
 
 .otstup {
-    padding: 0px 0px 0px 10px;
+  padding: 0px 0px 0px 10px;
 }
 
 .menu {
-    color: rgb(255, 255, 255);
-    word-spacing: 20px;
+  color: rgb(255, 255, 255);
+  word-spacing: 20px;
 }
 
 .menu:hover {
-    color: purple;
+  color: purple;
 }
 
 @media (min-width: 1700px) {
-    .menu {
-        font-size: 23px;
-    }
+  .menu {
+    font-size: 23px;
+  }
 }
 
-
-
 .center {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .image {
-    max-height: 75px;
-    min-height: 75px;
-    max-width: 280px;
-    min-width: 280px;
-    justify-self: center;
-    align-self: center;
+  max-height: 75px;
+  min-height: 75px;
+  max-width: 280px;
+  min-width: 280px;
+  justify-self: center;
+  align-self: center;
 }
 
 .beta {
-    position: absolute;
-    top: 10px;
-    right: 38%;
+  position: absolute;
+  top: 10px;
+  right: 38%;
 }
 
 .image:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .wallet {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 @media (max-width: 1100px) {
-    .wallet {
-        justify-content: center;
-    }
+  .wallet {
+    justify-content: center;
+  }
 }
 
 @media (max-width: 800px) {
-
-    .image {
-        max-height: 65px;
-        min-height: 65px;
-        max-width: 190px;
-        min-width: 190px;
-    }
+  .image {
+    max-height: 65px;
+    min-height: 65px;
+    max-width: 190px;
+    min-width: 190px;
+  }
 }

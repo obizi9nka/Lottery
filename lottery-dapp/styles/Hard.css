@@ -1,180 +1,189 @@
 .pointer:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .OFF {
-    position: absolute;
-    top: 75vh;
-    left: 85vw;
-    display: block;
-    width: 1vw;
-    height: 1vw;
-    --weight: 0.1vw;
-    --aa: 0.1vw;
-    --color: rgb(6, 25, 40);
-    background:
-        linear-gradient(45deg, transparent calc(50% - var(--weight) - var(--aa)), var(--color) calc(50% - var(--weight)), var(--color) calc(50% + var(--weight)), transparent calc(50% + var(--weight) + var(--aa))),
-        linear-gradient(-45deg, transparent calc(50% - var(--weight) - var(--aa)), var(--color) calc(50% - var(--weight)), var(--color) calc(50% + var(--weight)), transparent calc(50% + var(--weight) + var(--aa)));
-    transform: skew(16deg, 10deg) rotate(10deg);
+  position: absolute;
+  top: 75vh;
+  left: 85vw;
+  display: block;
+  width: 1vw;
+  height: 1vw;
+  --weight: 0.1vw;
+  --aa: 0.1vw;
+  --color: rgb(6, 25, 40);
+  background: linear-gradient(
+      45deg,
+      transparent calc(50% - var(--weight) - var(--aa)),
+      var(--color) calc(50% - var(--weight)),
+      var(--color) calc(50% + var(--weight)),
+      transparent calc(50% + var(--weight) + var(--aa))
+    ),
+    linear-gradient(
+      -45deg,
+      transparent calc(50% - var(--weight) - var(--aa)),
+      var(--color) calc(50% - var(--weight)),
+      var(--color) calc(50% + var(--weight)),
+      transparent calc(50% + var(--weight) + var(--aa))
+    );
+  transform: skew(16deg, 10deg) rotate(10deg);
 }
 
 .HARD_BACK_NEXT {
-    position: absolute;
-    top: 68vh;
-    left: 19vw;
-    width: 14vw;
-    font-size: 1.4vw;
-    transform: skew(10deg, 10deg) rotate(6deg);
+  position: absolute;
+  top: 68vh;
+  left: 19vw;
+  width: 14vw;
+  font-size: 1.4vw;
+  transform: skew(10deg, 10deg) rotate(6deg);
 }
 
 .HARD_areaBN {
-    display: flex;
-    justify-content: space-around;
-    color: #08161e;
-    height: inherit;
-    align-items: center;
+  display: flex;
+  justify-content: space-around;
+  color: #08161e;
+  height: inherit;
+  align-items: center;
 }
 
 .OFF:hover {
-    transition: 1s;
-    transform: skew(16deg, 10deg) rotate(100deg);
+  transition: 1s;
+  transform: skew(16deg, 10deg) rotate(100deg);
 }
 
 .USER_NoSelected {
-    user-select: none;
+  user-select: none;
 }
 
 .menuLobby {
-    position: absolute;
+  position: absolute;
 
-    top: 3vh;
-    left: 4vw;
-    font-size: 2vw;
-    font-weight: bold;
-    color: #0d212a;
-    transform: skew(10deg, 10deg) rotate(10deg);
+  top: 3vh;
+  left: 4vw;
+  font-size: 2vw;
+  font-weight: bold;
+  color: #0d212a;
+  transform: skew(10deg, 10deg) rotate(10deg);
 }
 
 .menuGallery {
-    position: absolute;
-    top: 13.5vh;
-    left: 17vw;
-    font-size: 2vw;
-    font-weight: bold;
-    color: #0d212a;
-    transform: skew(10deg, 10deg) rotate(10deg);
+  position: absolute;
+  top: 13.5vh;
+  left: 17vw;
+  font-size: 2vw;
+  font-weight: bold;
+  color: #0d212a;
+  transform: skew(10deg, 10deg) rotate(10deg);
 }
 
 .Show {
-    position: absolute;
-    top: 62vh;
-    left: 58.5vw;
-    font-size: 2vw;
-    font-weight: bold;
-    color: #07141a;
-    transform: skew(5deg, 10deg) rotate(0deg);
+  position: absolute;
+  top: 62vh;
+  left: 58.5vw;
+  font-size: 2vw;
+  font-weight: bold;
+  color: #07141a;
+  transform: skew(5deg, 10deg) rotate(0deg);
 }
 
 .HARD_PopUp {
-    position: absolute;
-    top: 80.7vh;
-    left: 0.9vw;
-    transform: skew(5deg, 10deg) rotate(0deg);
-    opacity: 0.4;
+  position: absolute;
+  top: 80.7vh;
+  left: 0.9vw;
+  transform: skew(5deg, 10deg) rotate(0deg);
+  opacity: 0.4;
 }
 
 .NewsButtonText {
-    top: 19.3vh;
-    left: 43.5vw;
-    font-size: 1.5vw;
-    font-weight: bold;
-    position: absolute;
-    color: #0c222c;
-    z-index: 100;
-    transform: skew(-10deg, 0deg) rotate(-18deg);
+  top: 19.3vh;
+  left: 43.5vw;
+  font-size: 1.5vw;
+  font-weight: bold;
+  position: absolute;
+  color: #0c222c;
+  z-index: 100;
+  transform: skew(-10deg, 0deg) rotate(-18deg);
 }
 
 .Selected {
-    color: #e517e5;
-    text-shadow: 0 0 40px #e517e5;
+  color: #e517e5;
+  text-shadow: 0 0 40px #e517e5;
 }
 
-
 .NEWS {
-    top: 1.2vh;
-    left: 0vw;
-    position: absolute;
+  top: 1.2vh;
+  left: 0vw;
+  position: absolute;
 }
 
 .NEWSS {
-    width: 100vw;
-    height: 100vh;
+  width: 100vw;
+  height: 100vh;
 }
 
 .menuHover:hover {
-    color: #e517e5;
-    text-shadow: 0 0 40px #e517e5;
+  color: #e517e5;
+  text-shadow: 0 0 40px #e517e5;
 }
 
-
 .LeftMonitor {
-    width: 10vw;
-    height: 14vh;
-    position: absolute;
-    top: 38.5vh;
-    left: 16.3vw;
-    transform: skew(0deg, 0deg) rotate(3deg);
+  width: 10vw;
+  height: 14vh;
+  position: absolute;
+  top: 38.5vh;
+  left: 16.3vw;
+  transform: skew(0deg, 0deg) rotate(3deg);
 }
 
 .HARD_lobbyCreate {
-    width: inherit;
-    height: inherit;
-    height: 5vh;
-    font-size: 2.8vh;
-    font-weight: 500;
-    display: grid;
-    color: #193e4e;
-    grid-template-columns: 1fr 1fr;
+  width: inherit;
+  height: inherit;
+  height: 5vh;
+  font-size: 2.8vh;
+  font-weight: 500;
+  display: grid;
+  color: #193e4e;
+  grid-template-columns: 1fr 1fr;
 }
 
 .HARD_ELEMENTS_LOBBY_CREATE {
-    border: none;
-    outline: none;
-    width: 8vh;
-    height: 6vh;
-    background: none;
-    color: #1e465a;
-    text-align: center;
-    font-size: 3.6vh;
-    font-family: 'Caramel', cursive;
+  border: none;
+  outline: none;
+  width: 8vh;
+  height: 6vh;
+  background: none;
+  color: #1e465a;
+  text-align: center;
+  font-size: 3.6vh;
+  font-family: 'Caramel', cursive;
 }
 
 .HARD_lobbyCreate_input {
-    /* height: inherit;  */
+  /* height: inherit;  */
 }
 
 .HARD_lobbyCreate_input::-webkit-input-placeholder {
-    color: #1e465a;
+  color: #1e465a;
 }
 
 .HARD_lobbyCreate_button {
-    /* padding: 0vw; */
+  /* padding: 0vw; */
 }
 
 .HARD_lobbyCreate_select {
-    appearance: none;
+  appearance: none;
 }
 
 .case {
-    position: absolute;
-    /* background-color: #7f8c92; */
+  position: absolute;
+  /* background-color: #7f8c92; */
 }
 
 .HARD_RigthMonitor {
-    position: absolute;
-    top: 25vh;
-    left: 86vw;
-    /* transform: matrix3d(0.274298, -0.1207, 0, -0.000748,
+  position: absolute;
+  top: 25vh;
+  left: 86vw;
+  /* transform: matrix3d(0.274298, -0.1207, 0, -0.000748,
             -0.018836, 0.393093, 0, -0.000035,
             0, 0, 1, 0,
             -175.415202, 117.764351, 0, 1) rotate(-1deg);
@@ -186,262 +195,262 @@
             0, 0, 1, 0,
             -218.989883, 105.733792, 0, 1)rotate(-1deg);
     transform-origin: -802px -35px 0px; */
-    transform: matrix3d(0.370528, -0.113888, 0, -0.000701,
-            -0.022604, 0.461427, 0, -0.000033,
-            0, 0, 1, 0,
-            -250.542792, 109.223085, 0, 1)rotate(-1.5deg);
-    transform-origin: -802px -35px 0px;
+  transform: matrix3d(
+      0.370528,
+      -0.113888,
+      0,
+      -0.000701,
+      -0.022604,
+      0.461427,
+      0,
+      -0.000033,
+      0,
+      0,
+      1,
+      0,
+      -250.542792,
+      109.223085,
+      0,
+      1
+    )
+    rotate(-1.5deg);
+  transform-origin: -802px -35px 0px;
 }
 
 .HARD_RigthMonitor.active {
-    animation-name: RigthMonitor;
-    animation-iteration-count: infinite;
-    animation-duration: 5s;
-    animation-direction: alternate;
+  animation-name: RigthMonitor;
+  animation-iteration-count: infinite;
+  animation-duration: 5s;
+  animation-direction: alternate;
 }
 
 @keyframes RigthMonitor {
-    0% {
-        opacity: 0;
-    }
+  0% {
+    opacity: 0;
+  }
 
-    /* 50% {
+  /* 50% {
         opacity: 0;
     } */
 
-    100% {
-        opacity: 1;
-    }
-
+  100% {
+    opacity: 1;
+  }
 }
 
 .HARD_LobbyShablon {
-    display: grid;
-    border-radius: 19px;
-    min-width: 180px;
-    max-width: 180px;
-    min-height: 170px;
-    max-height: 170px;
+  display: grid;
+  border-radius: 19px;
+  min-width: 180px;
+  max-width: 180px;
+  min-height: 170px;
+  max-height: 170px;
 }
 
 .HARD_LobbyShablon_Sofa {
-    position: absolute;
-    margin: 1vw;
+  position: absolute;
+  margin: 1vw;
 }
 
 .case:hover .HARD_LobbuShablon_None {
-    display: block;
+  display: block;
 }
 
 .HARD_LobbuShablon_None {
-    display: none;
+  display: none;
 }
 
 .HARD_LobbuShablon_Block {
-    display: block;
+  display: block;
 }
 
 /*
     LobbyShablon
 */
 
-
-
-
-
-
 .HARD_tokenAnd {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    margin: 0px 5px;
-    opacity: 0.2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0px 5px;
+  opacity: 0.2;
 }
-
-
-
-
 
 .HARD_tokeninlobbyshablon {
-    min-width: 45px;
-    min-height: 45px;
-    max-width: 45px;
-    max-height: 45px;
+  min-width: 45px;
+  min-height: 45px;
+  max-width: 45px;
+  max-height: 45px;
 }
 
-
-
 .HARD_predepositlobby {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    border-top: 1px solid rgb(7, 81, 95);
-    margin: 0px 12px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  border-top: 1px solid rgb(7, 81, 95);
+  margin: 0px 12px;
 }
 
 .HARD_depositlobby {
-    color: rgb(50, 85, 112);
-    overflow-x: auto;
-    font-size: 1.2vw;
-    margin: 0px 12px;
+  color: rgb(50, 85, 112);
+  overflow-x: auto;
+  font-size: 1.2vw;
+  margin: 0px 12px;
 }
-
-
-
 
 /*** <--- CIRCLE STYLES ---> ***/
 .HARD_circle {
-    position: relative;
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: #232323;
-    overflow: hidden;
+  position: relative;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #232323;
+  overflow: hidden;
 }
 
 .HARD_countOfPlayersImagetru {
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 40px;
-    height: 40px;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 40px;
+  height: 40px;
 }
 
 .case1 {
-    top: 44vh;
-    left: 2vw;
-    width: 1vw;
-    height: 3vh;
+  top: 44vh;
+  left: 2vw;
+  width: 1vw;
+  height: 3vh;
 }
 
 .case2 {
-    top: 16vh;
-    left: 6vw;
-    width: 2vw;
-    height: 3vh;
+  top: 16vh;
+  left: 6vw;
+  width: 2vw;
+  height: 3vh;
 }
 
 .case3 {
-    top: 95vh;
-    left: 8vw;
-    width: 3vw;
-    height: 4vh;
+  top: 95vh;
+  left: 8vw;
+  width: 3vw;
+  height: 4vh;
 }
 
 .case4 {
-    top: 29vh;
-    left: 11.2vw;
-    width: 3vw;
-    height: 3vh;
+  top: 29vh;
+  left: 11.2vw;
+  width: 3vw;
+  height: 3vh;
 }
 
 .case5 {
-    top: 50vh;
-    left: 11.6vw;
-    width: 1.2vw;
-    height: 2.6vh;
+  top: 50vh;
+  left: 11.6vw;
+  width: 1.2vw;
+  height: 2.6vh;
 }
 
 .case6 {
-    top: 79vh;
-    left: 13vw;
-    width: 5vw;
-    height: 4vh;
+  top: 79vh;
+  left: 13vw;
+  width: 5vw;
+  height: 4vh;
 }
 
 .case7 {
-    top: 96vh;
-    left: 20.2vw;
-    width: 2vw;
-    height: 3vh;
+  top: 96vh;
+  left: 20.2vw;
+  width: 2vw;
+  height: 3vh;
 }
 
 .case8 {
-    top: 87vh;
-    left: 24.6vw;
-    width: 2.5vw;
-    height: 3vh;
+  top: 87vh;
+  left: 24.6vw;
+  width: 2.5vw;
+  height: 3vh;
 }
 
 .case9 {
-    top: 94vh;
-    left: 28vw;
-    width: 5vw;
-    height: 4vh;
+  top: 94vh;
+  left: 28vw;
+  width: 5vw;
+  height: 4vh;
 }
 
 .case10 {
-    top: 47.8vh;
-    left: 29vw;
-    width: 1vw;
-    height: 5vh;
+  top: 47.8vh;
+  left: 29vw;
+  width: 1vw;
+  height: 5vh;
 }
 
 .case11 {
-    top: 90vh;
-    left: 43.2vw;
-    width: 2.3vw;
-    height: 3vh;
+  top: 90vh;
+  left: 43.2vw;
+  width: 2.3vw;
+  height: 3vh;
 }
 
 .case12 {
-    top: 92.2vh;
-    left: 52.4vw;
-    width: 2vw;
-    height: 4vh;
+  top: 92.2vh;
+  left: 52.4vw;
+  width: 2vw;
+  height: 4vh;
 }
 
 .case13 {
-    top: 60vh;
-    left: 88.5vw;
-    width: 1vw;
-    height: 4.7vh;
+  top: 60vh;
+  left: 88.5vw;
+  width: 1vw;
+  height: 4.7vh;
 }
 
 .case14 {
-    top: 22vh;
-    left: 61.2vw;
-    width: 1vw;
-    height: 4vh;
+  top: 22vh;
+  left: 61.2vw;
+  width: 1vw;
+  height: 4vh;
 }
 
 .case15 {
-    top: 54vh;
-    left: 66vw;
-    width: 2.4vw;
-    height: 5vh;
+  top: 54vh;
+  left: 66vw;
+  width: 2.4vw;
+  height: 5vh;
 }
 
 .case16 {
-    top: 90.5vh;
-    left: 68vw;
-    width: 4vw;
-    height: 4vh;
+  top: 90.5vh;
+  left: 68vw;
+  width: 4vw;
+  height: 4vh;
 }
 
 .case17 {
-    top: 92.3vh;
-    left: 74vw;
-    width: 2vw;
-    height: 4vh;
+  top: 92.3vh;
+  left: 74vw;
+  width: 2vw;
+  height: 4vh;
 }
 
 .case18 {
-    top: 91vh;
-    left: 82vw;
-    width: 2.5vw;
-    height: 4vh;
+  top: 91vh;
+  left: 82vw;
+  width: 2.5vw;
+  height: 4vh;
 }
 
 .case19 {
-    top: 55vh;
-    left: 83.8vw;
-    width: 1.5vw;
-    height: 3vh;
+  top: 55vh;
+  left: 83.8vw;
+  width: 1.5vw;
+  height: 3vh;
 }
 
 .case20 {
-    top: 50vh;
-    left: 92.5vw;
-    width: 2.5vw;
-    height: 8vh;
+  top: 50vh;
+  left: 92.5vw;
+  width: 2.5vw;
+  height: 8vh;
 }
